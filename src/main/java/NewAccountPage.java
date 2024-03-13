@@ -1,9 +1,13 @@
+import javax.swing.*;
 import java.awt.*;
 
-public class NewAccountPage {
+public class NewAccountPage extends Page {
 
     private Credentials credentials;
-    public void draw(Graphics g){}
-    public NewAccountPage(){}
+    public NewAccountPage(PageManager pm){
+        super.draw();
+        JLabel label = new JLabel("NEW ACCOUNT PAGE!");
+        panel.add(label);
+    }
 
 }

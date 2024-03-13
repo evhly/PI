@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 public class Frame extends JFrame {
 
     Frame(){
-        LoginPage panel = new LoginPage();
-        this.add(panel);
+        PageManager pm = new PageManager();
+        pm.switchPages("login-page");
+        LoginPage loginPage = new LoginPage(pm);
+        this.add(loginPage);
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

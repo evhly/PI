@@ -1,16 +1,11 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPage extends Page {
     private Credentials credentials;
-    public void draw(Graphics g){
-
-    }
-
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    double width = screenSize.getWidth();
-    double height = screenSize.getHeight();
 
     JTextField emailField;
     JLabel emailFieldLabel;
@@ -19,22 +14,9 @@ public class LoginPage extends Page {
     JButton submitBtn;
 
 
-    public LoginPage(){
+    public LoginPage(PageManager pm){
 
-        JPanel panel = new JPanel(new GridBagLayout());
-
-        panel.setPreferredSize(new Dimension(screenSize));
-        panel.setBackground(Color.white);
-        panel.setFocusable(true);
-
-        panel.setLayout(new GridBagLayout());
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5, 5, 5);
-
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        super.draw();
 
         emailField = new JTextField(30);
         emailFieldLabel = new JLabel("Email Address");
@@ -50,6 +32,13 @@ public class LoginPage extends Page {
 
         submitBtn = new JButton("Submit");
         panel.add(submitBtn, gbc);
+
+        submitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pm.switchPages("new-account-page");
+            }
+        });
 
         add(panel, gbc);
     }
