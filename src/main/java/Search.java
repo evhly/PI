@@ -9,7 +9,9 @@ public class Search {
     private String startTime;
     private String endTime;
     private String selectedDepartment;
-    public Search(){}
+    public Search(CourseDatabase DB){
+        this.DB = DB;
+    }
     public ArrayList<Course> modifyQuery(String query){
         this.query = query;
         return search();
