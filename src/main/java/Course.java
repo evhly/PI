@@ -16,6 +16,54 @@ public class Course {
     private Term term;
     private ArrayList<String> room;
 
+    public String getCode() {
+        return code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Course> getPrereqs() {
+        return prereqs;
+    }
+
+    public ArrayList<DayOfWeek> getDays() {
+        return days;
+    }
+
+    public ArrayList<String> getRoom() {
+        return room;
+    }
+
+    public ArrayList<String> getTimes() {
+        return times;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public Term getTerm() {
+        return term;
+    }
+
     public Course(
             String code,
             String name,
