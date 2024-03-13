@@ -11,10 +11,17 @@ public class Search {
     private String selectedDepartment;
     public Search(){}
     public ArrayList<Course> modifyQuery(String query){
-        return null;
+        this.query = query;
+        return search();
     }
     public ArrayList<Course> search(){
-        return null;
+        results = new ArrayList<>();
+        for(Course course : DB.getCourses()){
+            if(course.getDescription().contains(query) || course.getCode().contains(query)){
+                results.add(course);
+            }
+        }
+        return results;
     }
     public ArrayList<Professor> getSelectedProfessors(){
         return null;
