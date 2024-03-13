@@ -23,7 +23,7 @@ public class Student {
 
     public Student(Credentials creds){
         schedules = new ArrayList<Schedule>();
-        information = creds; //TODO: is this shallow copy dangerous?
+        information = creds; //is this shallow copy dangerous?
     }
 
     public static Credentials readFile(File credentialDataFile) {

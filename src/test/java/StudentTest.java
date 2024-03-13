@@ -8,7 +8,7 @@ class StudentTest {
 
     @Test
     public void readFileTest() {
-        File testFile = new File("test_credential_data.txt"); //TODO: program can't find file
+        File testFile = new File("test_credential_data.txt");
         Credentials creds = Student.readFile(testFile);
         assertEquals(creds.getName(), "Billy Bob");
         assertEquals(creds.getId(),12345);
