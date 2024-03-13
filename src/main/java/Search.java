@@ -16,9 +16,6 @@ public class Search {
     public ArrayList<Course> search(){
         return null;
     }
-    public ArrayList<Course> loadMore(){
-        return null;
-    }
     public ArrayList<Professor> getSelectedProfessors(){
         return null;
     }
