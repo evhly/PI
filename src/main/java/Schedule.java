@@ -5,7 +5,9 @@ public class Schedule {
     private ArrayList<Course> courses;
     private String title;
     public Schedule(){}
-    public void deleteCourse(Course courseToDelete){}
+    public void deleteCourse(Course courseToDelete){
+        courses.remove(courseToDelete);
+    }
     public void addCourse(Course courseToAdd){}
     public Schedule undo(){
         return null;
