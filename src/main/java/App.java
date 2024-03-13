@@ -1,17 +1,39 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
+import java.util.HashMap;
 
-public class Frame extends JFrame {
+public class App extends JFrame {
 
-    Frame(){
-        PageManager pm = new PageManager();
+    private HashMap<String, Page> pages = new HashMap<>();
+    private Page currentPage;
+
+    public App(){
+        pages.put("login-page", new LoginPage(this));
+        pages.put("new-account-page", new NewAccountPage(this));
+        pages.put("choose-schedule-page", new ChooseSchedulePage(this));
+        pages.put("schedule-page", new SchedulePage(this));
+
+        switchPages("login-page");
+
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.pack();
         this.setVisible(true);
+        this.pack();
         this.setLocationRelativeTo(null);
+    }
+
+    public void switchPages(String pageName){
+        System.out.println(pageName);
+        Page page = pages.get(pageName);
+        if(currentPage != null) {
+            this.remove(currentPage);
+        }
+        this.add(page);
+        this.pack();
+        this.repaint();
+        this.currentPage = page;
+        System.out.println("Done");
     }
 
 }

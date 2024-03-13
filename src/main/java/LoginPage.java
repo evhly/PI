@@ -13,33 +13,30 @@ public class LoginPage extends Page {
     JLabel passwordFieldLabel;
     JButton submitBtn;
 
+    public LoginPage(App app) {
+        super();
 
-    public LoginPage(PageManager pm){
-
-        super.draw();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5, 5, 5);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        setLayout(new GridBagLayout());
 
         emailField = new JTextField(30);
         emailFieldLabel = new JLabel("Email Address");
 
-        panel.add(emailFieldLabel, gbc);
-        panel.add(emailField, gbc);
+        add(emailFieldLabel, gbc);
+        add(emailField, gbc);
 
         passwordField = new JTextField(30);
         passwordFieldLabel = new JLabel("Password");
 
-        panel.add(passwordFieldLabel, gbc);
-        panel.add(passwordField, gbc);
+        add(passwordFieldLabel, gbc);
+        add(passwordField, gbc);
 
         submitBtn = new JButton("Submit");
-        panel.add(submitBtn, gbc);
-
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pm.switchPages("new-account-page");
-            }
-        });
-
-        add(panel, gbc);
+        add(submitBtn, gbc);
     }
+
 }
