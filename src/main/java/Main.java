@@ -8,6 +8,7 @@ public class Main {
     private Schedule currSchedule;
 
     public static void main(String[] args) {
+        Frame frame = new Frame();
 
     }
 
