@@ -1,8 +1,8 @@
 import java.awt.*;
 
-public class SchedulePage {
+public class SchedulePage extends Page{
 
     private Schedule schedule;
     public void draw(Graphics g){}
-    public SchedulePage(){}
+    public SchedulePage(App app){}
 }
