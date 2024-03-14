@@ -19,7 +19,7 @@ public class Search {
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
-            if(course.getDescription().contains(query) || course.getCode().contains(query)){
+            if(course.getName().contains(query) || course.getCode().contains(query)){
                 results.add(course);
             }
         }

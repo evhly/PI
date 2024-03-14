@@ -77,6 +77,19 @@ public class Course {
             ArrayList<String> times,
             Term term,
             ArrayList<String> room
-    ){}
+    ){
+        this.code = code;
+        this.name = name;
+        this.department = department;
+        this.credits = credits;
+        this.description = description;
+        this.prereqs = prereqs;
+        this.professor = professor;
+        this.endDate = endDate;
+        this.days = days;
+        this.times = times;
+        this.term = term;
+        this.room = room;
+    }
 
 }
