@@ -13,6 +13,7 @@ public class Student {
     }
 
     private Credentials information;
+
     public void changeProfile(Credentials newCreds){
         information.setName(newCreds.getName());
         information.setId(newCreds.getId());
@@ -53,4 +54,5 @@ public class Student {
     public ArrayList<Schedule> getSchedules() {
         return schedules;
     }
+
 }
