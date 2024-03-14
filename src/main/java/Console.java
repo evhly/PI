@@ -50,13 +50,18 @@ public class Console {
 
         System.out.println("Welcome to console debugger :D");
        // System.out.println("Enter in the file you want to read:");
-        fName = "TEST2018-2019.csv";//scn.next();
+        fName = "test2.csv";//scn.next();
         //read from csv
         db = loadDB(fName);
         System.out.println("Printing file contents ...");
         for (int i = 0; i < db.size(); i++){
             System.out.print(db.get(i) + "\t");
         }
+
+        //next check for creating a student
+        //maybe login?
+        //then search
+
         System.out.println("end");
 
         //scn.close();

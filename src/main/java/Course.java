@@ -104,6 +104,9 @@ public class Course {
 
         s.close();
     }
+    public String toString() {
+        return code;
+    }
 //    private String description;
 //    private ArrayList<Course> prereqs;
 //    private String endDate;
