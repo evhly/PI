@@ -17,6 +17,8 @@ public class NewAccountPage extends Page {
     JLabel passwordFieldLabel;
     JTextField confirmPasswordField;
     JLabel confirmPasswordFieldLabel;
+    JLabel majorComboBoxLabel;
+    JComboBox<String> majorComboBox;
     JButton submitBtn;
 
     public NewAccountPage(App app) {
@@ -100,6 +102,13 @@ public class NewAccountPage extends Page {
         gbc.gridheight = 1;
         add(confirmPasswordField, gbc);
 
+        majorComboBoxLabel = new JLabel("Major");
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        add(majorComboBoxLabel, gbc);
+
         String[] choices = {
                 "English",
                 "Business",
@@ -109,16 +118,16 @@ public class NewAccountPage extends Page {
                 "Biology"
         };
 
-        JComboBox<String> cb = new JComboBox<String>(choices);
+        majorComboBox = new JComboBox<String>(choices);
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
-        add(cb, gbc);
+        add(majorComboBox, gbc);
 
         submitBtn = new JButton("Submit");
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
 
