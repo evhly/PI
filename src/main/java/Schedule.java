@@ -5,6 +5,7 @@ public class Schedule {
     private ArrayList<Course> courses;
     private String title;
     public Schedule(){}
+
     public void deleteCourse(Course courseToDelete){}
     public Boolean addCourse(Course courseToAdd){
         if(checkConflict(courseToAdd)){

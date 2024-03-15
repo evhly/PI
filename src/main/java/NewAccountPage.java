@@ -1,9 +1,15 @@
-import java.awt.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class NewAccountPage {
+public class NewAccountPage extends Page {
 
     private Credentials credentials;
-    public void draw(Graphics g){}
-    public NewAccountPage(){}
+
+    public NewAccountPage(App app) {
+        super();
+    }
 
 }
+
+
