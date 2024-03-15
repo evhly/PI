@@ -5,10 +5,15 @@ public class Schedule {
     private ArrayList<Course> courses;
     private String title;
     public Schedule(){}
-    public void deleteCourse(Course courseToDelete){
-        courses.remove(courseToDelete);
+
+    public void deleteCourse(Course courseToDelete){}
+    public Boolean addCourse(Course courseToAdd){
+        if(checkConflict(courseToAdd)){
+            return false;
+        }
+        courses.add(courseToAdd);
+        return true;
     }
-    public void addCourse(Course courseToAdd){}
     public Schedule undo(){
         return null;
     }
