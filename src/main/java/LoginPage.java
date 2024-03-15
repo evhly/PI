@@ -36,6 +36,13 @@ public class LoginPage extends Page {
         add(passwordField, gbc);
 
         submitBtn = new JButton("Submit");
+
+        submitBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                app.switchPages("new-account-page");
+            }
+        } );
+
         add(submitBtn, gbc);
     }
 
