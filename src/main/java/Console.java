@@ -54,21 +54,22 @@ public class Console {
 
         System.out.println("Welcome to console debugger :D");
        // System.out.println("Enter in the file you want to read:");
-        fileName = "test2.csv";//scn.next();
-        //read from csv
-        db = loadDB(fileName);
-        System.out.println("Printing file contents ...");
-        for (int i = 0; i < db.size(); i++){
-            System.out.print(db.get(i) + "\t");
-        }
-        while(!exit){
-            userInput = scn.next();
-
-            //to finish using console, enter "exit".
-            if(userInput.contains("exit")){
-                exit = true;
-            }
-        }
+//        fileName = "test2.csv";//scn.next();
+//        //read from csv
+//        db = loadDB(fileName);
+//        System.out.println("Printing file contents ...");
+//        for (int i = 0; i < db.size(); i++){
+//            System.out.print(db.get(i) + "\t");
+//        }
+//        while(!exit){
+//            userInput = scn.next();
+//
+//            //to finish using console, enter "exit".
+//            if(userInput.contains("exit")){
+//                exit = true;
+//            }
+//        }
+        runner();
 
         //next check for creating a student
         //maybe login?
@@ -83,6 +84,21 @@ public class Console {
         Scanner s = new Scanner(System.in);
         System.out.println("--- Welcome to Sched-o-matic!\nPlease log in, " +
                 "or sign up if you don't have an account.");
+        System.out.println("Enter in name:");
+        String name = s.next();
+        System.out.println("Enter student id:");
+        int id = s.nextInt();
+        System.out.println("Enter major:");
+        String major = s.next();
+
+
+        //Credentials userCred = new Credentials(name,id,major);
+//
+//        userCred.setName(s.next());
+//
+//        //assign user info
+//        Student currUser = new Student(userCred);
+//        currUser.changeProfile();
 
 
     }
