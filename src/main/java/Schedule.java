@@ -25,5 +25,8 @@ public class Schedule {
     }
     public void rename(){}
 
+    public String toSave() {
+        return null; //TODO
+    }
 
 }
