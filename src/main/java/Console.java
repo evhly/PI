@@ -9,7 +9,7 @@ public class Console {
     static Student s;
     static ArrayList<Course> db;
 
-    //read from csv methed -- loadDB(fileName) ->return arraylist
+    //read from csv method -- loadDB(fileName) ->return arraylist
 
     /**
      * loads data from a csv file into ArrayList
@@ -44,18 +44,30 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-       // Scanner scn = new Scanner(System.in);
-        search = new Search();
-        String fName;
+        boolean exit = false;
+        Scanner scn = new Scanner(System.in);
+        //search = new Search();
+        String fileName;
+        String userInput;
+
+        //set up console loop
 
         System.out.println("Welcome to console debugger :D");
        // System.out.println("Enter in the file you want to read:");
-        fName = "test2.csv";//scn.next();
+        fileName = "test2.csv";//scn.next();
         //read from csv
-        db = loadDB(fName);
+        db = loadDB(fileName);
         System.out.println("Printing file contents ...");
         for (int i = 0; i < db.size(); i++){
             System.out.print(db.get(i) + "\t");
+        }
+        while(!exit){
+            userInput = scn.next();
+
+            //to finish using console, enter "exit".
+            if(userInput.contains("exit")){
+                exit = true;
+            }
         }
 
         //next check for creating a student
@@ -65,5 +77,13 @@ public class Console {
         System.out.println("end");
 
         //scn.close();
+    }
+
+    public static void runner(){
+        Scanner s = new Scanner(System.in);
+        System.out.println("--- Welcome to Sched-o-matic!\nPlease log in, " +
+                "or sign up if you don't have an account.");
+
+
     }
 }
