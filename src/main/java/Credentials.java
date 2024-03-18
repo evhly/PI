@@ -71,8 +71,12 @@ public class Credentials {
         return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String first) {
+        this.firstName = first;
+    }
+
+    public void setLastName(String last) {
+        this.lastName = last;
     }
 
     public void setId(int id) {
