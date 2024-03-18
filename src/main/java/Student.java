@@ -57,4 +57,31 @@ public class Student {
         return schedules;
     }
 
+    /**
+     * Adds a schedule to the student's schedules list
+     * @param schedule the schedule to add
+     */
+    public void addSchedule(Schedule schedule) {
+        schedules.add(schedule);
+    }
+
+    /**
+     * Prints schedules to a file in a format (csv) that can be read back into the program
+     * @throws IOException File cannot be created or written to
+     */
+    public void saveSchedules() throws IOException {
+        PrintWriter fout = new PrintWriter(information.getId() + "_savedSchedules.csv");
+        StringBuilder sb = new StringBuilder();
+        for (Schedule schedule : schedules) {
+            sb.append("SCHEDULE_START,");
+            sb.append(schedule.toSave());
+            sb.append("SCHEDULE_END,");
+        }
+        fout.print(sb);
+        fout.flush();
+        fout.close();
+    }
+
+
+
 }

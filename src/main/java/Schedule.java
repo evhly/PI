@@ -4,7 +4,10 @@ public class Schedule {
 
     private ArrayList<Course> courses;
     private String title;
-    public Schedule(){}
+    public Schedule(String title){
+        courses = new ArrayList<Course>();
+        this.title = title;
+    }
 
     public void deleteCourse(Course courseToDelete){}
     public Boolean addCourse(Course courseToAdd){
@@ -26,7 +29,13 @@ public class Schedule {
     public void rename(){}
 
     public String toSave() {
-        return null; //TODO
+        StringBuilder sb = new StringBuilder();
+        sb.append(title + ",");
+        for (Course course : courses) {
+            sb.append(course.getCode());
+            sb.append(",");
+        }
+        return sb.toString();
     }
 
 }

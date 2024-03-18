@@ -45,7 +45,7 @@ public class Console {
      */
     public static void main(String[] args) throws FileNotFoundException {
        // Scanner scn = new Scanner(System.in);
-        search = new Search();
+        search = new Search(new CourseDatabase(new File("2018-2019.csv")));
         String fName;
 
         System.out.println("Welcome to console debugger :D");
