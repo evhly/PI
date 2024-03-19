@@ -17,6 +17,9 @@ public class Schedule {
         return "";
     }
     public void rename(){}
+    public String getTitle(){
+        return title;
+    }
 
 
 }

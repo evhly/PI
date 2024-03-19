@@ -10,6 +10,8 @@ public class ChooseSchedulePage extends Page{
     public ChooseSchedulePage(App app){
         super();
 
+
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5, 5, 5);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -17,10 +19,10 @@ public class ChooseSchedulePage extends Page{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setLayout(new GridBagLayout());
 
-        HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent();
-        add(scheduleComponent);
-
-
+        for(int i = 0; i < 3; i++){
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(/*schedules.get(i)*/);
+            add(scheduleComponent);
+        }
 
     }
 }
