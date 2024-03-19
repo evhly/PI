@@ -4,7 +4,10 @@ public class Schedule {
 
     private ArrayList<Course> courses;
     private String title;
-    public Schedule(){}
+    public Schedule(ArrayList<Course> courses, String title) {
+        this.courses = courses;
+        this.title = title;
+    }
 
     public void deleteCourse(Course courseToDelete){}
     public Boolean addCourse(Course courseToAdd){
