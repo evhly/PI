@@ -5,4 +5,8 @@ public class CourseDatabase {
 
     private ArrayList<Course> courses;
     public CourseDatabase(File in){}
+
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
 }
