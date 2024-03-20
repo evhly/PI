@@ -11,8 +11,6 @@ public class Console {
     static Scanner scn;
 
 
-    //read from csv method -- loadDB(fileName) ->return arraylist
-
     /**
      * loads data from a csv file into ArrayList
      * @param fileName for csv
@@ -65,22 +63,7 @@ public class Console {
 //        for (int i = 0; i < db.size(); i++){
 //            System.out.print(db.get(i) + "\t");
 //        }
-//        while(!exit){
-//            userInput = scn.next();
-//
-//            //to finish using console, enter "exit".
-//            if(userInput.contains("exit")){
-//                exit = true;
-//            }
-//        }
 
-
-        //next check for creating a student
-        //maybe login?
-        //then search
-
-
-        //scn.close();
     }
 
     private static void homeScreen() {
