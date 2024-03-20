@@ -73,9 +73,8 @@ public class Student {
         PrintWriter fout = new PrintWriter(information.getId() + "_savedSchedules.csv");
         StringBuilder sb = new StringBuilder();
         for (Schedule schedule : schedules) {
-            sb.append("SCHEDULE_START,");
             sb.append(schedule.toSave());
-            sb.append("SCHEDULE_END,");
+            sb.append("\n");
         }
         fout.print(sb);
         fout.flush();
