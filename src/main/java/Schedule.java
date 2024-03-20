@@ -4,8 +4,8 @@ public class Schedule {
 
     private ArrayList<Course> courses;
     private String title;
-    public Schedule(String title){
-        courses = new ArrayList<Course>();
+    public Schedule(ArrayList<Course> courses, String title) {
+        this.courses = courses;
         this.title = title;
     }
 
@@ -27,6 +27,9 @@ public class Schedule {
         return "";
     }
     public void rename(){}
+    public String getTitle(){
+        return title;
+    }
 
     public String toSave() {
         StringBuilder sb = new StringBuilder();
