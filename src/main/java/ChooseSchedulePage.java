@@ -57,7 +57,7 @@ public class ChooseSchedulePage extends Page{
         schedulePanel.setLayout(new GridLayout(0, 3, 10, 10));
         schedulePanel.setBackground(Color.white);
 
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 6; i++){
             HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(new Schedule(null, "Dummy Schedule "+i));
             schedulePanel.add(scheduleComponent);
         }
