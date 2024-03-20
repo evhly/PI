@@ -81,6 +81,39 @@ public class Student {
         fout.close();
     }
 
+    /**
+     * Loads schedules of a student from a file
+     * @param db The CourseDatabase to draw course data from, since we only have the course code
+     * @throws IOException
+     */
+    public void loadSchedules(CourseDatabase db) throws IOException {
+        try {
+            File file = new File(information.getId() + "_savedSchedules.csv");
+            Scanner fileScanner = new Scanner(file);
+            fileScanner.useDelimiter(",");
+
+            while (fileScanner.hasNext()) {
+                Schedule schedule = new Schedule(fileScanner.next());
+                while (!fileScanner.next().equals("\n")) {
+                    String code = fileScanner.next();
+                    Course course = getCourseFromCode(code, db);
+                    schedule.addCourse(course);
+                }
+                schedules.add(schedule);
+            }
+
+            fileScanner.close();
+
+        } catch (NullPointerException e) {
+            System.out.println("No saved schedules exist for " + information.getLastName() + ", ID: " + information.getId());
+        }
+
+    }
+
+    public Course getCourseFromCode(String code, CourseDatabase db) {;
+        return db.getCourseData(code);
+    }
+
 
 
 }

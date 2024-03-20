@@ -9,6 +9,15 @@ public class Schedule {
         this.title = title;
     }
 
+    public Schedule() {
+        this.courses = new ArrayList<Course>();
+        this.title = "Untitled";
+    }
+
+    public Schedule(String title) {
+        this.title = title;
+    }
+
     public void deleteCourse(Course courseToDelete){}
     public Boolean addCourse(Course courseToAdd){
         if(checkConflict(courseToAdd)){
