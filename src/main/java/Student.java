@@ -15,7 +15,8 @@ public class Student {
     private Credentials information;
 
     public void changeProfile(Credentials newCreds){
-        information.setName(newCreds.getName());
+        information.setFirstName(newCreds.getFirstName());
+        information.setLastName(newCreds.getLastName());
         information.setId(newCreds.getId());
         information.setMajor(newCreds.getMajor());
         information.setEmail(newCreds.getEmail());
@@ -32,13 +33,14 @@ public class Student {
             Scanner credentialFileScanner = new Scanner(credentialDataFile);
 
             // reads file data
-            String name = credentialFileScanner.nextLine();
+            String first = credentialFileScanner.nextLine();
+            String last = credentialFileScanner.nextLine();
             int id = parseInt(credentialFileScanner.nextLine());
             String major = credentialFileScanner.nextLine();
             String password = credentialFileScanner.nextLine();
             String email = credentialFileScanner.nextLine();
 
-            Credentials returnCreds = new Credentials(name, id, major, password, email);
+            Credentials returnCreds = new Credentials(first, last, id, major, password, email);
             credentialFileScanner.close();
             return returnCreds;
         } catch (IOException e) {
@@ -54,5 +56,31 @@ public class Student {
     public ArrayList<Schedule> getSchedules() {
         return schedules;
     }
+
+    /**
+     * Adds a schedule to the student's schedules list
+     * @param schedule the schedule to add
+     */
+    public void addSchedule(Schedule schedule) {
+        schedules.add(schedule);
+    }
+
+    /**
+     * Prints schedules to a file in a format (csv) that can be read back into the program
+     * @throws IOException File cannot be created or written to
+     */
+    public void saveSchedules() throws IOException {
+        PrintWriter fout = new PrintWriter(information.getId() + "_savedSchedules.csv");
+        StringBuilder sb = new StringBuilder();
+        for (Schedule schedule : schedules) {
+            sb.append(schedule.toSave());
+            sb.append("\n");
+        }
+        fout.print(sb);
+        fout.flush();
+        fout.close();
+    }
+
+
 
 }

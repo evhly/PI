@@ -78,7 +78,7 @@ public class Course {
             ArrayList<String> times,
             Term term,
             ArrayList<String> room
-    ){
+    ) {
         this.code = code;
         this.name = name;
         this.department = department;
@@ -95,8 +95,8 @@ public class Course {
 
 
     //may be fields need to change. if so, change them here
+
     /**
-     *
      * yr_cde
      * trm_cde
      * crs_cde
@@ -122,6 +122,7 @@ public class Course {
      * first_name
      * preferred_name
      * comment_txt
+     *
      * @param csvLine
      */
     public Course(String csvLine) {
@@ -144,35 +145,25 @@ public class Course {
         String x_listed_parnt_crs = s.next();
         String acad_credit_varies = s.next();
         String acad_credit_label = s.next();
-        String crs_capacity	= s.next();
+        String crs_capacity = s.next();
         String crs_enrollment = s.next();
-        String bldg_cde	= s.next();
-        String room_cde	= s.next();
+        String bldg_cde = s.next();
+        String room_cde = s.next();
         String monday_cde = s.next();
         String tuesday_cde = s.next();
         String wednesday_cde = s.next();
-        String thursday_cde	= s.next();
+        String thursday_cde = s.next();
         String friday_cde = s.next();
         String begin_tim = s.next();
         String end_tim = s.next();
         String last_name = s.next();
-        professor = new Professor(last_name,department);
+        professor = new Professor(last_name, department);
         String first_name = s.next();
         String preferred_name = s.next();
-        if(s.hasNext()) {
+        if (s.hasNext()) {
             String comment_txt = s.next();
         }
 
         s.close();
     }
-    public String toString() {
-        return code;
-    }
-//    private String description;
-//    private ArrayList<Course> prereqs;
-//    private String endDate;
-//    private ArrayList<DayOfWeek> days;
-//    private ArrayList<String> times;
-//    private Term term;
-//    private ArrayList<String> room;
 }

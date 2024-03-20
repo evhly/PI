@@ -2,7 +2,8 @@ import java.util.Objects;
 
 public class Credentials {
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private int id;
     private String major;
     private String password;
@@ -10,45 +11,35 @@ public class Credentials {
 
     /**
      * Constructor
-     * @param newName
+     * @param newFirst
+     * @param newLast
      * @param newId
      * @param newMajor
      * @param newPassword
      * @param newEmail
      */
     public Credentials(
-            String newName,
+            String newFirst,
+            String newLast,
             int newId,
             String newMajor,
             String newPassword,
             String newEmail
     ){
-        name = newName;
+        firstName =newFirst;
+        lastName = newLast;
         id = newId;
         major = newMajor;
         password = newPassword;
         email = newEmail;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Credentials that = (Credentials) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(major, that.major) && Objects.equals(password, that.password) && Objects.equals(email, that.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, id, major, password, email);
-    }
-
     //TODO: set up with user interface
-    public void login(String attemptEmail, String attemptPassword){
-        if (attemptEmail.equals(email) && attemptPassword.equals(password)) {
-            //TODO: LOGIN STUFF
+    public String login(String attemptEmail, String attemptPassword){
+        if (attemptEmail.equals(email) && checkValid(attemptPassword)) {
+            return "Good";
         } else {
-            //TODO: YELL AT THEM
+            return "Sus";
         }
     }
 
@@ -56,8 +47,12 @@ public class Credentials {
         return password.equals(this.password);
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public int getId() {
@@ -76,8 +71,12 @@ public class Credentials {
         return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String first) {
+        this.firstName = first;
+    }
+
+    public void setLastName(String last) {
+        this.lastName = last;
     }
 
     public void setId(int id) {

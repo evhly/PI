@@ -31,5 +31,14 @@ public class Schedule {
         return title;
     }
 
+    public String toSave() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(title + ",");
+        for (Course course : courses) {
+            sb.append(course.getCode());
+            sb.append(",");
+        }
+        return sb.toString();
+    }
 
 }
