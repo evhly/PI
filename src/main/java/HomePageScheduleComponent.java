@@ -6,7 +6,7 @@ public class HomePageScheduleComponent extends JPanel {
     public static ImageIcon trashcanIcon = new ImageIcon("resources/recycle-bin-icon.png");
     public static ImageIcon pencilIcon = new ImageIcon("resources/pencil-icon.png");
 
-    public HomePageScheduleComponent(/*Schedule schedule*/){
+    public HomePageScheduleComponent(Schedule schedule){
         setMinimumSize(new Dimension(150, 150));
         setMaximumSize(new Dimension(150, 150));
         setPreferredSize(new Dimension(150, 150));
@@ -22,7 +22,7 @@ public class HomePageScheduleComponent extends JPanel {
 
         Dimension btnDimension = new Dimension(30, 30);
 
-        JLabel scheduleTitle = new JLabel(/*schedule.getTitle()*/ "SCHEDULE TITLE");
+        JLabel scheduleTitle = new JLabel(schedule.getTitle());
         add(scheduleTitle, gbc);
 
         JButton deleteSchedule = new JButton();
@@ -34,8 +34,13 @@ public class HomePageScheduleComponent extends JPanel {
         trashcanIcon = new ImageIcon(newimg);
         deleteSchedule.setIcon(trashcanIcon);
         deleteSchedule.setPreferredSize(btnDimension);
+        deleteSchedule.addActionListener((e) -> {
+            Container parent = getParent();
+            parent.remove(this);
+            parent.revalidate();
+            parent.repaint();
+        });
         add(deleteSchedule, gbc);
-
 
         JButton editSchedule = new JButton();
         gbc.gridx = 1;
