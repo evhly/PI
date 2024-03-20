@@ -44,6 +44,10 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
+       // Scanner scn = new Scanner(System.in);
+        CourseDatabase DB = new CourseDatabase(null);
+        search = new Search(DB);
+        String fName;
         boolean exit = false;
         Scanner scn = new Scanner(System.in);
         //search = new Search();

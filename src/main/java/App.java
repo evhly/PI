@@ -13,7 +13,7 @@ public class App extends JFrame {
         pages.put("choose-schedule-page", new ChooseSchedulePage(this));
         pages.put("schedule-page", new SchedulePage(this));
 
-        switchPages("login-page");
+        switchPages("choose-schedule-page");
 
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
