@@ -1,13 +1,15 @@
 public class Professor {
-    private String name;
-    private String department;
-    public Professor(String name, String department){
+    private String firstName;
+    private String lastName;
+    public Professor(String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    public String getFirstName(){
+        return firstName;
+    }
+    public String getLastName(){
+        return lastName;
+    }
 
-    }
-    public String getName(){
-        return "";
-    }
-    public String getDepartment(){
-        return "";
-    }
 }

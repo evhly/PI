@@ -3,7 +3,9 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Course {
+
     private String code;
     private String name;
     private String department;
@@ -12,8 +14,7 @@ public class Course {
     private ArrayList<Course> prereqs;
     private Professor professor;
     private String endDate;
-    private ArrayList<DayOfWeek> days;
-    private ArrayList<String> times;
+    private ArrayList<Meeting> meetings;
     private Term term;
     private ArrayList<String> room;
 
@@ -41,16 +42,12 @@ public class Course {
         return prereqs;
     }
 
-    public ArrayList<DayOfWeek> getDays() {
-        return days;
+    public ArrayList<Meeting> getMeetings() {
+        return meetings;
     }
 
     public ArrayList<String> getRoom() {
         return room;
-    }
-
-    public ArrayList<String> getTimes() {
-        return times;
     }
 
     public Professor getProfessor() {
@@ -74,8 +71,7 @@ public class Course {
             ArrayList<Course> prereqs,
             Professor professor,
             String endDate,
-            ArrayList<DayOfWeek> days,
-            ArrayList<String> times,
+            ArrayList<Meeting> meetings,
             Term term,
             ArrayList<String> room
     ){
@@ -87,8 +83,7 @@ public class Course {
         this.prereqs = prereqs;
         this.professor = professor;
         this.endDate = endDate;
-        this.days = days;
-        this.times = times;
+        this.meetings = meetings;
         this.term = term;
         this.room = room;
     }
@@ -129,6 +124,14 @@ public class Course {
         s.useDelimiter(",");
         String yr_cde = s.next();
         String trm_cde = s.next();
+        if(trm_cde == "10"){
+            trm_cde = "Fall";
+        } else {
+            trm_cde = "Spring";
+        }
+        trm_cde += yr_cde;
+        term = new Term(null, null, trm_cde);
+        // TODO: startDate and endDate for term
         String crs_cde = s.next();
         code = crs_cde;
         String crs_comp1 = s.next();
@@ -148,16 +151,23 @@ public class Course {
         String crs_enrollment = s.next();
         String bldg_cde	= s.next();
         String room_cde	= s.next();
-        String monday_cde = s.next();
-        String tuesday_cde = s.next();
-        String wednesday_cde = s.next();
-        String thursday_cde	= s.next();
-        String friday_cde = s.next();
+        room = new ArrayList<>();
+        room.add(bldg_cde + " " + room_cde);
+
+        String[] days = new String[5];
+        for(int i = 0; i < 5; i++){
+            days[i] = s.next();
+        }
         String begin_tim = s.next();
         String end_tim = s.next();
+        for(int i = 0; i < 5; i++){
+            if(days[i] != ""){
+                meetings.add(new Meeting(begin_tim, end_tim, WeekDay.valueOf(String.valueOf(i))));
+            }
+        }
         String last_name = s.next();
-        professor = new Professor(last_name,department);
         String first_name = s.next();
+        professor = new Professor(first_name, last_name);
         String preferred_name = s.next();
         if(s.hasNext()) {
             String comment_txt = s.next();
