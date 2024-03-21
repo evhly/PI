@@ -34,21 +34,47 @@ public class CourseReader {
     }
 
     public boolean sameCourse(Course c, String section) {
-        // TODO: add other parameters
-        // check if they're the same course
+        // TODO
         return false;
     }
 
     public void appendToCourse(){
-       // TODO: append things to create the full course
+       // TODO
     }
 
     public Course parseCourseInfo(String csvLine){
+
         // parse the line to get parameters for Course
         Scanner s = new Scanner(csvLine);
         s.useDelimiter(",");
-        int yr_cde = Integer.parseInt(s.next());
+        String yr_cde_str = s.next();
         String trm_cde = s.next();
+        String crs_comp1 = s.next();
+        String crs_comp2 = s.next();
+        String crs_comp3 = s.next();
+        String crs_title = s.next();
+        String credit_hrs = s.next();
+        String crs_capacity	= s.next();
+        String crs_enrollment = s.next();
+        // TODO: add room and bldg code columns
+//        String bldg_cde	= s.next();
+//        String room_cde	= s.next();
+        String[] days = new String[5];
+        for(int i = 0; i < 5; i++){
+            days[i] = s.next();
+        }
+        String begin_tim = s.next();
+        String end_tim = s.next();
+        String last_name = s.next();
+        String first_name = s.next();
+        String preferred_name = s.next();
+        if(s.hasNext()) {
+            String comment_txt = s.next();
+        }
+        s.close();
+
+        // adjust and format values from csv line
+        int yr_cde = Integer.parseInt(yr_cde_str);
         if(Objects.equals(trm_cde, "10")){
             trm_cde = "F";
             trm_cde += String.valueOf(yr_cde - 2000);
@@ -56,50 +82,20 @@ public class CourseReader {
             trm_cde = "S";
             trm_cde += String.valueOf(yr_cde - 2000 + 1);
         }
-        String crs_cde = s.next();
-        String crs_comp1 = s.next();
-        String crs_comp2 = s.next();
-        String crs_comp3 = s.next();
-        String crs_title = s.next();
-        String credit_hrs = s.next();
-        int credits = -1; // TODO: what value should credits be if none?
+        int credits = 0; // TODO: what value should credits be if none?
         if (!credit_hrs.equals("")) {
-             credits = Integer.parseInt(credit_hrs); //reading str as int
+            credits = Integer.parseInt(credit_hrs); //reading str as int
         }
-        String x_listed_parnt_crs = s.next();
-        String acad_credit_varies = s.next();
-        String acad_credit_label = s.next();
-        String crs_capacity	= s.next();
-        String max_capacity	= s.next();
-        String crs_enrollment = s.next();
-        String bldg_cde	= s.next();
-        String room_cde	= s.next();
-        ArrayList<String> rooms = new ArrayList<>();
-        rooms.add(bldg_cde + " " + room_cde);
-
-        String[] days = new String[5];
-        for(int i = 0; i < 5; i++){
-            days[i] = s.next();
-        }
-        String begin_tim = s.next();
-        String end_tim = s.next();
         ArrayList<Meeting> meetings = new ArrayList<>();
         for(int i = 0; i < 5; i++){
             if(!Objects.equals(days[i], "")){
                 meetings.add(new Meeting(begin_tim, end_tim, WeekDay.valueOf(String.valueOf(days[i]))));
             }
         }
-        String last_name = s.next();
-        String first_name = s.next();
-        String preferred_name = s.next();
-        if(s.hasNext()) {
-            String comment_txt = s.next();
-        }
 
-        s.close();
 
         // create a new Course from these parameters
-        Course c = new Course(crs_cde,
+        Course c = new Course(crs_comp1 + " " + crs_comp2 + " " + crs_comp3,
                 crs_title,
                 crs_comp1,
                 credits,
@@ -109,7 +105,7 @@ public class CourseReader {
                 null,
                 meetings,
                 trm_cde,
-                rooms);
+                null);
         return c;
     }
 
