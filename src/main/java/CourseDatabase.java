@@ -6,7 +6,17 @@ import java.util.NoSuchElementException;
 public class CourseDatabase {
 
     private HashSet<Course> courses;
-    public CourseDatabase(File in){}
+    public CourseDatabase(String path){
+        File in = new File(path);
+    }
+
+    public CourseDatabase() {
+        courses = new HashSet<>();
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
 
     public HashSet<Course> getCourses() {
         return courses;

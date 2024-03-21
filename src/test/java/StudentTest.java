@@ -32,4 +32,23 @@ class StudentTest {
         bb.addSchedule(newSchedule);
         bb.saveSchedules();
     }
+
+    @Test
+    public void loadSchedulesTest() throws IOException {
+        CourseDatabase courseDatabase = new CourseDatabase();
+        Student bb = new Student(Student.readFile(new File("test_credential_data.txt")));
+        Schedule newSchedule = new Schedule("testSchedule");
+        Course testCourse = new Course("TEST 101","testCourse","TEST",0,"testDescription",new ArrayList<Course>(),new Professor("Dr. Test","TEST"),"November 31",new ArrayList<DayOfWeek>(),new ArrayList<String>(),new Term("Day","Day2","Mud Season"),new ArrayList<String>());
+        courseDatabase.addCourse(testCourse);
+        newSchedule.addCourse(testCourse);
+        System.out.println(newSchedule.toSave());
+        bb.addSchedule(newSchedule);
+        bb.saveSchedules();
+        bb = new Student(Student.readFile(new File("test_credential_data.txt")));
+        bb.loadSchedules(courseDatabase);
+        ArrayList<Schedule> Schoodles = bb.getSchedules();
+        for (Schedule schedule : Schoodles) {
+            System.out.println(schedule.toSave());
+        }
+    }
 }
