@@ -5,7 +5,7 @@ import java.util.*;
 public class CourseReader {
 
 
-    Map<Term, CourseDatabase> courseDatabaseMap;
+    Map<String, CourseDatabase> courseDatabaseMap;
 
     public CourseReader(){
         courseDatabaseMap = new HashMap<>();
@@ -47,14 +47,15 @@ public class CourseReader {
         // parse the line to get parameters for Course
         Scanner s = new Scanner(csvLine);
         s.useDelimiter(",");
-        String yr_cde = s.next();
+        int yr_cde = Integer.parseInt(s.next());
         String trm_cde = s.next();
         if(Objects.equals(trm_cde, "10")){
-            trm_cde = "Fall";
+            trm_cde = "F";
+            trm_cde += String.valueOf(yr_cde - 2000);
         } else {
-            trm_cde = "Spring";
+            trm_cde = "S";
+            trm_cde += String.valueOf(yr_cde - 2000 + 1);
         }
-        trm_cde += yr_cde;
         String crs_cde = s.next();
         String crs_comp1 = s.next();
         String crs_comp2 = s.next();
@@ -107,16 +108,16 @@ public class CourseReader {
                 new Professor(first_name, last_name),
                 null,
                 meetings,
-                new Term(null, null, trm_cde),
+                trm_cde,
                 rooms);
         return c;
     }
 
-    public CourseDatabase getCourseDatabase(Term term){
+    public CourseDatabase getCourseDatabase(String term){
         return courseDatabaseMap.get(term);
     }
 
-    public Set<Term> getTerms(){
+    public Set<String> getTerms(){
         return courseDatabaseMap.keySet();
     }
 

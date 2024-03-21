@@ -15,7 +15,9 @@ public class Course {
     private Professor professor;
     private String endDate;
     private ArrayList<Meeting> meetings;
-    private Term term;
+
+    // term should always be a String in the format like "S24" or "F22"
+    private String term;
     private ArrayList<String> room;
 
     public String getCode() {
@@ -58,7 +60,7 @@ public class Course {
         return endDate;
     }
 
-    public Term getTerm() {
+    public String getTerm() {
         return term;
     }
 
@@ -72,7 +74,7 @@ public class Course {
             Professor professor,
             String endDate,
             ArrayList<Meeting> meetings,
-            Term term,
+            String term,
             ArrayList<String> room
     ){
         this.code = code;
@@ -117,64 +119,9 @@ public class Course {
      * first_name
      * preferred_name
      * comment_txt
-     * @param csvLine
+     *
      */
-    public Course(String csvLine) {
-        Scanner s = new Scanner(csvLine);
-        s.useDelimiter(",");
-        String yr_cde = s.next();
-        String trm_cde = s.next();
-        if(trm_cde == "10"){
-            trm_cde = "Fall";
-        } else {
-            trm_cde = "Spring";
-        }
-        trm_cde += yr_cde;
-        term = new Term(null, null, trm_cde);
-        // TODO: startDate and endDate for term
-        String crs_cde = s.next();
-        code = crs_cde;
-        String crs_comp1 = s.next();
-        department = crs_comp1;
-        String crs_comp2 = s.next();
-        String crs_comp3 = s.next();
-        String crs_title = s.next();
-        name = crs_title;
-        String credit_hrs = s.next();
-        if (!credit_hrs.equals("")) {
-            credits = Integer.parseInt(credit_hrs); //reading str as int
-        }
-        String x_listed_parnt_crs = s.next();
-        String acad_credit_varies = s.next();
-        String acad_credit_label = s.next();
-        String crs_capacity	= s.next();
-        String crs_enrollment = s.next();
-        String bldg_cde	= s.next();
-        String room_cde	= s.next();
-        room = new ArrayList<>();
-        room.add(bldg_cde + " " + room_cde);
 
-        String[] days = new String[5];
-        for(int i = 0; i < 5; i++){
-            days[i] = s.next();
-        }
-        String begin_tim = s.next();
-        String end_tim = s.next();
-        for(int i = 0; i < 5; i++){
-            if(days[i] != ""){
-                meetings.add(new Meeting(begin_tim, end_tim, WeekDay.valueOf(String.valueOf(days[i]))));
-            }
-        }
-        String last_name = s.next();
-        String first_name = s.next();
-        professor = new Professor(first_name, last_name);
-        String preferred_name = s.next();
-        if(s.hasNext()) {
-            String comment_txt = s.next();
-        }
-
-        s.close();
-    }
     public String toString() {
         return code;
     }
