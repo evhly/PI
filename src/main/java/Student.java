@@ -23,11 +23,6 @@ public class Student {
         information.setPassword(newCreds.getPassword());
     }
 
-    public Student(Credentials creds){
-        schedules = new ArrayList<Schedule>();
-        information = creds;
-    }
-
     public static Credentials readFile(File credentialDataFile) {
         try {
             Scanner credentialFileScanner = new Scanner(credentialDataFile);
