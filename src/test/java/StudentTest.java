@@ -39,8 +39,11 @@ class StudentTest {
         Student bb = new Student(Student.readFile(new File("test_credential_data.txt")));
         Schedule newSchedule = new Schedule("testSchedule");
         Course testCourse = new Course("TEST 101","testCourse","TEST",0,"testDescription",new ArrayList<Course>(),new Professor("Dr. Test","TEST"),"November 31",new ArrayList<DayOfWeek>(),new ArrayList<String>(),new Term("Day","Day2","Mud Season"),new ArrayList<String>());
+        Course testCourse2 = new Course("TEST 102","testCourse","TEST",0,"testDescription",new ArrayList<Course>(),new Professor("Dr. Test","TEST"),"November 31",new ArrayList<DayOfWeek>(),new ArrayList<String>(),new Term("Day","Day2","Mud Season"),new ArrayList<String>());
         courseDatabase.addCourse(testCourse);
+        courseDatabase.addCourse(testCourse2);
         newSchedule.addCourse(testCourse);
+        newSchedule.addCourse(testCourse2);
         System.out.println(newSchedule.toSave());
         bb.addSchedule(newSchedule);
         bb.saveSchedules();
