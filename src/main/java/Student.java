@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.io.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -84,7 +85,7 @@ public class Student {
     /**
      * Loads schedules of a student from a file
      * @param db The CourseDatabase to draw course data from, since we only have the course code
-     * @throws IOException
+     * @throws IOException If a save data file does not exist
      */
     public void loadSchedules(CourseDatabase db) throws IOException {
         try {
@@ -96,8 +97,13 @@ public class Student {
                 Schedule schedule = new Schedule(fileScanner.next());
                 while (!fileScanner.next().equals("\n")) {
                     String code = fileScanner.next();
-                    Course course = getCourseFromCode(code, db);
-                    schedule.addCourse(course);
+                    Course course;
+                    try {
+                        course = getCourseFromCode(code, db);
+                        schedule.addCourse(course);
+                    } catch (NoSuchElementException nse) {
+                        System.out.println(nse.getMessage());
+                    }
                 }
                 schedules.add(schedule);
             }
