@@ -22,11 +22,14 @@ public class Console {
         File folder = new File(path);
         for(File fileEntry : folder.listFiles()){
             if(!fileEntry.isDirectory()){
-                System.out.println(path + "/" + fileEntry.getName());
-                CR.parseCsv(path + "/" + fileEntry.getName());
+                String fullPath = path + "/" + fileEntry.getName();
+                System.out.println("Attempting to read " + fullPath);
+                CR.parseCsv(fullPath);
+                System.out.println("Successfully read " + fullPath);
             }
         }
         Set<String> terms = CR.getTerms();
+        CourseDatabase F22 = CR.getCourseDatabase("F19");
         System.out.println("done!");
     }
 }

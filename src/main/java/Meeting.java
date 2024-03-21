@@ -1,12 +1,12 @@
 public class Meeting {
 
-    public Meeting(String beginTime, String endTime, WeekDay day){
+    public Meeting(Time beginTime, Time endTime, WeekDay day){
         this.beginTime = beginTime;
         this.endTime = endTime;
         this.day = day;
     }
-    private String beginTime;
-    private String endTime;
+    private Time beginTime;
+    private Time endTime;
     private WeekDay day;
 
 }
