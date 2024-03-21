@@ -4,7 +4,13 @@ import java.util.ArrayList;
 public class CourseDatabase {
 
     private ArrayList<Course> courses;
-    public CourseDatabase(File in){}
+
+    public CourseDatabase(){
+        courses = new ArrayList<>();
+    }
+    public void addCourse(Course c){
+        courses.add(c);
+    }
 
     public ArrayList<Course> getCourses() {
         return courses;

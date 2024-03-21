@@ -1,26 +1,26 @@
 public enum WeekDay {
-    M(0),
-    T(1),
-    W(2),
-    R(3),
-    F(4);
+    M("0"),
+    T("1"),
+    W("2"),
+    R("3"),
+    F("4");
 
 
-    private int num;
+    private final String num;
 
-    WeekDay(int num) {
+    WeekDay(String num) {
         this.num = num;
     }
 
     String getName() {
         switch(num){
-            case 0 :
+            case "0" :
                 return "Monday";
-            case 1 :
+            case "1" :
                 return "Tuesday";
-            case 2 :
+            case "2" :
                 return "Wednesday";
-            case 3 :
+            case "3" :
                 return "Thursday";
         }
         return "Friday";

@@ -162,7 +162,7 @@ public class Course {
         String end_tim = s.next();
         for(int i = 0; i < 5; i++){
             if(days[i] != ""){
-                meetings.add(new Meeting(begin_tim, end_tim, WeekDay.valueOf(String.valueOf(i))));
+                meetings.add(new Meeting(begin_tim, end_tim, WeekDay.valueOf(String.valueOf(days[i]))));
             }
         }
         String last_name = s.next();

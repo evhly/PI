@@ -44,27 +44,9 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-       // Scanner scn = new Scanner(System.in);
-        CourseDatabase DB = new CourseDatabase(null);
-        search = new Search(DB);
-        String fName;
-
-        System.out.println("Welcome to console debugger :D");
-       // System.out.println("Enter in the file you want to read:");
-        fName = "test2.csv";//scn.next();
-        //read from csv
-        db = loadDB(fName);
-        System.out.println("Printing file contents ...");
-        for (int i = 0; i < db.size(); i++){
-            System.out.print(db.get(i) + "\t");
-        }
-
-        //next check for creating a student
-        //maybe login?
-        //then search
-
-        System.out.println("end");
-
-        //scn.close();
+        CourseReader CR = new CourseReader();
+        CR.parseCsv("TEST2018-2019.csv");
+        CR.getTerms();
+        System.out.println("done!");
     }
 }
