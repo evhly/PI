@@ -15,6 +15,7 @@ public class Schedule {
     }
 
     public Schedule(String title) {
+        this.courses = new ArrayList<>();
         this.title = title;
     }
 
