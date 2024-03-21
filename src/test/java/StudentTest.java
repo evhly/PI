@@ -30,7 +30,7 @@ class StudentTest {
         newSchedule.addCourse(testCourse);
         System.out.println(newSchedule.toSave());
         bb.addSchedule(newSchedule);
-        bb.saveSchedules();
+        Schedule.saveSchedules(bb);
     }
 
     @Test
@@ -49,9 +49,9 @@ class StudentTest {
         System.out.println(newSchedule.toSave());
         bb.addSchedule(newSchedule);
         bb.addSchedule(newSchedule2);
-        bb.saveSchedules();
+        Schedule.saveSchedules(bb);
         bb = new Student(Student.readFile(new File("test_credential_data.txt")));
-        bb.loadSchedules(courseDatabase);
+        Schedule.loadSchedules(courseDatabase ,bb);
         ArrayList<Schedule> Schoodles = bb.getSchedules();
         for (Schedule schedule : Schoodles) {
             System.out.println(schedule.toSave());

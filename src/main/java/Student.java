@@ -66,64 +66,7 @@ public class Student {
         schedules.add(schedule);
     }
 
-    /**
-     * Prints schedules to a file in a format (csv) that can be read back into the program
-     * @throws IOException File cannot be created or written to
-     */
-    public void saveSchedules() throws IOException {
-        PrintWriter fout = new PrintWriter(information.getId() + "_savedSchedules.csv");
-        StringBuilder sb = new StringBuilder();
-        for (Schedule schedule : schedules) {
-            sb.append(schedule.toSave());
-            sb.append("\n");
-            sb.append(",");
-        }
-        fout.print(sb);
-        fout.flush();
-        fout.close();
-    }
 
-    /**
-     * Loads schedules of a student from a file
-     * @param db The CourseDatabase to draw course data from, since we only have the course code
-     * @throws IOException If a save data file does not exist
-     */
-    public void loadSchedules(CourseDatabase db) throws IOException {
-        try {
-            File file = new File(information.getId() + "_savedSchedules.csv");
-            Scanner fileScanner = new Scanner(file);
-            fileScanner.useDelimiter(",");
-
-            while (fileScanner.hasNext()) {
-                Schedule schedule = new Schedule(fileScanner.next());
-                do {
-                    String code = fileScanner.next();
-                    if (code.equals("\n")) {
-                        break;
-                    }
-                    Course course;
-                    try {
-                        course = getCourseFromCode(code, db);
-                        schedule.addCourse(course);
-                    } catch (NoSuchElementException nse) {
-                        System.out.println(nse.getMessage());
-                    }
-                } while (true);
-
-                schedules.add(schedule);
-            }
-
-            fileScanner.close();
-
-        } catch (NullPointerException e) {
-            System.out.println("No saved schedules exist for " + information.getLastName() + ", ID: " + information.getId());
-        }
-
-    }
-
-    public Course getCourseFromCode(String code, CourseDatabase db) {;
-        return db.getCourseData(code);
-    }
 
 
 
