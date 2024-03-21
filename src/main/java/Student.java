@@ -76,6 +76,7 @@ public class Student {
         for (Schedule schedule : schedules) {
             sb.append(schedule.toSave());
             sb.append("\n");
+            sb.append(",");
         }
         fout.print(sb);
         fout.flush();
