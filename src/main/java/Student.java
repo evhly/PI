@@ -95,16 +95,6 @@ public class Student {
 
             while (fileScanner.hasNext()) {
                 Schedule schedule = new Schedule(fileScanner.next());
-//                while (!fileScanner.next().equals("\n")) {
-//                    String code = fileScanner.next();
-//                    Course course;
-//                    try {
-//                        course = getCourseFromCode(code, db);
-//                        schedule.addCourse(course);
-//                    } catch (NoSuchElementException nse) {
-//                        System.out.println(nse.getMessage());
-//                    }
-//                }
                 do {
                     String code = fileScanner.next();
                     if (code.equals("\n")) {
