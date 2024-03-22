@@ -54,7 +54,7 @@ public class SchedulePage extends Page {
         bottomContainer.add(calendarInfoContainer);
         add(bottomContainer);*/
 
-        setLayout(new MigLayout());
+        setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
@@ -73,37 +73,33 @@ public class SchedulePage extends Page {
 
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
-        add(backBtn);
+        add(backBtn, "cell 0 0");
 
         JButton undoBtn = new JButton();
         undoBtn.setIcon(undoIcon);
-        add(undoBtn);
+        add(undoBtn, "cell 2 0, align right");
 
         JButton pdfBtn = new JButton();
         pdfBtn.setIcon(pdfIcon);
-        add(pdfBtn, "wrap");
-
+        add(pdfBtn, "cell 3 0, align left, wrap");
 
 
         JTextField searchBar = new JTextField();
-        searchBar.setPreferredSize(new Dimension(100,20));
+        searchBar.setPreferredSize(new Dimension(200,20));
         JButton searchBtn = new JButton("SEARCH");
-        add(searchBar, "top");
+        add(searchBar, "align right");
         CalendarComponent calendar = new CalendarComponent();
-        add(searchBtn, "top");
-        add(calendar, "span 1 2, wrap");
-        DefaultListModel<String> model = new DefaultListModel<>();
-        JList<String> courseList = new JList<>( model );
-        for ( int i = 0; i < 10; i++ ){
-            model.addElement("Course" + i);
-        }
-        add(courseList, "top, wrap");
+        add(searchBtn);
+        add(calendar, "span 1 2, align right, wrap");
+        DefaultListModel<Course> model = new DefaultListModel<>();
+        JList<Course> courseList = new JList<>( model );
+        add(courseList, "top, align center, wrap");
 
-        JTextArea courseInfo = new JTextArea(7, 50);
+        JTextArea courseInfo = new JTextArea(7, 61);
         courseInfo.setText("MORE INFO ABOUT CLASS");
         courseInfo.setEditable(false);
         courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 2 3, span");
+        add(courseInfo, "cell 2 3, align right");
 
     }
 }
