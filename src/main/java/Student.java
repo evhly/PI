@@ -27,28 +27,7 @@ public class Student {
         schedules = new ArrayList<Schedule>();
         information = creds;
     }
-
-    public static Credentials readFile(File credentialDataFile) {
-        try {
-            Scanner credentialFileScanner = new Scanner(credentialDataFile);
-
-            // reads file data
-            String first = credentialFileScanner.nextLine();
-            String last = credentialFileScanner.nextLine();
-            int id = parseInt(credentialFileScanner.nextLine());
-            String major = credentialFileScanner.nextLine();
-            String password = credentialFileScanner.nextLine();
-            String email = credentialFileScanner.nextLine();
-
-            Credentials returnCreds = new Credentials(first, last, id, major, password, email);
-            credentialFileScanner.close();
-            return returnCreds;
-        } catch (IOException e) {
-            System.out.println("No credential data file found.");
-            return null;
-        }
-    }
-
+    
     /**
      * Returns all schedules associated with the student's account
      * @return an ArrayList of all schedules associated with the student's account

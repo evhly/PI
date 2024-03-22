@@ -1,4 +1,12 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
 
 public class Credentials {
 
@@ -42,6 +50,53 @@ public class Credentials {
             return "Sus";
         }
     }
+
+    public static Credentials fromCSV(String credential){
+        String[] cols = credential.split(",");
+        Credentials credentials = new Credentials(
+                cols[0].trim(),
+                cols[1].trim(),
+                parseInt(cols[2].trim()),
+                cols[3].trim(),
+                cols[4].trim(),
+                cols[5].trim());
+        return credentials;
+    }
+    public static ArrayList<Credentials> loadAllCredentials(File credentialDataFile) {
+        try {
+            ArrayList<Credentials> allCredentials = new ArrayList<>();
+
+            Scanner credentialFileScanner = new Scanner(credentialDataFile);
+            while(credentialFileScanner.hasNext()){
+                String credentials = credentialFileScanner.nextLine();
+                allCredentials.add(fromCSV(credentials));
+            }
+            return allCredentials;
+        } catch (IOException e) {
+            System.out.println("No credential data file found.");
+            return null;
+        }
+    }
+
+    public String toCSV(){
+        return(String.format("%s,%s,%d,%s,%s,%s",firstName, lastName, id, major, password, email));
+    }
+
+    public static void saveAllCredentials(ArrayList<Credentials> allCredentials, File file) throws FileNotFoundException {
+        PrintWriter pw = new PrintWriter(file);
+        StringBuilder sb = new StringBuilder();
+        for(Credentials credentials : allCredentials){
+            sb.append(credentials.toCSV());
+            sb.append("\n");
+        }
+        if(sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        pw.print(sb);
+        pw.flush();
+        pw.close();
+    }
+
 
     public Boolean checkValid(String password) {
         return password.equals(this.password);

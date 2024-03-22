@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Main {
     private Enum currentPage;
@@ -7,7 +9,7 @@ public class Main {
     private Student student;
     private Schedule currSchedule;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         App app = new App();
     }
 }

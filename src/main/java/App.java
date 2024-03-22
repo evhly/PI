@@ -7,6 +7,8 @@ public class App extends JFrame {
     private HashMap<String, Page> pages = new HashMap<>();
     private Page currentPage;
 
+    private Student loggedInStudent;
+
     public App(){
         pages.put("login-page", new LoginPage(this));
         pages.put("new-account-page", new NewAccountPage(this));
@@ -34,6 +36,14 @@ public class App extends JFrame {
         this.repaint();
         this.currentPage = page;
         System.out.println("Done");
+    }
+
+    public void setLoggedInStudent(Student student){
+        this.loggedInStudent = student;
+    }
+
+    public Student getLoggedInStudent() {
+        return loggedInStudent;
     }
 
 }

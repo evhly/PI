@@ -6,8 +6,6 @@ import java.util.ArrayList;
 public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
-
-    private ArrayList<Schedule> schedules;
     public void openSchedule(Schedule scheduleToOpen){}
     public void deleteSchedule(Schedule scheduleToDelete){}
     public void draw(Graphics g){}
@@ -57,10 +55,11 @@ public class ChooseSchedulePage extends Page{
         schedulePanel.setLayout(new GridLayout(0, 3, 10, 10));
         schedulePanel.setBackground(Color.white);
 
-        for(int i = 0; i < 6; i++){
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(new Schedule(null, "Dummy Schedule "+i));
+        for(Schedule schedule: app.getLoggedInStudent().getSchedules()) {
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule);
             schedulePanel.add(scheduleComponent);
         }
+
 
         JScrollPane scrollPane = new JScrollPane(schedulePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
