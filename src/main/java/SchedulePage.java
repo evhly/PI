@@ -8,51 +8,6 @@ public class SchedulePage extends Page {
     private Schedule schedule;
     public void draw(Graphics g){}
     public SchedulePage(App app){
-        /*setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-
-        JPanel topContainer = new JPanel();
-        JLabel label = new JLabel("THIS IS THE TOP BAR");
-        topContainer.add(label);
-        add(topContainer);
-
-        JPanel searchBarPanel = new JPanel();
-        searchBarPanel.setLayout(new BoxLayout(searchBarPanel, BoxLayout.X_AXIS));
-        searchBarPanel.setBackground(Color.RED);
-        JTextField searchBar = new JTextField();
-        searchBar.setMinimumSize(new Dimension(300, 64));
-        searchBar.setMaximumSize(new Dimension(300, 64));
-        searchBar.setPreferredSize(new Dimension(300, 64));
-        JButton searchBtn = new JButton("Search");
-        searchBarPanel.add(searchBar);
-        searchBarPanel.add(searchBtn);
-        //TODO change to course
-
-        JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
-        DefaultListModel<String> model = new DefaultListModel<>();
-        JList<String> courseList = new JList<>( model );
-        for ( int i = 0; i < 10; i++ ){
-            model.addElement("Course" + i);
-        }
-        searchPanel.add(searchBarPanel);
-        searchPanel.add(courseList);
-
-
-        JPanel calendarInfoContainer = new JPanel();
-        calendarInfoContainer.setLayout(new BoxLayout(calendarInfoContainer, BoxLayout.Y_AXIS));
-        CalendarComponent calendar = new CalendarComponent();
-        JTextArea courseInfo = new JTextArea(7, 50);
-        courseInfo.setText("MORE INFO ABOUT CLASS");
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        calendarInfoContainer.add(calendar);
-        calendarInfoContainer.add(courseInfo);
-
-        JPanel bottomContainer = new JPanel();
-        bottomContainer.setLayout(new BoxLayout(bottomContainer, BoxLayout.X_AXIS));
-        bottomContainer.add(searchPanel);
-        bottomContainer.add(calendarInfoContainer);
-        add(bottomContainer);*/
 
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
