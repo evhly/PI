@@ -43,12 +43,8 @@ public class Credentials {
     }
 
     //TODO: set up with user interface
-    public String login(String attemptEmail, String attemptPassword){
-        if (attemptEmail.equals(email) && checkValid(attemptPassword)) {
-            return "Good";
-        } else {
-            return "Sus";
-        }
+    public Boolean login(String attemptEmail, String attemptPassword){
+         return attemptEmail.equals(email) && checkValid(attemptPassword);
     }
 
     public static Credentials fromCSV(String credential){

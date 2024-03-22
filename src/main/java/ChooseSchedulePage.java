@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
+    private JLabel userNameLabel;
     public void openSchedule(Schedule scheduleToOpen){}
     public void deleteSchedule(Schedule scheduleToDelete){}
     public void draw(Graphics g){}
@@ -43,7 +44,7 @@ public class ChooseSchedulePage extends Page{
         homeButtonsContainer.add(addScheduleBtn, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
-        JLabel userNameLabel = new JLabel("HELLO USERNAME");
+        userNameLabel = new JLabel("HELLO USERNAME");
         homeButtonsContainer.add(userNameLabel, gbc);
 
 
@@ -55,12 +56,6 @@ public class ChooseSchedulePage extends Page{
         schedulePanel.setLayout(new GridLayout(0, 3, 10, 10));
         schedulePanel.setBackground(Color.white);
 
-        for(Schedule schedule: app.getLoggedInStudent().getSchedules()) {
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule);
-            schedulePanel.add(scheduleComponent);
-        }
-
-
         JScrollPane scrollPane = new JScrollPane(schedulePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -68,7 +63,14 @@ public class ChooseSchedulePage extends Page{
         scrollPane.setMaximumSize(bottomScreen);
         scrollPane.setPreferredSize(bottomScreen);
         add(scrollPane);
-
-
     }
+
+    public void loadStudentSchedules(Student student) {
+        userNameLabel.setText(student.getInformation().getFirstName());
+        for(Schedule schedule: student.getSchedules()) {
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule);
+            schedulePanel.add(scheduleComponent);
+        }
+    }
+
 }

@@ -7,15 +7,13 @@ public class App extends JFrame {
     private HashMap<String, Page> pages = new HashMap<>();
     private Page currentPage;
 
-    private Student loggedInStudent;
-
     public App(){
         pages.put("login-page", new LoginPage(this));
         pages.put("new-account-page", new NewAccountPage(this));
         pages.put("choose-schedule-page", new ChooseSchedulePage(this));
         pages.put("schedule-page", new SchedulePage(this));
 
-        switchPages("schedule-page");
+        switchPages("login-page");
 
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,12 +36,8 @@ public class App extends JFrame {
         System.out.println("Done");
     }
 
-    public void setLoggedInStudent(Student student){
-        this.loggedInStudent = student;
-    }
-
-    public Student getLoggedInStudent() {
-        return loggedInStudent;
+    public Page getPage(String name) {
+        return pages.get(name);
     }
 
 }

@@ -3,6 +3,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 
 public class LoginPage extends Page {
     private Credentials credentials;
@@ -26,6 +28,8 @@ public class LoginPage extends Page {
         emailField = new JTextField(30);
         emailFieldLabel = new JLabel("Email Address");
 
+
+
         add(emailFieldLabel, gbc);
         add(emailField, gbc);
 
@@ -37,11 +41,20 @@ public class LoginPage extends Page {
 
         submitBtn = new JButton("Submit");
 
-        submitBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                app.switchPages("new-account-page");
+        submitBtn.addActionListener((event) -> {
+            String userEmail = emailField.getText();
+            String userPassword = passwordField.getText();
+            ArrayList<Credentials> credentials1 = Credentials.loadAllCredentials(new File("credentials.csv"));
+            for(Credentials credential : credentials1){
+                if(credential.login(userEmail, userPassword)){
+                    //TODO: Actually load student's saved schedules!
+                    ((ChooseSchedulePage)app.getPage("choose-schedule-page")).loadStudentSchedules(
+                        new Student(credential)
+                    );
+                    app.switchPages("choose-schedule-page");
+                }
             }
-        } );
+        });
 
         add(submitBtn, gbc);
     }
