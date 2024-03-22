@@ -24,7 +24,19 @@ public class Schedule {
         this.title = title;
     }
 
-    public void deleteCourse(Course courseToDelete){}
+    /**
+     * Removes course from schedule
+     * @param courseToDelete Course to remove from schedule
+     */
+    public void deleteCourse(Course courseToDelete){
+        courses.remove(courseToDelete);
+    }
+
+    /**
+     * Adds a course if it does not conflict with any other course in the current schedule
+     * @param courseToAdd Course to try to add to schedule
+     * @return false if there is a time conflict, true otherwise
+     */
     public Boolean addCourse(Course courseToAdd){
         if(checkConflict(courseToAdd)){
             return false;
