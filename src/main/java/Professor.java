@@ -1,6 +1,12 @@
 public class Professor {
     private String name;
     private String department;
+
+    public Professor() {
+        name = "";
+        department = "";
+    }
+
     public Professor(String name, String department){
 
     }

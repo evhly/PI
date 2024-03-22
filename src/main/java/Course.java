@@ -65,6 +65,21 @@ public class Course {
         return term;
     }
 
+    public Course() {
+        code = "";
+        name = "";
+        department = "";
+        credits = -1;
+        description = "";
+        prereqs = new ArrayList<>();
+        professor = new Professor();
+        endDate = "";
+        days = new ArrayList<>();
+        times = new ArrayList<>();
+        term = new Term();
+        room = new ArrayList<>();
+    }
+
     public Course(
             String code,
             String name,

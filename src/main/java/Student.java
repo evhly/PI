@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.io.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -21,11 +22,6 @@ public class Student {
         information.setMajor(newCreds.getMajor());
         information.setEmail(newCreds.getEmail());
         information.setPassword(newCreds.getPassword());
-    }
-
-    public Student(Credentials creds){
-        schedules = new ArrayList<Schedule>();
-        information = creds;
     }
 
     public static Credentials readFile(File credentialDataFile) {
@@ -65,21 +61,7 @@ public class Student {
         schedules.add(schedule);
     }
 
-    /**
-     * Prints schedules to a file in a format (csv) that can be read back into the program
-     * @throws IOException File cannot be created or written to
-     */
-    public void saveSchedules() throws IOException {
-        PrintWriter fout = new PrintWriter(information.getId() + "_savedSchedules.csv");
-        StringBuilder sb = new StringBuilder();
-        for (Schedule schedule : schedules) {
-            sb.append(schedule.toSave());
-            sb.append("\n");
-        }
-        fout.print(sb);
-        fout.flush();
-        fout.close();
-    }
+
 
 
 

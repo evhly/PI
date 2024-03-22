@@ -8,8 +8,8 @@ public class Console {
     static Schedule sch;
     static Student s;
     static ArrayList<Course> db;
+    static Scanner scn;
 
-    //read from csv methed -- loadDB(fileName) ->return arraylist
 
     /**
      * loads data from a csv file into ArrayList
@@ -44,27 +44,91 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-       // Scanner scn = new Scanner(System.in);
+        scn = new Scanner(System.in);
+
         CourseDatabase DB = new CourseDatabase(null);
         search = new Search(DB);
         String fName;
+        boolean exit = false;
+        String fileName;
+        String userInput;
+
+        homeScreen();
+
+       // System.out.println("Enter in the file you want to read:");
+//        fileName = "test2.csv";//scn.next();
+//        //read from csv
+//        db = loadDB(fileName);
+//        System.out.println("Printing file contents ...");
+//        for (int i = 0; i < db.size(); i++){
+//            System.out.print(db.get(i) + "\t");
+//        }
+
+    }
+
+    private static void homeScreen() {
 
         System.out.println("Welcome to console debugger :D");
-       // System.out.println("Enter in the file you want to read:");
-        fName = "test2.csv";//scn.next();
-        //read from csv
-        db = loadDB(fName);
-        System.out.println("Printing file contents ...");
-        for (int i = 0; i < db.size(); i++){
-            System.out.print(db.get(i) + "\t");
+        System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for schedule");
+        //TODO: enter loadSchedule and saveSchedule options
+        int choice = scn.nextInt();
+        //TODO(Evelyn): add error checking
+        if (choice == 1){
+            searchScreen();
         }
+        else if (choice == 2){
+            scheduleScreen();
+        }
+    }
 
-        //next check for creating a student
-        //maybe login?
-        //then search
+    private static void scheduleScreen() {
+        //TODO: show schedule and add schedule options here
 
-        System.out.println("end");
+        System.out.println("What do you want to do now?\nEnter 1 to return home\nEnter 2 for search");
+        int choice = scn.nextInt();
+        //TODO(Evelyn): add error checking
+        if (choice == 1){
+            homeScreen();
+        }
+        else if (choice == 2){
+            searchScreen();
+        }
+    }
 
-        //scn.close();
+    private static void searchScreen() {
+        //TODO: add search methods and search UI
+
+        System.out.println("What do you want to do now?\nEnter 1 to return home\nEnter 2 for schedule");
+        int choice = scn.nextInt();
+        //TODO(Evelyn): add error checking
+        if (choice == 1){
+            homeScreen();
+        }
+        else if (choice == 2){
+            scheduleScreen();
+        }
+    }
+
+
+    public static void login(){
+//        Scanner s = new Scanner(System.in);
+//        System.out.println("--- Welcome to Sched-o-matic! ---\nPlease log in, " +
+//                "or sign up if you don't have an account.");
+//        System.out.println("Enter in name:");
+//        String name = s.next();
+//        System.out.println("Enter email:");
+//        String email = s.next();
+//        System.out.println("Enter password:");
+//        String password = s.next();
+//        System.out.println("Enter major:");
+//        String major = s.next();
+//        System.out.println("Enter student id number:");
+//        int id = s.nextInt();
+//
+//        Credentials userCred = new Credentials(name,id,major,password,email);
+//
+//        //assign user info
+//        Student currUser = new Student(userCred);
+
     }
 }
