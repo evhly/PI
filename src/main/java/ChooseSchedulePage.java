@@ -1,14 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
+    private Student loggedInStudent;
     private JLabel userNameLabel;
-    public void openSchedule(Schedule scheduleToOpen){}
-    public void deleteSchedule(Schedule scheduleToDelete){}
+    public void openSchedule(Schedule scheduleToOpen){
+
+    }
+    public void deleteSchedule(Schedule scheduleToDelete){
+        loggedInStudent.getSchedules().remove(scheduleToDelete);
+        try {
+            Schedule.saveSchedules(loggedInStudent);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public void draw(Graphics g){}
     public ChooseSchedulePage(App app){
         super();
@@ -36,10 +47,18 @@ public class ChooseSchedulePage extends Page{
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         JButton addScheduleBtn = new JButton("ADD SCHEDULE");
         addScheduleBtn.addActionListener((e) -> {
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(new Schedule(null, "Added Schedule"));
+            Schedule schedule = new Schedule();
+            loggedInStudent.addSchedule(schedule);
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
             schedulePanel.add(scheduleComponent);
             schedulePanel.revalidate();
             scheduleComponent.repaint();
+
+            try {
+                Schedule.saveSchedules(loggedInStudent);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
         homeButtonsContainer.add(addScheduleBtn, gbc);
 
@@ -65,10 +84,14 @@ public class ChooseSchedulePage extends Page{
         add(scrollPane);
     }
 
-    public void loadStudentSchedules(Student student) {
-        userNameLabel.setText(student.getInformation().getFirstName());
-        for(Schedule schedule: student.getSchedules()) {
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule);
+
+    public void loadStudentSchedules(Credentials credentials) throws IOException {
+        CourseDatabase cb = new CourseDatabase("2020-2021.csv");
+        loggedInStudent = new Student(credentials);
+        Schedule.loadSchedules(cb, loggedInStudent);
+        userNameLabel.setText(credentials.getFirstName());
+        for(Schedule schedule: loggedInStudent.getSchedules()) {
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
             schedulePanel.add(scheduleComponent);
         }
     }
