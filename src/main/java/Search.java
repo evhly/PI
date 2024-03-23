@@ -11,6 +11,7 @@ public class Search {
     private String selectedDepartment;
     public Search(CourseDatabase DB){
         this.DB = DB;
+        results = new ArrayList<>();
     }
     public ArrayList<Course> modifyQuery(String query){
         this.query = query;
@@ -25,6 +26,17 @@ public class Search {
         }
         return results;
     }
+
+        public String[] resultsStrs() {
+            String[] arr = new String[results.size()];
+            int i = 0;
+            for (Course course : results) {
+                arr[i] = course.getName();
+                i++;
+            }
+            return arr;
+        }
+
     public ArrayList<Professor> getSelectedProfessors(){
         return null;
     }
