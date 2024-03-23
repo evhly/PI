@@ -1,6 +1,9 @@
 import java.lang.reflect.Array;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -14,9 +17,10 @@ public class Course {
     private ArrayList<Course> prereqs;
     private Professor professor;
     private String endDate;
-    private ArrayList<DayOfWeek> days;
-    private ArrayList<String> times;
+//    private ArrayList<DayOfWeek> days;
+//    private ArrayList<String> times;
     // term should always be a String in the format like "S24" or "F22"
+    private HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes;
     private String term;
     private ArrayList<String> room;
 
@@ -44,15 +48,19 @@ public class Course {
         return prereqs;
     }
 
-    public ArrayList<DayOfWeek> getDays() {
-        return days;
-    }
+//    public ArrayList<DayOfWeek> getDays() {
+//        return days;
+//    }
     public ArrayList<String> getRoom() {
         return room;
     }
 
-    public ArrayList<String> getTimes() {
-        return times;
+//    public ArrayList<String> getTimes() {
+//        return times;
+//    }
+
+    public HashMap<DayOfWeek, ArrayList<LocalTime>> getMeetingTimes() {
+        return meetingTimes;
     }
 
     public Professor getProfessor() {
@@ -76,8 +84,9 @@ public class Course {
             ArrayList<Course> prereqs,
             Professor professor,
             String endDate,
-            ArrayList<DayOfWeek> days,
-            ArrayList<String> times,
+//            ArrayList<DayOfWeek> days,
+//            ArrayList<String> times,
+            HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes,
             String term,
             ArrayList<String> room
     ){
@@ -89,8 +98,9 @@ public class Course {
         this.prereqs = prereqs;
         this.professor = professor;
         this.endDate = endDate;
-        this.days = days;
-        this.times = times;
+//        this.days = days;
+//        this.times = times;
+        this.meetingTimes = meetingTimes;
         this.term = term;
         this.room = room;
     }

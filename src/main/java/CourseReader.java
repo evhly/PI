@@ -1,5 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CourseReader {
@@ -82,9 +85,26 @@ public class CourseReader {
             trm_cde = "S";
             trm_cde += String.valueOf(yr_cde - 2000 + 1);
         }
-        int credits = 0; // TODO: what value should credits be if none?
+        int credits = 0;
         if (!credit_hrs.equals("")) {
             credits = Integer.parseInt(credit_hrs); //reading str as int
+        }
+
+        HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
+        for (String day : days) {
+            ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
+            beginAndEnd.add(LocalTime.parse(begin_tim, DateTimeFormatter.ISO_LOCAL_TIME)); // reads the String as a time (HH:MM:SS)
+            beginAndEnd.add(LocalTime.parse(end_tim, DateTimeFormatter.ISO_LOCAL_TIME));
+            if (day != null) {
+                switch (day) {
+                    case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
+                    case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
+                    case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
+                    case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
+                    case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
+                    default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+                }
+            }
         }
 
         // create a new Course from these parameters
@@ -96,10 +116,10 @@ public class CourseReader {
                 null,
                 new Professor(first_name, last_name),
                 null,
-                null,
-                null,
+                meetings,
                 trm_cde,
-                null);
+                null
+            );
         return c;
     }
 
