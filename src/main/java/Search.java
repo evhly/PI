@@ -20,8 +20,16 @@ public class Search {
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
-            if(course.getName().toLowerCase().contains(query) || course.getCode().toLowerCase().contains(query)){
-                results.add(course);
+            String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()};
+            for(int j = 0; j < arr.length; j++){
+                String q = arr[j];
+                int i = q.indexOf(query);
+                if(i != -1){
+                    if(i == 0 || q.charAt(i-1) == ' ') {
+                        results.add(course);
+                        j = 2;
+                    }
+                }
             }
         }
         return results;

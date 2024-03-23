@@ -60,7 +60,7 @@ public class SchedulePage extends Page {
         });
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.blue));
-        add(scrollPane);
+        add(scrollPane, "cell 2 1");
 
 
         CalendarComponent calendar = new CalendarComponent();
