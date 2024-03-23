@@ -13,7 +13,8 @@ public class LoginPage extends Page {
     JLabel emailFieldLabel;
     JTextField passwordField;
     JLabel passwordFieldLabel;
-    JButton submitBtn;
+    JButton loginBtn;
+    JButton newAccountBtn;
 
     public LoginPage(App app) {
         super();
@@ -39,9 +40,10 @@ public class LoginPage extends Page {
         add(passwordFieldLabel, gbc);
         add(passwordField, gbc);
 
-        submitBtn = new JButton("Submit");
+        loginBtn = new JButton("LOGIN");
 
-        submitBtn.addActionListener((event) -> {
+
+        loginBtn.addActionListener((event) -> {
             String userEmail = emailField.getText();
             String userPassword = passwordField.getText();
             ArrayList<Credentials> credentials1 = Credentials.loadAllCredentials(new File("credentials.csv"));
@@ -56,7 +58,14 @@ public class LoginPage extends Page {
             }
         });
 
-        add(submitBtn, gbc);
-    }
+        add(loginBtn, gbc);
 
+        newAccountBtn = new JButton("Create New Account");
+        newAccountBtn.addActionListener((event ->{
+            app.switchPages("new-account-page");
+        }));
+
+        add(newAccountBtn);
+
+    }
 }
