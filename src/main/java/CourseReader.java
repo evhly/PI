@@ -13,10 +13,12 @@ public class CourseReader {
     public CourseReader(){
         courseDatabaseMap = new HashMap<>();
     }
-    public void parseCsv(String filename) throws FileNotFoundException {
+    public void parseCsv(String filename)  {
         ArrayList<Course> data = new ArrayList<>();
         File f = new File(filename);
-        Scanner fs = new Scanner(f);
+        try {
+            Scanner fs = new Scanner(f);
+
         //get rid of header
         fs.nextLine();
 
@@ -34,6 +36,9 @@ public class CourseReader {
             }
         }
         fs.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     public boolean sameCourse(Course c, String section) {
@@ -90,22 +95,24 @@ public class CourseReader {
             credits = Integer.parseInt(credit_hrs); //reading str as int
         }
 
-        HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
-        for (String day : days) {
-            ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
-            beginAndEnd.add(LocalTime.parse(begin_tim, DateTimeFormatter.ISO_LOCAL_TIME)); // reads the String as a time (HH:MM:SS)
-            beginAndEnd.add(LocalTime.parse(end_tim, DateTimeFormatter.ISO_LOCAL_TIME));
-            if (day != null) {
-                switch (day) {
-                    case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
-                    case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
-                    case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
-                    case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
-                    case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
-                    default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
-                }
-            }
-        }
+//        HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
+//        for (String day : days) {
+//            if(!day.isEmpty()) {
+//                ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
+//                beginAndEnd.add(LocalTime.parse(begin_tim, DateTimeFormatter.ISO_LOCAL_TIME)); // reads the String as a time (HH:MM:SS)
+//                beginAndEnd.add(LocalTime.parse(end_tim, DateTimeFormatter.ISO_LOCAL_TIME));
+//                if (day != null) {
+//                    switch (day) {
+//                        case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
+//                        case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
+//                        case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
+//                        case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
+//                        case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
+//                        default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+//                    }
+//                }
+//            }
+//        }
 
         // create a new Course from these parameters
         Course c = new Course(crs_comp1 + " " + crs_comp2 + " " + crs_comp3,
@@ -116,7 +123,8 @@ public class CourseReader {
                 null,
                 new Professor(first_name, last_name),
                 null,
-                meetings,
+//                meetings,
+                null,
                 trm_cde,
                 null
             );
