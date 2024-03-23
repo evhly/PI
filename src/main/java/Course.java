@@ -14,8 +14,8 @@ public class Course {
     private ArrayList<Course> prereqs;
     private Professor professor;
     private String endDate;
-    private ArrayList<Meeting> meetings;
-
+    private ArrayList<DayOfWeek> days;
+    private ArrayList<String> times;
     // term should always be a String in the format like "S24" or "F22"
     private String term;
     private ArrayList<String> room;
@@ -44,12 +44,15 @@ public class Course {
         return prereqs;
     }
 
-    public ArrayList<Meeting> getMeetings() {
-        return meetings;
+    public ArrayList<DayOfWeek> getDays() {
+        return days;
     }
-
     public ArrayList<String> getRoom() {
         return room;
+    }
+
+    public ArrayList<String> getTimes() {
+        return times;
     }
 
     public Professor getProfessor() {
@@ -73,7 +76,8 @@ public class Course {
             ArrayList<Course> prereqs,
             Professor professor,
             String endDate,
-            ArrayList<Meeting> meetings,
+            ArrayList<DayOfWeek> days,
+            ArrayList<String> times,
             String term,
             ArrayList<String> room
     ){
@@ -85,7 +89,8 @@ public class Course {
         this.prereqs = prereqs;
         this.professor = professor;
         this.endDate = endDate;
-        this.meetings = meetings;
+        this.days = days;
+        this.times = times;
         this.term = term;
         this.room = room;
     }
@@ -125,11 +130,5 @@ public class Course {
     public String toString() {
         return code;
     }
-//    private String description;
-//    private ArrayList<Course> prereqs;
-//    private String endDate;
-//    private ArrayList<DayOfWeek> days;
-//    private ArrayList<String> times;
-//    private Term term;
-//    private ArrayList<String> room;
+
 }

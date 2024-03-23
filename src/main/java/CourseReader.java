@@ -86,13 +86,6 @@ public class CourseReader {
         if (!credit_hrs.equals("")) {
             credits = Integer.parseInt(credit_hrs); //reading str as int
         }
-        ArrayList<Meeting> meetings = new ArrayList<>();
-        for(int i = 0; i < 5; i++){
-            if(!Objects.equals(days[i], "")){
-                meetings.add(new Meeting(parseTimeString(begin_tim), parseTimeString(end_tim), WeekDay.valueOf(String.valueOf(days[i]))));
-            }
-        }
-
 
         // create a new Course from these parameters
         Course c = new Course(crs_comp1 + " " + crs_comp2 + " " + crs_comp3,
@@ -103,7 +96,8 @@ public class CourseReader {
                 null,
                 new Professor(first_name, last_name),
                 null,
-                meetings,
+                null,
+                null,
                 trm_cde,
                 null);
         return c;
@@ -111,17 +105,6 @@ public class CourseReader {
 
     public CourseDatabase getCourseDatabase(String term){
         return courseDatabaseMap.get(term);
-    }
-
-    public Time parseTimeString(String timeStr){
-        if(timeStr.isEmpty()){
-            return null;
-        }
-        String[] timeArr = timeStr.split(":");
-        int hour = Integer.parseInt(timeArr[0]);
-        int minute = Integer.parseInt(timeArr[1]);
-        String ampm = timeArr[2].substring(timeArr[2].length()-2);
-        return new Time(hour, minute, ampm);
     }
 
     public Set<String> getTerms(){
