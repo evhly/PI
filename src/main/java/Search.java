@@ -11,20 +11,40 @@ public class Search {
     private String selectedDepartment;
     public Search(CourseDatabase DB){
         this.DB = DB;
+        results = new ArrayList<>();
     }
     public ArrayList<Course> modifyQuery(String query){
-        this.query = query;
+        this.query = query.toLowerCase();
         return search();
     }
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
-            if(course.getName().contains(query) || course.getCode().contains(query)){
-                results.add(course);
+            String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()};
+            for(int j = 0; j < arr.length; j++){
+                String q = arr[j];
+                int i = q.indexOf(query);
+                if(i != -1){
+                    if(i == 0 || q.charAt(i-1) == ' ') {
+                        results.add(course);
+                        j = 2;
+                    }
+                }
             }
         }
         return results;
     }
+
+        public String[] resultsStrs() {
+            String[] arr = new String[results.size()];
+            int i = 0;
+            for (Course course : results) {
+                arr[i] = course.getName();
+                i++;
+            }
+            return arr;
+        }
+
     public ArrayList<Professor> getSelectedProfessors(){
         return null;
     }
