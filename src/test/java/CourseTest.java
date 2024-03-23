@@ -59,5 +59,10 @@ class CourseTest {
         Course c3 = new Course(days, "12:30:00 PM","01:45:00 PM");
         assertTrue(c1.hasConflict(c3));
         assertTrue(c3.hasConflict(c1));
+        ArrayList<DayOfWeek> days2 = new ArrayList<>();
+        days2.add(DayOfWeek.TUESDAY);
+        Course c4 = new Course(days2, "12:30:00 PM","01:45:00 PM");
+        assertFalse(c1.hasConflict(c4));
+        assertFalse(c4.hasConflict(c1));
     }
 }
