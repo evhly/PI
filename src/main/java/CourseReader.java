@@ -14,10 +14,12 @@ public class CourseReader {
     public CourseReader(){
         courseDatabaseMap = new HashMap<>();
     }
-    public void parseCsv(String filename) throws FileNotFoundException {
+    public void parseCsv(String filename)  {
         ArrayList<Course> data = new ArrayList<>();
         File f = new File(filename);
-        Scanner fs = new Scanner(f);
+        try {
+            Scanner fs = new Scanner(f);
+
         //get rid of header
         fs.nextLine();
 
@@ -35,6 +37,9 @@ public class CourseReader {
             }
         }
         fs.close();
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     public boolean sameCourse(Course c, String section) {
@@ -118,7 +123,8 @@ public class CourseReader {
                 null,
                 new Professor(first_name, last_name),
                 null,
-                meetings,
+//                meetings,
+                null,
                 trm_cde,
                 null
             );

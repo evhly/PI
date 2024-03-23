@@ -21,6 +21,25 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
+
+//        // read in all files in csv directory
+//        CourseReader CR = new CourseReader();
+//        String path = "src/main/csvs";
+//        File folder = new File(path);
+//        for(File fileEntry : folder.listFiles()){
+//            if(!fileEntry.isDirectory()){
+//                String fullPath = path + "/" + fileEntry.getName();
+//                System.out.println("Attempting to read " + fullPath);
+//                CR.parseCsv(fullPath);
+//                System.out.println("Successfully read " + fullPath);
+//            }
+//        }
+
+//        // just read in test2.csv
+//        CourseReader CR = new CourseReader();
+//        CR.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+//        System.out.println("Done");
+
         scn = new Scanner(System.in);
 
         CourseDatabase DB = new CourseDatabase(null);
