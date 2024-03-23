@@ -23,12 +23,12 @@ public class Console {
     public static void main(String[] args) throws FileNotFoundException {
         scn = new Scanner(System.in);
 
-        CourseDatabase DB = new CourseDatabase(null);
+        CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
         search = new Search(DB);
-        String fName;
+        //String fName;
         boolean exit = false;
-        String fileName;
-        String userInput;
+        //String fileName;
+        //String userInput;
 
         homeScreen();
 
@@ -55,11 +55,20 @@ public class Console {
         }
         else if (choice == 2){
             scheduleScreen();
+        } else {
+            System.out.println("ERROR: bad input");
         }
     }
 
     private static void scheduleScreen() {
         //TODO: show schedule and add schedule options here
+        System.out.println("\nEnter name for desired schedule:");
+        String schNm = scn.next();
+        Schedule sched = new Schedule(schNm);
+        System.out.println("--- " + schNm + " Schedule ---");
+        System.out.println("Current schedule:");
+
+
 
         System.out.println("What do you want to do now?\nEnter 1 to return home\nEnter 2 for search");
         int choice = scn.nextInt();
