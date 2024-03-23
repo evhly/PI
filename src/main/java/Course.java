@@ -114,6 +114,12 @@ public class Course {
         for (DayOfWeek day : meetingDays) {
             ArrayList<LocalTime> times = new ArrayList<>();
             DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+            if (startTime.charAt(1) == ':') { // if the time is not padded with a 0
+                startTime = "0" + startTime;
+            }
+            if (endTime.charAt(1) == ':') { // if the time is not padded with a 0
+                endTime = "0" + endTime;
+            }
             times.add(LocalTime.parse(startTime, ampmFormatter));
             times.add(LocalTime.parse(endTime, ampmFormatter));
             m.put(day,times);
