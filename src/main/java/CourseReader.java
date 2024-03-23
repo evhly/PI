@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class CourseReader {
@@ -95,24 +96,23 @@ public class CourseReader {
             credits = Integer.parseInt(credit_hrs); //reading str as int
         }
 
-//        HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
-//        for (String day : days) {
-//            if(!day.isEmpty()) {
-//                ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
-//                beginAndEnd.add(LocalTime.parse(begin_tim, DateTimeFormatter.ISO_LOCAL_TIME)); // reads the String as a time (HH:MM:SS)
-//                beginAndEnd.add(LocalTime.parse(end_tim, DateTimeFormatter.ISO_LOCAL_TIME));
-//                if (day != null) {
-//                    switch (day) {
-//                        case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
-//                        case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
-//                        case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
-//                        case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
-//                        case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
-//                        default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
-//                    }
-//                }
-//            }
-//        }
+        HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
+        for (String day : days) {
+            ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
+            DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+            beginAndEnd.add(LocalTime.parse(begin_tim, ampmFormatter)); // reads the String as a time (HH:MM:SS AM/PM)
+            beginAndEnd.add(LocalTime.parse(end_tim, ampmFormatter));
+            if (day != null) {
+                switch (day) {
+                    case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
+                    case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
+                    case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
+                    case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
+                    case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
+                    default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+                }
+            }
+        }
 
         // create a new Course from these parameters
         Course c = new Course(crs_comp1 + " " + crs_comp2 + " " + crs_comp3,

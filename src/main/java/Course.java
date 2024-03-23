@@ -2,6 +2,7 @@ import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -105,6 +106,21 @@ public class Course {
         this.room = room;
     }
 
+    public Course() {
+    }
+
+    public Course(ArrayList<DayOfWeek> meetingDays, String startTime, String endTime) {
+        HashMap<DayOfWeek, ArrayList<LocalTime>> m = new HashMap<>();
+        for (DayOfWeek day : meetingDays) {
+            ArrayList<LocalTime> times = new ArrayList<>();
+            DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+            times.add(LocalTime.parse(startTime, ampmFormatter));
+            times.add(LocalTime.parse(endTime, ampmFormatter));
+            m.put(day,times);
+        }
+        this.meetingTimes = m;
+    }
+
 
     //may be fields need to change. if so, change them here
     /**
@@ -139,6 +155,62 @@ public class Course {
 
     public String toString() {
         return code;
+    }
+
+    /**
+     * Checks if Course other has a time conflict with this course.
+     * @param other The course to check if this has a time conflict with
+     * @return True if there is a conflict, false otherwise
+     */
+    public boolean hasConflict(Course other) {
+        HashMap<DayOfWeek, ArrayList<LocalTime>> otherTimes = other.getMeetingTimes();
+        for (DayOfWeek day : DayOfWeek.values()) { // for each day in the week
+            if (otherTimes.containsKey(day) && this.meetingTimes.containsKey(day)) { // if both classes meet on that day
+                if (timeRangesOverlap(this.meetingTimes.get(day).get(0),
+                        this.meetingTimes.get(day).get(1), otherTimes.get(day).get(0),
+                        otherTimes.get(day).get(1))) { // if the ranges of the meetingTimes overlap
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean timeRangesOverlap(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        // Cases:
+        // if start1 == start2
+        if (start1.equals(start2)) {
+            return true;
+        }
+        // if end1 == end2
+        if (end1.equals(end2)) {
+            return true;
+        }
+        // if start1 is after start2 but before end2
+        if (start1.isAfter(start2) && start1.isBefore(end2)) {
+            return true;
+        }
+        // if start2 is after start1 but before end1
+        if (start2.isAfter(start1) && start2.isBefore(end1)) {
+            return true;
+        }
+        // if end1 is after start2 but before end2
+        if (end1.isAfter(start2) && end1.isBefore(end2)) {
+            return true;
+        }
+        // if end2 is after start1 but before end1
+        if (end2.isAfter(start1) && end2.isBefore(end1)) {
+            return true;
+        }
+        // if start1 is after start2 and end1 is before end2
+        if (start1.isAfter(start2) && end1.isBefore(end2)) {
+            return true;
+        }
+        // if start2 is after start1 and end2 is before end1
+        if (start2.isAfter(start1) && end2.isBefore(end1)) {
+            return true;
+        }
+        return false;
     }
 
 }
