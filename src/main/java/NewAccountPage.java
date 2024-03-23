@@ -26,6 +26,7 @@ public class NewAccountPage extends Page {
     JLabel accountStatusLabel;
     JComboBox<String> majorComboBox;
     JButton submitBtn;
+    JButton backToLoginBtn;
 
     public NewAccountPage(App app) {
         super();
@@ -185,6 +186,20 @@ public class NewAccountPage extends Page {
         add(accountStatusLabel);
 
         add(submitBtn, gbc);
+
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 11;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 1;
+        backToLoginBtn = new JButton("Back to Log In Screen");
+        add(backToLoginBtn, gbc);
+        backToLoginBtn.addActionListener((event) -> {
+            app.switchPages("login-page");
+        });
+
+
     }
 
 }
