@@ -172,13 +172,14 @@ public class NewAccountPage extends Page {
                 case CredentialDB.SUCCESS -> {
                     //accountStatusLabel.setText("Account created! Please log in");
                     app.switchPages("login-page");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    emailField.setText("");
+                    passwordField.setText("");
+                    confirmPasswordField.setText("");
                 }
             }
-            firstNameField.setText("");
-            lastNameField.setText("");
-            emailField.setText("");
-            passwordField.setText("");
-            confirmPasswordField.setText("");
+
         });
         accountStatusLabel = new JLabel();
         add(accountStatusLabel);
