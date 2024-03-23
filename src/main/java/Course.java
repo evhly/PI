@@ -141,4 +141,27 @@ public class Course {
         return code;
     }
 
+    /**
+     * Checks if Course other has a time conflict with this course.
+     * @param other The course to check if this has a time conflict with
+     * @return True if there is a conflict, false otherwise
+     */
+    public boolean hasConflict(Course other) {
+        HashMap<DayOfWeek, ArrayList<LocalTime>> otherTimes = other.getMeetingTimes();
+        for (DayOfWeek day : DayOfWeek.values()) { // for each day in the week
+            if (otherTimes.containsKey(day) && this.meetingTimes.containsKey(day)) { // if both classes meet on that day
+                if (timeRangesOverlap(this.meetingTimes.get(day).get(0),
+                        this.meetingTimes.get(day).get(1), otherTimes.get(day).get(0),
+                        otherTimes.get(day).get(1))) { // if the ranges of the meetingTimes overlap
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean timeRangesOverlap(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        return false; //TODO: implement
+    }
+
 }
