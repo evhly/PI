@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class CourseReader {
@@ -93,8 +94,9 @@ public class CourseReader {
         HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
         for (String day : days) {
             ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
-            beginAndEnd.add(LocalTime.parse(begin_tim, DateTimeFormatter.ISO_LOCAL_TIME)); // reads the String as a time (HH:MM:SS)
-            beginAndEnd.add(LocalTime.parse(end_tim, DateTimeFormatter.ISO_LOCAL_TIME));
+            DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+            beginAndEnd.add(LocalTime.parse(begin_tim, ampmFormatter)); // reads the String as a time (HH:MM:SS AM/PM)
+            beginAndEnd.add(LocalTime.parse(end_tim, ampmFormatter));
             if (day != null) {
                 switch (day) {
                     case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
