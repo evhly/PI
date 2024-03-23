@@ -81,9 +81,9 @@ public class SchedulePage extends Page {
     private Search init(){
         CourseDatabase courseDB = new CourseDatabase();
         ArrayList<Course> courses = new ArrayList<>();
-        Course c1 = new Course("COMP 141 A", "Computer Programming 1", null, 3, null, null, null, null, null, null, null, null);
-        Course c2 = new Course("COMP 141 B", "Computer Programming 1", null, 3, null, null, null, null, null, null, null, null);
-        Course c3 = new Course("COMP 220 A", "Computer Programming 2", null, 3, null, null, null, null, null, null, null, null);
+        Course c1 = new Course("COMP 141 A", "Computer Programming 1", null, 3, null, null, null, null, null, null, null);
+        Course c2 = new Course("COMP 141 B", "Computer Programming 1", null, 3, null, null, null, null, null, null, null);
+        Course c3 = new Course("COMP 220 A", "Computer Programming 2", null, 3, null, null, null, null, null, null, null);
         courseDB.addCourse(c1);
         courseDB.addCourse(c2);
         courseDB.addCourse(c3);
