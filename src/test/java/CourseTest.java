@@ -23,5 +23,26 @@ class CourseTest {
 
         boolean overlap1 = Course.timeRangesOverlap(start1, end1, start2, end2);
         System.out.println(overlap1);
+
+        start2 = LocalTime.parse("12:30:00 PM", ampmFormatter);
+        end2 = LocalTime.parse("01:45:00 PM", ampmFormatter);
+
+        boolean overlap2 = Course.timeRangesOverlap(start1,end1,start2,end2);
+        System.out.println(overlap2);
+
+        start2 = LocalTime.parse("11:00:00 AM", ampmFormatter);
+        end2 = LocalTime.parse("12:15:00 PM", ampmFormatter);
+
+        boolean overlap3 = Course.timeRangesOverlap(start1,end1,start2,end2);
+        System.out.println(overlap3);
+
+        boolean overlap4 = Course.timeRangesOverlap(start1,end1,start1,end1);
+        System.out.println(overlap4);
+
+        start2 = LocalTime.parse("12:15:00 PM", ampmFormatter);
+        end2 = LocalTime.parse("12:45:00 PM", ampmFormatter);
+
+        boolean overlap5 = Course.timeRangesOverlap(start1,end1,start2,end2);
+        System.out.println(overlap5);
     }
 }
