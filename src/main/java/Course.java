@@ -161,7 +161,40 @@ public class Course {
     }
 
     public static boolean timeRangesOverlap(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
-        return false; //TODO: implement
+        // Cases:
+        // if start1 == start2
+        if (start1.equals(start2)) {
+            return true;
+        }
+        // if end1 == end2
+        if (end1.equals(end2)) {
+            return true;
+        }
+        // if start1 is after start2 but before end2
+        if (start1.isAfter(start2) && start1.isBefore(end2)) {
+            return true;
+        }
+        // if start2 is after start1 but before end1
+        if (start2.isAfter(start1) && start2.isBefore(end1)) {
+            return true;
+        }
+        // if end1 is after start2 but before end2
+        if (end1.isAfter(start2) && end1.isBefore(end2)) {
+            return true;
+        }
+        // if end2 is after start1 but before end1
+        if (end2.isAfter(start1) && end2.isBefore(end1)) {
+            return true;
+        }
+        // if start1 is after start2 and end1 is before end2
+        if (start1.isAfter(start2) && end1.isBefore(end2)) {
+            return true;
+        }
+        // if start2 is after start1 and end2 is before end1
+        if (start2.isAfter(start1) && end2.isBefore(end1)) {
+            return true;
+        }
+        return false;
     }
 
 }
