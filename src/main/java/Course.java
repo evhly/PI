@@ -3,7 +3,9 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Course {
+
     private String code;
     private String name;
     private String department;
@@ -14,7 +16,8 @@ public class Course {
     private String endDate;
     private ArrayList<DayOfWeek> days;
     private ArrayList<String> times;
-    private Term term;
+    // term should always be a String in the format like "S24" or "F22"
+    private String term;
     private ArrayList<String> room;
 
     public String getCode() {
@@ -44,7 +47,6 @@ public class Course {
     public ArrayList<DayOfWeek> getDays() {
         return days;
     }
-
     public ArrayList<String> getRoom() {
         return room;
     }
@@ -61,23 +63,8 @@ public class Course {
         return endDate;
     }
 
-    public Term getTerm() {
+    public String getTerm() {
         return term;
-    }
-
-    public Course() {
-        code = "";
-        name = "";
-        department = "";
-        credits = -1;
-        description = "";
-        prereqs = new ArrayList<>();
-        professor = new Professor();
-        endDate = "";
-        days = new ArrayList<>();
-        times = new ArrayList<>();
-        term = new Term();
-        room = new ArrayList<>();
     }
 
     public Course(
@@ -91,9 +78,9 @@ public class Course {
             String endDate,
             ArrayList<DayOfWeek> days,
             ArrayList<String> times,
-            Term term,
+            String term,
             ArrayList<String> room
-    ) {
+    ){
         this.code = code;
         this.name = name;
         this.department = department;
@@ -110,8 +97,8 @@ public class Course {
 
 
     //may be fields need to change. if so, change them here
-
     /**
+     *
      * yr_cde
      * trm_cde
      * crs_cde
@@ -138,47 +125,10 @@ public class Course {
      * preferred_name
      * comment_txt
      *
-     * @param csvLine
      */
-    public Course(String csvLine) {
-        Scanner s = new Scanner(csvLine);
-        s.useDelimiter(",");
-        String yr_cde = s.next();
-        String trm_cde = s.next();
-        String crs_cde = s.next();
-        code = crs_cde;
-        String crs_comp1 = s.next();
-        department = crs_comp1;
-        String crs_comp2 = s.next();
-        String crs_comp3 = s.next();
-        String crs_title = s.next();
-        name = crs_title;
-        String credit_hrs = s.next();
-        if (!credit_hrs.equals("")) {
-            credits = Integer.parseInt(credit_hrs); //reading str as int
-        }
-        String x_listed_parnt_crs = s.next();
-        String acad_credit_varies = s.next();
-        String acad_credit_label = s.next();
-        String crs_capacity = s.next();
-        String crs_enrollment = s.next();
-        String bldg_cde = s.next();
-        String room_cde = s.next();
-        String monday_cde = s.next();
-        String tuesday_cde = s.next();
-        String wednesday_cde = s.next();
-        String thursday_cde = s.next();
-        String friday_cde = s.next();
-        String begin_tim = s.next();
-        String end_tim = s.next();
-        String last_name = s.next();
-        professor = new Professor(last_name, department);
-        String first_name = s.next();
-        String preferred_name = s.next();
-        if (s.hasNext()) {
-            String comment_txt = s.next();
-        }
 
-        s.close();
+    public String toString() {
+        return code;
     }
+
 }

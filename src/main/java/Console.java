@@ -10,29 +10,6 @@ public class Console {
     static ArrayList<Course> db;
     static Scanner scn;
 
-
-    /**
-     * loads data from a csv file into ArrayList
-     * @param fileName for csv
-     * @return ArrayList of data
-     * @throws FileNotFoundException
-     */
-    public static ArrayList<Course> loadDB(String fileName) throws FileNotFoundException {
-        ArrayList<Course> data = new ArrayList<>();
-        File f = new File(fileName);
-        Scanner fs = new Scanner(f);
-        //get rid of header
-        fs.nextLine();
-
-        while (fs.hasNext()){
-           // Scanner ls = new Scanner(fs.nextLine());
-            Course c = new Course(fs.nextLine());
-            data.add(c);
-        }
-        fs.close();
-        return data;
-    }
-
     //excel
     //ctrl+ h
     //10 = fall class

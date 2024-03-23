@@ -2,10 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class NewAccountPage extends Page {
 
     private Credentials credentials;
+
+
 
     JTextField firstNameField;
     JLabel firstNameFieldLabel;
@@ -18,6 +23,7 @@ public class NewAccountPage extends Page {
     JTextField confirmPasswordField;
     JLabel confirmPasswordFieldLabel;
     JLabel majorComboBoxLabel;
+    JLabel accountStatusLabel;
     JComboBox<String> majorComboBox;
     JButton submitBtn;
 
@@ -131,11 +137,52 @@ public class NewAccountPage extends Page {
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
 
-        submitBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                app.switchPages("login-page");
+        submitBtn.addActionListener((event) -> {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
+            String major = (String) majorComboBox.getSelectedItem();
+            //TODO make newID aut0increment
+
+            app.switchPages("login-page");
+            Credentials studentCredentials = new Credentials(
+                firstName, lastName, 1, major,
+                password, email
+            );
+            CredentialDB credDb = CredentialDB.getInstance();
+
+
+            int result = 0;
+            try {
+                result = credDb.newAccount(studentCredentials, confirmPassword);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        } );
+            switch(result) {
+                case CredentialDB.PASSWORDS_DONT_MATCH -> {
+                    accountStatusLabel.setText("Passwords don't match");
+                    app.switchPages("new-account-page");
+                }
+                case CredentialDB.EMAIL_ALREADY_USED -> {
+                    accountStatusLabel.setText("Account exists with that email. Try logging in");
+                    app.switchPages("new-account-page");
+                }
+                case CredentialDB.SUCCESS -> {
+                    //accountStatusLabel.setText("Account created! Please log in");
+                    app.switchPages("login-page");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    emailField.setText("");
+                    passwordField.setText("");
+                    confirmPasswordField.setText("");
+                }
+            }
+
+        });
+        accountStatusLabel = new JLabel();
+        add(accountStatusLabel);
 
         add(submitBtn, gbc);
     }

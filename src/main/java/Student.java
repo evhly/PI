@@ -24,27 +24,11 @@ public class Student {
         information.setPassword(newCreds.getPassword());
     }
 
-    public static Credentials readFile(File credentialDataFile) {
-        try {
-            Scanner credentialFileScanner = new Scanner(credentialDataFile);
-
-            // reads file data
-            String first = credentialFileScanner.nextLine();
-            String last = credentialFileScanner.nextLine();
-            int id = parseInt(credentialFileScanner.nextLine());
-            String major = credentialFileScanner.nextLine();
-            String password = credentialFileScanner.nextLine();
-            String email = credentialFileScanner.nextLine();
-
-            Credentials returnCreds = new Credentials(first, last, id, major, password, email);
-            credentialFileScanner.close();
-            return returnCreds;
-        } catch (IOException e) {
-            System.out.println("No credential data file found.");
-            return null;
-        }
+    public Student(Credentials creds){
+        schedules = new ArrayList<Schedule>();
+        information = creds;
     }
-
+    
     /**
      * Returns all schedules associated with the student's account
      * @return an ArrayList of all schedules associated with the student's account
@@ -60,9 +44,5 @@ public class Student {
     public void addSchedule(Schedule schedule) {
         schedules.add(schedule);
     }
-
-
-
-
 
 }
