@@ -13,7 +13,7 @@ public class App extends JFrame {
         pages.put("choose-schedule-page", new ChooseSchedulePage(this));
         pages.put("schedule-page", new SchedulePage(this));
 
-        switchPages("schedule-page");
+        switchPages("login-page");
 
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,6 +34,10 @@ public class App extends JFrame {
         this.repaint();
         this.currentPage = page;
         System.out.println("Done");
+    }
+
+    public Page getPage(String name) {
+        return pages.get(name);
     }
 
 }
