@@ -2,6 +2,7 @@ import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -103,6 +104,21 @@ public class Course {
         this.meetingTimes = meetingTimes;
         this.term = term;
         this.room = room;
+    }
+
+    public Course() {
+    }
+
+    public Course(ArrayList<DayOfWeek> meetingDays, String startTime, String endTime) {
+        HashMap<DayOfWeek, ArrayList<LocalTime>> m = new HashMap<>();
+        for (DayOfWeek day : meetingDays) {
+            ArrayList<LocalTime> times = new ArrayList<>();
+            DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+            times.add(LocalTime.parse(startTime, ampmFormatter));
+            times.add(LocalTime.parse(endTime, ampmFormatter));
+            m.put(day,times);
+        }
+        this.meetingTimes = m;
     }
 
 

@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,5 +46,18 @@ class CourseTest {
 
         boolean overlap5 = Course.timeRangesOverlap(start1,end1,start2,end2);
         System.out.println(overlap5);
+    }
+
+    @Test
+    void hasConflictTest() {
+        ArrayList<DayOfWeek> days = new ArrayList<>();
+        days.add(DayOfWeek.MONDAY);
+        Course c1 = new Course(days, "12:00:00 PM", "12:50:00 PM");
+        Course c2 = new Course(days, "01:00:00 PM", "01:50:00 PM");
+        assertFalse(c1.hasConflict(c2));
+        assertFalse(c2.hasConflict(c1));
+        Course c3 = new Course(days, "12:30:00 PM","01:45:00 PM");
+        assertTrue(c1.hasConflict(c3));
+        assertTrue(c3.hasConflict(c1));
     }
 }
