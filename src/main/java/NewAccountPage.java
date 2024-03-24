@@ -146,11 +146,12 @@ public class NewAccountPage extends Page {
             String password = passwordField.getText();
             String confirmPassword = confirmPasswordField.getText();
             String major = (String) majorComboBox.getSelectedItem();
-            //TODO make newID aut0increment
+
 
             app.switchPages("login-page");
+            CredentialDB credDb = CredentialDB.getInstance();
             Credentials studentCredentials = new Credentials(
-                firstName, lastName, 1, major,
+                firstName, lastName, credDb.findNextId(), major,
                 password, email
             );
 
@@ -160,8 +161,6 @@ public class NewAccountPage extends Page {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            CredentialDB credDb = CredentialDB.getInstance();
 
 
             int result = 0;

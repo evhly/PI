@@ -30,13 +30,13 @@ public class SchedulePage extends Page {
         backBtn.setIcon(backArrowIcon);
         add(backBtn, "cell 0 0");
 
-        JButton undoBtn = new JButton();
-        undoBtn.setIcon(undoIcon);
-        add(undoBtn, "cell 2 0, align right");
+//        JButton undoBtn = new JButton();
+//        undoBtn.setIcon(undoIcon);
+//        add(undoBtn, "cell 2 0, align right");
 
-        JButton pdfBtn = new JButton();
-        pdfBtn.setIcon(pdfIcon);
-        add(pdfBtn, "cell 3 0, align left, wrap");
+//        JButton pdfBtn = new JButton();
+//        pdfBtn.setIcon(pdfIcon);
+//        add(pdfBtn, "cell 3 0, align left, wrap");
 
 
         JTextField searchBar = new JTextField();

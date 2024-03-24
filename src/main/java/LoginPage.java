@@ -70,4 +70,10 @@ public class LoginPage extends Page {
         add(newAccountBtn);
 
     }
+
+    public void clearTextBoxes(){
+        emailField.setText("");
+        passwordField.setText("");
+    }
+
 }
