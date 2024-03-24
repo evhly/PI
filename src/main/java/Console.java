@@ -21,7 +21,7 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-
+//
 //        // read in all files in csv directory
 //        CourseReader CR = new CourseReader();
 //        String path = "src/main/csvs";
@@ -35,15 +35,15 @@ public class Console {
 //            }
 //        }
 
-//        // just read in test2.csv
-//        CourseReader CR = new CourseReader();
-//        CR.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-//        System.out.println("Done");
+        // just read in test2.csv
+        CourseReader cr = new CourseReader();
+        cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+        System.out.println("Done");
 
         scn = new Scanner(System.in);
 
-        CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
-        search = new Search(DB);
+        //CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
+        search = new Search(cr.getCourseDatabase("F22"));
         //String fName;
         boolean exit = false;
         //String fileName;
@@ -65,16 +65,19 @@ public class Console {
     private static void homeScreen() {
 
         System.out.println("Welcome to console debugger :D");
-        System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for schedule");
+        System.out.println("\nChose an option: \nEnter 1 for search\nEnter 2 for schedule" +
+                "\nEnter -1 to quit");
         //TODO: enter loadSchedule and saveSchedule options
+
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
-        if (choice == 1){
+        if (choice == 1){         //moving to search screen
             searchScreen();
-        }
-        else if (choice == 2){
+        } else if (choice == 2){  //moving to schedule screen
             scheduleScreen();
-        } else {
+        } else if (choice == -1){ //exiting program
+            System.out.println("quitting ...");
+        } else {                  //bad input
             System.out.println("ERROR: bad input");
         }
     }
@@ -85,11 +88,11 @@ public class Console {
         String schNm = scn.next();
         Schedule sched = new Schedule(schNm);
         System.out.println("--- " + schNm + " Schedule ---");
-        System.out.println("Current schedule:");
 
 
 
-        System.out.println("What do you want to do now?\nEnter 1 to return home\nEnter 2 for search");
+        System.out.println("\nWhat do you want to do now?\n" +
+                "Enter 1 to return home\nEnter 2 for search");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1){
@@ -103,7 +106,8 @@ public class Console {
     private static void searchScreen() {
         //TODO: add search methods and search UI
 
-        System.out.println("What do you want to do now?\nEnter 1 to return home\nEnter 2 for schedule");
+        System.out.println("\nWhat do you want to do now?\n" +
+                "Enter 1 to return home\nEnter 2 for schedule");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1){

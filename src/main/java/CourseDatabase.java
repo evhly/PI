@@ -12,28 +12,6 @@ public class CourseDatabase {
         File in = new File(path);
     }
 
-    /**
-     * loads in the database from a CSV file
-     * @param fileName name of CSV file
-     * @return data is an ArrayList of courses
-     * @throws FileNotFoundException
-     */
-    public static ArrayList<Course> loadDB(String fileName) throws FileNotFoundException {
-        ArrayList<Course> data = new ArrayList<>();
-        File f = new File(fileName);
-        Scanner fs = new Scanner(f);
-        //get rid of header
-        fs.nextLine();
-
-        while (fs.hasNext()){
-            // Scanner ls = new Scanner(fs.nextLine());
-            //Course c = new Course(fs.nextLine());
-            //data.add(c);
-        }
-        fs.close();
-        return data;
-    }
-
     public CourseDatabase() {
         courses = new HashSet<>();
     }
