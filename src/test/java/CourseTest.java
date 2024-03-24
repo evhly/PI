@@ -65,4 +65,11 @@ class CourseTest {
         assertFalse(c1.hasConflict(c4));
         assertFalse(c4.hasConflict(c1));
     }
+
+    @Test
+    void paddingTest() {
+        ArrayList<DayOfWeek> days = new ArrayList<>();
+        days.add(DayOfWeek.FRIDAY);
+        Course c = new Course(days, "8:00:00 AM","08:50:00 AM");
+    }
 }
