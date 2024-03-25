@@ -96,6 +96,7 @@ public class CourseReader {
             credits = Integer.parseInt(credit_hrs); //reading str as int
         }
 
+        // parse meeting times and create a map of days of the week to meeting times
         HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
         for (String day : days) {
             ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
