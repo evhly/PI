@@ -7,10 +7,12 @@ import java.util.ArrayList;
 public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
+
+    App app;
     private Student loggedInStudent;
     private JLabel userNameLabel;
-    public void openSchedule(Schedule scheduleToOpen){
-
+    public void openSchedule(){
+        app.switchPages("schedule-page");
     }
     public void deleteSchedule(Schedule scheduleToDelete){
         loggedInStudent.getSchedules().remove(scheduleToDelete);
@@ -24,6 +26,7 @@ public class ChooseSchedulePage extends Page{
     public ChooseSchedulePage(App app){
         super();
 
+        this.app = app;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         int width = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
@@ -63,12 +66,16 @@ public class ChooseSchedulePage extends Page{
         homeButtonsContainer.add(addScheduleBtn, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
-        userNameLabel = new JLabel("HELLO USERNAME");
+        userNameLabel = new JLabel();
         homeButtonsContainer.add(userNameLabel, gbc);
 
 
         gbc.anchor = GridBagConstraints.NORTHEAST;
         JButton logoutBtn = new JButton("LOG OUT");
+        logoutBtn.addActionListener((event) ->{
+            ((LoginPage)app.getPage("login-page")).clearTextBoxes();
+            app.switchPages("login-page");
+        });
         homeButtonsContainer.add(logoutBtn, gbc);
 
         schedulePanel = new JPanel();
@@ -84,15 +91,18 @@ public class ChooseSchedulePage extends Page{
         add(scrollPane);
     }
 
-
     public void loadStudentSchedules(Credentials credentials) throws IOException {
+        //Remove Old Schedule Components From View
+        schedulePanel.removeAll();
+
+        //Add In New Schedule Components for Loaded Student
         CourseDatabase cb = new CourseDatabase("2020-2021.csv");
         loggedInStudent = new Student(credentials);
         Schedule.loadSchedules(cb, loggedInStudent);
-        userNameLabel.setText(credentials.getFirstName());
+        userNameLabel.setText("Hello " + credentials.getFirstName() + "!");
         for(Schedule schedule: loggedInStudent.getSchedules()) {
             HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
-            schedulePanel.add(scheduleComponent);
+                schedulePanel.add(scheduleComponent);
         }
     }
 

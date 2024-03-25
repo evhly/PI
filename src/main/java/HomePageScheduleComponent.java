@@ -44,6 +44,10 @@ public class HomePageScheduleComponent extends JPanel {
         pencilIcon = new ImageIcon(newimg2);
         editSchedule.setIcon(pencilIcon);
         editSchedule.setPreferredSize(btnDimension);
+        editSchedule.addActionListener((event) -> {
+            //TODO open specific schedule
+            csp.openSchedule();
+        });
         add(editSchedule, "align center");
     }
 
