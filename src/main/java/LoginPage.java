@@ -12,7 +12,7 @@ public class LoginPage extends Page {
 
     JTextField emailField;
     JLabel emailFieldLabel;
-    JTextField passwordField;
+    JPasswordField passwordField;
     JLabel passwordFieldLabel;
     JButton loginBtn;
     JButton newAccountBtn;
@@ -34,7 +34,7 @@ public class LoginPage extends Page {
         add(emailFieldLabel, gbc);
         add(emailField, gbc);
 
-        passwordField = new JTextField(30);
+        passwordField = new JPasswordField(30);
         passwordFieldLabel = new JLabel("Password");
 
         add(passwordFieldLabel, gbc);

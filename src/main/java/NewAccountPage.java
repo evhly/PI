@@ -19,9 +19,9 @@ public class NewAccountPage extends Page {
     JLabel lastNameFieldLabel;
     JTextField emailField;
     JLabel emailFieldLabel;
-    JTextField passwordField;
+    JPasswordField passwordField;
     JLabel passwordFieldLabel;
-    JTextField confirmPasswordField;
+    JPasswordField confirmPasswordField;
     JLabel confirmPasswordFieldLabel;
     JLabel majorComboBoxLabel;
     JLabel accountStatusLabel;
@@ -89,7 +89,7 @@ public class NewAccountPage extends Page {
         gbc.gridheight = 1;
         add(passwordFieldLabel, gbc);
 
-        passwordField = new JTextField(30);
+        passwordField = new JPasswordField(30);
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
@@ -103,7 +103,7 @@ public class NewAccountPage extends Page {
         gbc.gridheight = 1;
         add(confirmPasswordFieldLabel, gbc);
 
-        confirmPasswordField = new JTextField(30);
+        confirmPasswordField = new JPasswordField(30);
         gbc.gridx = 0;
         gbc.gridy = 7;
         gbc.gridwidth = 2;
