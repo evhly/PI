@@ -2,21 +2,29 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<String> searchResults = new DefaultListModel<>();
+    Set<String> terms;
+    CourseReader CR;
+    Search search;
+    String curTerm = "F20";
     private Schedule schedule;
     public void draw(Graphics g){}
     public SchedulePage(App app){
-
-        Search search = init();
+//        search = init();
+        readCsvs();
 
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
+        ImageIcon plusIcon = new ImageIcon("resources/plus-line-icon.png");
+
 
         Image backArrow = backArrowIcon.getImage();
         Image newimg = backArrow.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
@@ -30,6 +38,10 @@ public class SchedulePage extends Page {
         Image newimg3 = pdf.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         pdfIcon = new ImageIcon(newimg3);
 
+        Image plus = plusIcon.getImage();
+        Image newimg4 = plus.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        plusIcon = new ImageIcon(newimg4);
+
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
         add(backBtn, "cell 0 0");
@@ -41,6 +53,10 @@ public class SchedulePage extends Page {
         JButton pdfBtn = new JButton();
         pdfBtn.setIcon(pdfIcon);
         add(pdfBtn, "cell 3 0, align left, wrap");
+
+        JButton plusBtn = new JButton();
+        plusBtn.setIcon(plusIcon);
+        add(plusBtn, "cell 4 0, align left, wrap");
 
 
         JTextField searchBar = new JTextField();
@@ -61,6 +77,11 @@ public class SchedulePage extends Page {
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.blue));
         add(scrollPane, "cell 2 1");
+
+        plusBtn.addActionListener((event) -> {
+            Object selected = searchResults.getElementAt(list.getSelectedIndex());
+            System.out.println(selected);
+        });
 
 
         CalendarComponent calendar = new CalendarComponent();
@@ -90,5 +111,21 @@ public class SchedulePage extends Page {
         Search s = new Search(courseDB);
         return s;
 
+    }
+
+    private void readCsvs(){
+        CR = new CourseReader();
+        String path = "src/main/csvs";
+        File folder = new File(path);
+        for(File fileEntry : folder.listFiles()){
+            if(!fileEntry.isDirectory()){
+                String fullPath = path + "/" + fileEntry.getName();
+                System.out.println("Attempting to read " + fullPath);
+                CR.parseCsv(fullPath);
+                System.out.println("Successfully read " + fullPath);
+            }
+        }
+        terms = CR.getTerms();
+        search = new Search(CR.getCourseDatabase("F20"));
     }
 }
