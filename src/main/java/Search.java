@@ -17,6 +17,11 @@ public class Search {
         this.query = query.toLowerCase();
         return search();
     }
+
+    public ArrayList<Course> getResults() {
+        return results;
+    }
+
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
