@@ -43,6 +43,16 @@ public class CredentialDB {
         return null;
     }
 
+    public int findNextId(){
+        int max = 0;
+        for(Credentials credential : allCredentials){
+            if (credential.getId() > max){
+                max = credential.getId();
+            }
+        }
+        return max + 1;
+    }
+
 
     private static CredentialDB instance;
     public static CredentialDB getInstance() {
