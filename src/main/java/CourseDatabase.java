@@ -16,7 +16,7 @@ public class CourseDatabase {
         courses = new HashSet<>();
     }
 
-    public void addCourse(Course course) { //TODO: fix
+    public void addCourse(Course course) {
 
         // checks if a course already exists with this course code
         try { //TODO: it may be better to use if/else since it is faster than try/catch in Java
