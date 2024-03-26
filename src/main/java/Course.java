@@ -158,11 +158,20 @@ public class Course {
      * comment_txt
      *
      */
+
+    /**
+     *
+     * @return course code
+     */
     @Override
     public String toString() {
         return code;
     }
 
+    /**
+     * another tostring
+     * @return coures code and class name
+     */
     public String consoleString() {
         return code + " " + name;
     }

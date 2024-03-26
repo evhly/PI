@@ -39,13 +39,14 @@ public class Console {
         s = new Student(null);
         // just read in test2.csv
         cr = new CourseReader();
-        cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+     //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+        cr.parseCsv("C://Users//HUTCHINSEJ19//IdeaProjects//PIb//src//main//csvs//2020-2021.csv");
         System.out.println("Done");
 
         scn = new Scanner(System.in);
 
         //CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
-        search = new Search(cr.getCourseDatabase("F22"));
+        search = new Search(cr.getCourseDatabase("F20"));
         //String fName;
         //boolean exit = false;
         //String fileName;
@@ -92,7 +93,7 @@ public class Console {
 
 
         System.out.println("\nWhat do you want to do now?\n" +
-                "Enter 1 to return home\nEnter 2 for search");
+                "1 to return home\n2 for search");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1) {
@@ -106,7 +107,7 @@ public class Console {
      * screen that facilitates search
      */
     private static void searchScreen() {
-        System.out.println("Welcome to search! \nEnter 1 to search" +
+        System.out.println("Welcome to search! \n1 to search" +
                 "\n2 to filter\n3 to return home\n4 to schedule");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
@@ -162,10 +163,10 @@ public class Console {
     private static void searchWTerm() {
         System.out.println("Enter search term:");
         String query = scn.nextLine();
+        query = scn.nextLine();
         ArrayList<Course> results = search.modifyQuery(query);
         int numPrint = Math.min(6, results.size());
         for (int i = 0; i < numPrint; i++) {
-            //TODO: fix
             System.out.println(i + ": " +  results.get(i).consoleString());//+"tostring for course"
         }
     }

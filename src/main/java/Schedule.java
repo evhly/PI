@@ -31,9 +31,9 @@ public class Schedule {
         this.title = title;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
-    }
+//    public ArrayList<Course> getCourses() {
+//        return courses;
+//    }
 
     /**
      * Removes course from schedule
