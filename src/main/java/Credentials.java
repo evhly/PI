@@ -42,7 +42,6 @@ public class Credentials {
         email = newEmail;
     }
 
-    //TODO: set up with user interface
     public Boolean login(String attemptEmail, String attemptPassword){
          return attemptEmail.equals(email) && checkValid(attemptPassword);
     }

@@ -1,11 +1,18 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class CalendarComponent extends JPanel {
-    public CalendarComponent(){
+    Schedule schedule;
+    public CalendarComponent(Schedule s){
+        this.schedule = s;
+
         setMinimumSize(new Dimension(550, 500));
         setMaximumSize(new Dimension(550, 500));
         setPreferredSize(new Dimension(550, 500));
@@ -21,6 +28,16 @@ public class CalendarComponent extends JPanel {
             for (int j = 0; j < 7; j++) {
                 // if course add component
                 data[i][j] = " ";
+            }
+        }
+        for(Course c : schedule.getCourses()){
+            if(c.getMeetingTimes() != null){
+                for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){
+                    int day = entry.getKey().getValue() % 7;
+                    int time = (int)ChronoUnit.HOURS.between(LocalTime.parse("08:00:00"), entry.getValue().get(0));
+                    System.out.println("time: " + time);
+                    data[time][day] = c.getCode();
+                }
             }
         }
         String[] columnNames = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};

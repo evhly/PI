@@ -24,10 +24,12 @@ public class Student {
         information.setPassword(newCreds.getPassword());
     }
 
+
     public Student(Credentials creds){
         schedules = new ArrayList<Schedule>();
         information = creds;
     }
+
     
     /**
      * Returns all schedules associated with the student's account
