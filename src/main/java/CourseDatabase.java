@@ -16,7 +16,7 @@ public class CourseDatabase {
         courses = new HashSet<>();
     }
 
-    public void addCourse(Course course) {
+    public void addCourse(Course course) { //TODO: fix
 
         // checks if a course already exists with this course code
         try { //TODO: it may be better to use if/else since it is faster than try/catch in Java
@@ -66,5 +66,15 @@ public class CourseDatabase {
             }
         }
         throw new NoSuchElementException("Course with code " + code + " does not exist in database.");
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Course course : courses) {
+            sb.append(course.getCode());
+            sb.append(", ");
+        }
+        return sb.toString();
     }
 }
