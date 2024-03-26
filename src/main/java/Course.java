@@ -136,9 +136,13 @@ public class Course {
      * comment_txt
      *
      */
-
+    @Override
     public String toString() {
         return code;
+    }
+
+    public String consoleString() {
+        return code + " " + name;
     }
 
 }

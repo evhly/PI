@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CourseReader {
-
-
     Map<String, CourseDatabase> courseDatabaseMap;
 
     public CourseReader(){
