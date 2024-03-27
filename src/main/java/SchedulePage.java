@@ -12,15 +12,10 @@ import java.util.Set;
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
-    Set<String> terms;
-    CourseReader CR;
-    Search search;
-    String curTerm = "F20";
-    private Schedule schedule;
-    public void draw(Graphics g){}
-    public SchedulePage(App app){
-        search = init();
-//        readCsvs();
+    public void draw(){
+        App app = App.getInstance();
+        Schedule schedule = app.getCurrSchedule();
+        Search search = new Search(app.getCourseDatabase());
 
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
@@ -47,7 +42,11 @@ public class SchedulePage extends Page {
 
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
+        backBtn.addActionListener((event) -> {
+            app.switchPages("choose-schedule-page");
+        });
         add(backBtn, "cell 0 0");
+
 
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
@@ -60,7 +59,6 @@ public class SchedulePage extends Page {
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
         add(plusBtn, "cell 4 0, align left, wrap");
-
 
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(200,20));
@@ -82,7 +80,9 @@ public class SchedulePage extends Page {
         add(scrollPane, "cell 2 1");
 
 
-        CalendarComponent calendar = new CalendarComponent(schedule);
+        CalendarComponent calendar = new CalendarComponent();
+        calendar.draw();
+
         add(searchBtn);
         add(calendar, "span 1 2, align right, wrap");
         DefaultListModel<Course> model = new DefaultListModel<>();
@@ -100,64 +100,14 @@ public class SchedulePage extends Page {
             System.out.println(selected);
             if(schedule.addCourse(selected)){
                 calendar.removeAll();
-                calendar.add(new CalendarComponent(schedule));
+                calendar.add(new CalendarComponent());
                 calendar.repaint();
                 calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
             } else {
                 // TODO: error
             }
         });
-
-    }
-
-    private Search init(){
-        schedule = new Schedule();
-
-        ArrayList<LocalTime> times1 = new ArrayList<>();
-        times1.add(LocalTime.parse("12:00:00"));
-        HashMap<DayOfWeek, ArrayList<LocalTime>> myMap1 = new HashMap<>();
-        myMap1.put(DayOfWeek.MONDAY, times1);
-
-        ArrayList<LocalTime> times2 = new ArrayList<>();
-        times2.add(LocalTime.parse("12:00:00"));
-        HashMap<DayOfWeek, ArrayList<LocalTime>> myMap2 = new HashMap<>();
-        myMap2.put(DayOfWeek.TUESDAY, times2);
-
-        ArrayList<LocalTime> times = new ArrayList<>();
-        times.add(LocalTime.parse("12:00:00"));
-        HashMap<DayOfWeek, ArrayList<LocalTime>> myMap = new HashMap<>();
-        myMap.put(DayOfWeek.TUESDAY, times);
-
-        CourseDatabase courseDB = new CourseDatabase();
-        Course c1 = new Course("COMP 141 A", "Computer Programming 1", null, 3, null, null, null, null,
-                myMap2, null, null);
-        Course c2 = new Course("COMP 141 B", "Computer Programming 1", null, 3, null, null, null, null,
-                myMap1, null, null);
-        Course c3 = new Course("COMP 220 A", "Computer Programming 2", null, 3, null, null, null, null,
-                myMap,
-                null, null);
-        courseDB.addCourse(c1);
-        courseDB.addCourse(c2);
-        courseDB.addCourse(c3);
-        search = new Search(courseDB);
-        return search;
-
-    }
-
-    private void readCsvs(){
-        schedule = new Schedule();
-        CR = new CourseReader();
-        String path = "src/main/csvs";
-        File folder = new File(path);
-        for(File fileEntry : folder.listFiles()){
-            if(!fileEntry.isDirectory()){
-                String fullPath = path + "/" + fileEntry.getName();
-                System.out.println("Attempting to read " + fullPath);
-                CR.parseCsv(fullPath);
-                System.out.println("Successfully read " + fullPath);
-            }
-        }
-        terms = CR.getTerms();
-        search = new Search(CR.getCourseDatabase("F20"));
     }
 }

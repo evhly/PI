@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Page extends JPanel {
+public abstract class Page extends DynamicComponent {
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 

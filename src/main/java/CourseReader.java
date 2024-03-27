@@ -143,4 +143,19 @@ public class CourseReader {
         return courseDatabaseMap.keySet();
     }
 
+    public static CourseReader getAllCourseDatabases() {
+        CourseReader CR = new CourseReader();
+        String path = "src/main/csvs";
+        File folder = new File(path);
+        for(File fileEntry : folder.listFiles()){
+            if(!fileEntry.isDirectory()){
+                String fullPath = path + "/" + fileEntry.getName();
+                System.out.println("Attempting to read " + fullPath);
+                CR.parseCsv(fullPath);
+                System.out.println("Successfully read " + fullPath);
+            }
+        }
+        return CR;
+    }
+
 }

@@ -7,26 +7,19 @@ import java.util.ArrayList;
 public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
-
-    App app;
-    private Student loggedInStudent;
     private JLabel userNameLabel;
-    public void openSchedule(){
+    public void openSchedule(Schedule schedule){
+        App app = App.getInstance();
+        app.setCurrSchedule(schedule);
         app.switchPages("schedule-page");
     }
     public void deleteSchedule(Schedule scheduleToDelete){
-        loggedInStudent.getSchedules().remove(scheduleToDelete);
-        try {
-            Schedule.saveSchedules(loggedInStudent);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        App.getInstance().getLoggedInStudent().deleteSchedule(scheduleToDelete);
     }
-    public void draw(Graphics g){}
-    public ChooseSchedulePage(App app){
-        super();
+    public void draw(){
+        App app = App.getInstance();
+        Student loggedInStudent = app.getLoggedInStudent();
 
-        this.app = app;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         int width = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width;
@@ -56,12 +49,6 @@ public class ChooseSchedulePage extends Page{
             schedulePanel.add(scheduleComponent);
             schedulePanel.revalidate();
             scheduleComponent.repaint();
-
-            try {
-                Schedule.saveSchedules(loggedInStudent);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
         homeButtonsContainer.add(addScheduleBtn, gbc);
 
@@ -73,14 +60,21 @@ public class ChooseSchedulePage extends Page{
         gbc.anchor = GridBagConstraints.NORTHEAST;
         JButton logoutBtn = new JButton("LOG OUT");
         logoutBtn.addActionListener((event) ->{
-            ((LoginPage)app.getPage("login-page")).clearTextBoxes();
-            app.switchPages("login-page");
+            App.getInstance().switchPages("login-page");
         });
         homeButtonsContainer.add(logoutBtn, gbc);
 
         schedulePanel = new JPanel();
         schedulePanel.setLayout(new GridLayout(0, 3, 10, 10));
         schedulePanel.setBackground(Color.white);
+
+        //Add In New Schedule Components for Loaded Student
+
+        userNameLabel.setText("Hello " + app.getLoggedInStudent().getInformation().getFirstName() + "!");
+        for(Schedule schedule: loggedInStudent.getSchedules()) {
+            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
+            schedulePanel.add(scheduleComponent);
+        }
 
         JScrollPane scrollPane = new JScrollPane(schedulePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -89,21 +83,6 @@ public class ChooseSchedulePage extends Page{
         scrollPane.setMaximumSize(bottomScreen);
         scrollPane.setPreferredSize(bottomScreen);
         add(scrollPane);
-    }
-
-    public void loadStudentSchedules(Credentials credentials) throws IOException {
-        //Remove Old Schedule Components From View
-        schedulePanel.removeAll();
-
-        //Add In New Schedule Components for Loaded Student
-        CourseDatabase cb = new CourseDatabase("2020-2021.csv");
-        loggedInStudent = new Student(credentials);
-        Schedule.loadSchedules(cb, loggedInStudent);
-        userNameLabel.setText("Hello " + credentials.getFirstName() + "!");
-        for(Schedule schedule: loggedInStudent.getSchedules()) {
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
-                schedulePanel.add(scheduleComponent);
-        }
     }
 
 }

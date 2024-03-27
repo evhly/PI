@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Console {
     static Search search;
     static Schedule sch;
-    static Student s;
     static CourseReader cr;
     static Scanner scn;
 
@@ -36,7 +35,6 @@ public class Console {
 //        }
 
         sch = new Schedule();
-        s = new Student(null);
         // just read in test2.csv
         cr = new CourseReader();
      //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
