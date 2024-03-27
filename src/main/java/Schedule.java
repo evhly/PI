@@ -9,6 +9,13 @@ public class Schedule {
 
     private ArrayList<Course> courses;
     private String title;
+
+
+    public ArrayList<Course> getCourses(){
+        return courses;
+    }
+
+
     public Schedule(ArrayList<Course> courses, String title) {
         this.courses = courses;
         this.title = title;
@@ -24,9 +31,9 @@ public class Schedule {
         this.title = title;
     }
 
-    public ArrayList<Course> getCourses() {
-        return courses;
-    }
+//    public ArrayList<Course> getCourses() {
+//        return courses;
+//    }
 
     /**
      * Removes course from schedule
