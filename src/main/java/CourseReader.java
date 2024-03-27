@@ -7,8 +7,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class CourseReader {
-
-
     Map<String, CourseDatabase> courseDatabaseMap;
 
     public CourseReader(){
@@ -99,25 +97,25 @@ public class CourseReader {
         // parse meeting times and create a map of days of the week to meeting times
         HashMap<DayOfWeek, ArrayList<LocalTime>> meetings = new HashMap<>();
         for (String day : days) {
-            ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
-            DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
-            if (begin_tim.charAt(1) == ':') { // if the time is not padded with a 0
-                begin_tim = "0" + begin_tim;
-            }
-            if (end_tim.charAt(1) == ':') { // if the time is not padded with a 0
-                end_tim = "0" + end_tim;
-            }
-            beginAndEnd.add(LocalTime.parse(begin_tim, ampmFormatter)); // reads the String as a time (HH:MM:SS AM/PM)
-            beginAndEnd.add(LocalTime.parse(end_tim, ampmFormatter));
-            if (day != null) {
-                switch (day) {
-                    case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
-                    case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
-                    case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
-                    case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
-                    case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
-                    default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+            if(!day.isEmpty()) {
+                ArrayList<LocalTime> beginAndEnd = new ArrayList<>();
+                DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                if (begin_tim.charAt(1) == ':') { // if the time is not padded with a 0
+                    begin_tim = "0" + begin_tim;
                 }
+                if (end_tim.charAt(1) == ':') { // if the time is not padded with a 0
+                    end_tim = "0" + end_tim;
+                }
+                beginAndEnd.add(LocalTime.parse(begin_tim, ampmFormatter)); // reads the String as a time (HH:MM:SS AM/PM)
+                beginAndEnd.add(LocalTime.parse(end_tim, ampmFormatter));
+                    switch (day) {
+                        case "M" -> meetings.put(DayOfWeek.MONDAY, beginAndEnd);
+                        case "T" -> meetings.put(DayOfWeek.TUESDAY, beginAndEnd);
+                        case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
+                        case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
+                        case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
+                        default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+                    }
             }
         }
 
@@ -130,8 +128,7 @@ public class CourseReader {
                 null,
                 new Professor(first_name, last_name),
                 null,
-//                meetings,
-                null,
+                meetings,
                 trm_cde,
                 null
             );
