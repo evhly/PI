@@ -5,10 +5,12 @@ public class Search {
     private ArrayList<Course> results;
     private String query;
     private CourseDatabase DB;
-    private Professor selectedProfessor;
-    private String startTime;
-    private String endTime;
-    private String selectedDepartment;
+//    private Professor selectedProfessor;
+//    private String startTime;
+//    private String endTime;
+//    private String selectedDepartment;
+    private ArrayList<Filter> filters;
+
     public Search(CourseDatabase DB){
         this.DB = DB;
         results = new ArrayList<>();
@@ -16,6 +18,10 @@ public class Search {
     public ArrayList<Course> modifyQuery(String query){
         this.query = query.toLowerCase();
         return search();
+    }
+
+    public void addFilter(Filter filter) {
+        filters.add(filter);
     }
 
     public ArrayList<Course> getResults() {
@@ -50,24 +56,24 @@ public class Search {
             return arr;
         }
 
-    public ArrayList<Professor> getSelectedProfessors(){
-        return null;
-    }
-    public ArrayList<String> getSelectedTimes(){
-        return null;
-    }
-    public ArrayList<String> getSelectedDepartments(){
-        return null;
-    }
-    public ArrayList<Course> addProfessor(Professor professorToAdd){
-        return null;
-    }
-    public ArrayList<Course> addTimes(String start, String end){
-        return null;
-    }
-    public ArrayList<Course> addDepartment(String deptToAdd){
-        return null;
-    }
+//    public ArrayList<Professor> getSelectedProfessors(){
+//        return null;
+//    }
+//    public ArrayList<String> getSelectedTimes(){
+//        return null;
+//    }
+//    public ArrayList<String> getSelectedDepartments(){
+//        return null;
+//    }
+//    public ArrayList<Course> addProfessor(Professor professorToAdd){
+//        return null;
+//    }
+//    public ArrayList<Course> addTimes(String start, String end){
+//        return null;
+//    }
+//    public ArrayList<Course> addDepartment(String deptToAdd){
+//        return null;
+//    }
 
 
 
