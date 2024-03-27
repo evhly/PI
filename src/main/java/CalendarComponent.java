@@ -2,16 +2,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class CalendarComponent extends JPanel {
-    Schedule schedule;
-    public CalendarComponent(Schedule s){
-        this.schedule = s;
+public class CalendarComponent extends DynamicComponent {
+
+    public void draw() {
+        App app = App.getInstance();
+        Schedule schedule = app.getCurrSchedule();
 
         setMinimumSize(new Dimension(550, 500));
         setMaximumSize(new Dimension(550, 500));
@@ -60,6 +63,26 @@ public class CalendarComponent extends JPanel {
             rowHeader.setFixedCellHeight(40);
         add(rowHeader);
         add(tablePanel);
+
+        InputMap inputMap = calendar.getInputMap(WHEN_FOCUSED);
+        ActionMap actionMap = calendar.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
+        actionMap.put("delete", new AbstractAction() {
+            public void actionPerformed(ActionEvent evt) {
+                int row = calendar.getSelectedRow();
+                int col = calendar.getSelectedColumn();
+                if (row >= 0 && col >= 0) {
+                    row = calendar.convertRowIndexToModel(row);
+                    col = calendar.convertColumnIndexToModel(col);
+                    String courseCode = (String)calendar.getModel().getValueAt(row, col);
+                    Course courseToDelete = app.getCourseDatabase().getCourseData(courseCode);
+                    schedule.deleteCourse(courseToDelete);
+                    app.getLoggedInStudent().save();
+                    redraw();
+                }
+            }
+        });
 
     }
 }

@@ -76,7 +76,9 @@ public class SchedulePage extends Page {
         add(scrollPane, "cell 2 1");
 
 
-        CalendarComponent calendar = new CalendarComponent(schedule);
+        CalendarComponent calendar = new CalendarComponent();
+        calendar.draw();
+
         add(searchBtn);
         add(calendar, "span 1 2, align right, wrap");
         DefaultListModel<Course> model = new DefaultListModel<>();
@@ -94,7 +96,7 @@ public class SchedulePage extends Page {
             System.out.println(selected);
             if(schedule.addCourse(selected)){
                 calendar.removeAll();
-                calendar.add(new CalendarComponent(schedule));
+                calendar.add(new CalendarComponent());
                 calendar.repaint();
                 calendar.revalidate();
                 app.getLoggedInStudent().save();
