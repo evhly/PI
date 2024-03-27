@@ -10,32 +10,12 @@ public class App extends JFrame {
     private CourseDatabase courseDatabase;
     private Schedule currSchedule;
 
-    public Student getLoggedInStudent() {
-        return loggedInStudent;
-    }
-    public void setLoggedInStudent(Student student){
-        this.loggedInStudent = student;
-    }
-
-    public CourseDatabase getCourseDatabase() {
-        return courseDatabase;
-    }
-    public void setCourseDatabase(CourseDatabase courseDatabase){
-        this.courseDatabase = courseDatabase;
-    }
-    public Schedule getCurrSchedule(){
-        return currSchedule;
-    }
-    public void setCurrSchedule(Schedule currSchedule){
-        this.currSchedule = currSchedule;
-    }
-
     private App(){
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());
         pages.put("choose-schedule-page", new ChooseSchedulePage());
-        setCourseDatabase(new CourseDatabase("2020-2021.csv"));
-        //pages.put("schedule-page", new SchedulePage(this));
+        pages.put("schedule-page", new SchedulePage(this));
+        setCourseDatabase(new CourseDatabase());
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -54,8 +34,24 @@ public class App extends JFrame {
         repaint();
     }
 
-    public Page getPage(String name) {
-        return pages.get(name);
+    public Student getLoggedInStudent() {
+        return loggedInStudent;
+    }
+    public void setLoggedInStudent(Student student){
+        this.loggedInStudent = student;
+    }
+
+    public CourseDatabase getCourseDatabase() {
+        return courseDatabase;
+    }
+    public void setCourseDatabase(CourseDatabase courseDatabase){
+        this.courseDatabase = courseDatabase;
+    }
+    public Schedule getCurrSchedule(){
+        return currSchedule;
+    }
+    public void setCurrSchedule(Schedule currSchedule){
+        this.currSchedule = currSchedule;
     }
 
     private static App instance;

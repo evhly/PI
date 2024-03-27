@@ -14,13 +14,7 @@ public class ChooseSchedulePage extends Page{
         app.switchPages("schedule-page");
     }
     public void deleteSchedule(Schedule scheduleToDelete){
-        Student loggedInStudent = App.getInstance().getLoggedInStudent();
-        loggedInStudent.getSchedules().remove(scheduleToDelete);
-        try {
-            Schedule.saveSchedules(loggedInStudent);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        App.getInstance().getLoggedInStudent().deleteSchedule(scheduleToDelete);
     }
     public void draw(){
         App app = App.getInstance();
@@ -55,12 +49,6 @@ public class ChooseSchedulePage extends Page{
             schedulePanel.add(scheduleComponent);
             schedulePanel.revalidate();
             scheduleComponent.repaint();
-
-            try {
-                Schedule.saveSchedules(loggedInStudent);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
         homeButtonsContainer.add(addScheduleBtn, gbc);
 

@@ -16,8 +16,11 @@ public class Student {
     private Credentials information;
 
     public Student(Credentials creds){
-        schedules = new ArrayList<Schedule>();
         information = creds;
+        schedules = Schedule.loadSchedules(
+            getSaveFile(),
+            App.getInstance().getCourseDatabase()
+        );
     }
 
     public void changeProfile(Credentials newCreds){
@@ -43,6 +46,24 @@ public class Student {
      */
     public void addSchedule(Schedule schedule) {
         schedules.add(schedule);
+        save();
+    }
+
+    /**
+     * Deletes a schedule to the student's schedules list
+     * @param schedule the schedule to delete
+     */
+    public void deleteSchedule(Schedule schedule) {
+        schedules.remove(schedule);
+        save();
+    }
+
+    public void save() {
+        Schedule.saveSchedules(getSaveFile(), schedules);
+    }
+
+    private File getSaveFile() {
+        return new File(information.getId()+"_savedSchedules.csv");
     }
 
 }

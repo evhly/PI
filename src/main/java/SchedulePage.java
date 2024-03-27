@@ -17,11 +17,7 @@ public class SchedulePage extends Page {
     Search search;
     String curTerm = "F20";
     private Schedule schedule;
-    public void draw(){}
-    public SchedulePage(App app){
-        search = init();
-//        readCsvs();
-
+    public void draw(){
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
@@ -107,7 +103,10 @@ public class SchedulePage extends Page {
                 // TODO: error
             }
         });
-
+    }
+    public SchedulePage(App app){
+        search = init();
+        readCsvs();
     }
 
     private Search init(){

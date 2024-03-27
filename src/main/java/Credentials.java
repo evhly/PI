@@ -46,16 +46,6 @@ public class Credentials {
          return attemptEmail.equals(email) && checkValid(attemptPassword);
     }
 
-    public Student getAssociatedStudent() {
-        Student student = new Student(this);
-
-        try {
-            Schedule.loadSchedules(App.getInstance().getCourseDatabase(), student);
-        } catch(Exception e) {}
-
-        return student;
-    }
-
     public static Credentials fromCSV(String credential){
         String[] cols = credential.split(",");
         Credentials credentials = new Credentials(

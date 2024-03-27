@@ -37,7 +37,7 @@ public class CredentialDB {
     public Student loginSuccessful(String email, String password){
         for(Credentials credential : allCredentials){
             if(credential.login(email, password)){
-                return credential.getAssociatedStudent();
+                return new Student(credential);
             }
         }
         return null;
