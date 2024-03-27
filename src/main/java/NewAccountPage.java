@@ -134,15 +134,8 @@ public class NewAccountPage extends Page {
                 password, email
             );
 
-            Student student = new Student(studentCredentials);
-            student.save();
+            int result = credDb.newAccount(studentCredentials, confirmPassword);
 
-            int result = 0;
-            try {
-                result = credDb.newAccount(studentCredentials, confirmPassword);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
             switch(result) {
                 case CredentialDB.PASSWORDS_DONT_MATCH -> {
                     accountStatusLabel.setText("Passwords don't match");
@@ -152,12 +145,9 @@ public class NewAccountPage extends Page {
                 }
                 case CredentialDB.SUCCESS -> {
                     //accountStatusLabel.setText("Account created! Please log in");
+                    Student student = new Student(studentCredentials);
+                    student.save();
                     app.switchPages("login-page");
-                    firstNameField.setText("");
-                    lastNameField.setText("");
-                    emailField.setText("");
-                    passwordField.setText("");
-                    confirmPasswordField.setText("");
                 }
             }
 

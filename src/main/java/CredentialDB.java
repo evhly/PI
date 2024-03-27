@@ -14,7 +14,7 @@ public class CredentialDB {
         allCredentials = Credentials.loadAllCredentials(new File("credentials.csv"));
     }
 
-    public int newAccount(Credentials userCredentials, String confirmPw) throws FileNotFoundException {
+    public int newAccount(Credentials userCredentials, String confirmPw) {
         if(!isEmailUnique(userCredentials, confirmPw)){
             return EMAIL_ALREADY_USED;
         }else if(!userCredentials.getPassword().equals(confirmPw)){

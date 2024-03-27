@@ -15,12 +15,17 @@ public class Student {
 
     private Credentials information;
 
-    public Student(Credentials creds){
+    public Student(Credentials creds) {
         information = creds;
-        schedules = Schedule.loadSchedules(
-            getSaveFile(),
-            App.getInstance().getCourseDatabase()
-        );
+
+        if (getSaveFile().exists()) {
+            schedules = Schedule.loadSchedules(
+                getSaveFile(),
+                App.getInstance().getCourseDatabase()
+            );
+        } else {
+            schedules = new ArrayList<>();
+        }
     }
 
     public void changeProfile(Credentials newCreds){

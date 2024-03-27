@@ -78,19 +78,23 @@ public class Credentials {
         return(String.format("%s,%s,%d,%s,%s,%s",firstName, lastName, id, major, password, email));
     }
 
-    public static void saveAllCredentials(ArrayList<Credentials> allCredentials, File file) throws FileNotFoundException {
-        PrintWriter pw = new PrintWriter(file);
-        StringBuilder sb = new StringBuilder();
-        for(Credentials credentials : allCredentials){
-            sb.append(credentials.toCSV());
-            sb.append("\n");
+    public static void saveAllCredentials(ArrayList<Credentials> allCredentials, File file) {
+        try {
+            PrintWriter pw = new PrintWriter(file);
+            StringBuilder sb = new StringBuilder();
+            for (Credentials credentials : allCredentials) {
+                sb.append(credentials.toCSV());
+                sb.append("\n");
+            }
+            if (sb.length() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            pw.print(sb);
+            pw.flush();
+            pw.close();
+        } catch(Exception e ) {
+            e.printStackTrace();
         }
-        if(sb.length() > 0) {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        pw.print(sb);
-        pw.flush();
-        pw.close();
     }
 
 
