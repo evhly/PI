@@ -29,7 +29,6 @@ public class CalendarComponent extends DynamicComponent {
         String[][] data = new String[11][7];
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 7; j++) {
-                // if course add component
                 data[i][j] = " ";
             }
         }

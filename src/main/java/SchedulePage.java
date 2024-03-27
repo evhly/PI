@@ -42,7 +42,11 @@ public class SchedulePage extends Page {
 
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
+        backBtn.addActionListener((event) -> {
+            app.switchPages("choose-schedule-page");
+        });
         add(backBtn, "cell 0 0");
+
 
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
@@ -100,6 +104,7 @@ public class SchedulePage extends Page {
                 calendar.repaint();
                 calendar.revalidate();
                 app.getLoggedInStudent().save();
+                redraw();
             } else {
                 // TODO: error
             }
