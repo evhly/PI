@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
+import java.util.Set;
 
 public class App extends JFrame {
 
@@ -14,8 +16,8 @@ public class App extends JFrame {
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());
         pages.put("choose-schedule-page", new ChooseSchedulePage());
-        pages.put("schedule-page", new SchedulePage(this));
-        setCourseDatabase(new CourseDatabase());
+        pages.put("schedule-page", new SchedulePage());
+        setCourseDatabase(CourseReader.getAllCourseDatabases().getCourseDatabase("F20"));
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

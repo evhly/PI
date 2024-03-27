@@ -109,7 +109,7 @@ public class Schedule {
         Schedule schedule = new Schedule(parts[0].trim());
 
         for(int i=1; i<parts.length; i++) {
-            schedule.addCourse(getCourseFromCode(parts[i], db));
+            schedule.addCourse(db.getCourseData(parts[i]));
         }
 
         return schedule;
@@ -126,6 +126,7 @@ public class Schedule {
 
         try {
             Scanner fileScanner = new Scanner(file);
+            fileScanner.useDelimiter("\n");
             while (fileScanner.hasNext()) {
                 schedules.add(Schedule.loadSchedule(fileScanner.next(), db));
             }
@@ -135,10 +136,6 @@ public class Schedule {
         }
 
         return schedules;
-    }
-
-    public static Course getCourseFromCode(String code, CourseDatabase db) {;
-        return db.getCourseData(code);
     }
 
 }

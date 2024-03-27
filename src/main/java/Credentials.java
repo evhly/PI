@@ -62,6 +62,7 @@ public class Credentials {
             ArrayList<Credentials> allCredentials = new ArrayList<>();
 
             Scanner credentialFileScanner = new Scanner(credentialDataFile);
+            credentialFileScanner.useDelimiter("\n");
             while(credentialFileScanner.hasNext()){
                 String credentials = credentialFileScanner.nextLine();
                 allCredentials.add(fromCSV(credentials));
