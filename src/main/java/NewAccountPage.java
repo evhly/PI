@@ -11,8 +11,6 @@ public class NewAccountPage extends Page {
 
     private Credentials credentials;
 
-
-
     JTextField firstNameField;
     JLabel firstNameFieldLabel;
     JTextField lastNameField;
@@ -29,8 +27,8 @@ public class NewAccountPage extends Page {
     JButton submitBtn;
     JButton backToLoginBtn;
 
-    public NewAccountPage(App app) {
-        super();
+    public void draw() {
+        App app = App.getInstance();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5, 5, 5);
@@ -151,8 +149,8 @@ public class NewAccountPage extends Page {
             app.switchPages("login-page");
             CredentialDB credDb = CredentialDB.getInstance();
             Credentials studentCredentials = new Credentials(
-                firstName, lastName, credDb.findNextId(), major,
-                password, email
+                    firstName, lastName, credDb.findNextId(), major,
+                    password, email
             );
 
             Student student = new Student(studentCredentials);
@@ -206,8 +204,6 @@ public class NewAccountPage extends Page {
         backToLoginBtn.addActionListener((event) -> {
             app.switchPages("login-page");
         });
-
-
     }
 
 }

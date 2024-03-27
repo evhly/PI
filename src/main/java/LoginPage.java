@@ -18,8 +18,8 @@ public class LoginPage extends Page {
     JButton newAccountBtn;
     CredentialDB credDb = CredentialDB.getInstance();
 
-    public LoginPage(App app) {
-        super();
+    public void draw() {
+        App app = App.getInstance();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5, 5, 5);
@@ -45,30 +45,25 @@ public class LoginPage extends Page {
         loginBtn.addActionListener((event) -> {
             String userEmail = emailField.getText();
             String userPassword = passwordField.getText();
-            credentials = credDb.loginSuccessful(userEmail, userPassword);
-            System.out.println(credentials.getFirstName());
-            if(credentials != null){
-                try {
-                    ((ChooseSchedulePage)app.getPage("choose-schedule-page")).loadStudentSchedules(credentials);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+            Student student = credDb.loginSuccessful(userEmail, userPassword);
+            if(student != null){
+                clearTextBoxes();
+                app.setLoggedInStudent(student);
                 app.switchPages("choose-schedule-page");
             }else{
                 //Error message
-                app.switchPages("login-page");
             }
         });
 
         add(loginBtn, gbc);
 
         newAccountBtn = new JButton("Create New Account");
-        newAccountBtn.addActionListener((event ->{
+        newAccountBtn.addActionListener((event) ->{
+            clearTextBoxes();
             app.switchPages("new-account-page");
-        }));
+        });
 
         add(newAccountBtn);
-
     }
 
     public void clearTextBoxes(){

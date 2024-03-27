@@ -10,6 +10,7 @@ public class Main {
     private Schedule currSchedule;
 
     public static void main(String[] args) throws FileNotFoundException {
-        App app = new App();
+        App app = App.getInstance();
+        app.switchPages("login-page");
     }
 }

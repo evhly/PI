@@ -15,6 +15,11 @@ public class Student {
 
     private Credentials information;
 
+    public Student(Credentials creds){
+        schedules = new ArrayList<Schedule>();
+        information = creds;
+    }
+
     public void changeProfile(Credentials newCreds){
         information.setFirstName(newCreds.getFirstName());
         information.setLastName(newCreds.getLastName());
@@ -24,13 +29,6 @@ public class Student {
         information.setPassword(newCreds.getPassword());
     }
 
-
-    public Student(Credentials creds){
-        schedules = new ArrayList<Schedule>();
-        information = creds;
-    }
-
-    
     /**
      * Returns all schedules associated with the student's account
      * @return an ArrayList of all schedules associated with the student's account

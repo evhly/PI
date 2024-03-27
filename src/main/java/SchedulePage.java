@@ -17,7 +17,7 @@ public class SchedulePage extends Page {
     Search search;
     String curTerm = "F20";
     private Schedule schedule;
-    public void draw(Graphics g){}
+    public void draw(){}
     public SchedulePage(App app){
         search = init();
 //        readCsvs();

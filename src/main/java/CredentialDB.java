@@ -34,10 +34,10 @@ public class CredentialDB {
         return true;
     }
 
-    public Credentials loginSuccessful(String email, String password){
+    public Student loginSuccessful(String email, String password){
         for(Credentials credential : allCredentials){
             if(credential.login(email, password)){
-                return credential;
+                return credential.getAssociatedStudent();
             }
         }
         return null;
