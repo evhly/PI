@@ -31,12 +31,31 @@ public class Search {
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
-            String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()};
-            for(int j = 0; j < arr.length; j++){
-                String q = arr[j];
-                int i = q.indexOf(query);
-                if(i != -1){
-                    if(i == 0 || q.charAt(i-1) == ' ') {
+            for (Filter filter : filters) {
+                if (filter.getType() == Filter.type.DEPARTMENT) {
+                    if (!course.getDepartment().equals(filter.getDepartment())) {
+                        continue;
+                    }
+                }
+                if (filter.getType() == Filter.type.PROFESSOR) {
+                    if (!course.getProfessor().equals(filter.getProfessor())) {
+                        continue;
+                    }
+                }
+                if (filter.getType() == Filter.type.TIMES) { //TODO: finish
+                    // for each day of week
+                    // if not at least one of the days has times that match the filter's
+                    // continue;
+                }
+            }
+            String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()}; // name, code
+            for(int j = 0; j < arr.length; j++){ // for the name first, then the code
+                String nameOrCode = arr[j];
+                int index = nameOrCode.indexOf(query);
+                if(index != -1){ // index would be -1 if query is not in the course name or code
+                    if(index == 0 || nameOrCode.charAt(index-1) == ' ') { // either the name or code matches
+                                                                          // fully or is the start of a word
+                                                                          // in the name or code
                         results.add(course);
                         j = 2;
                     }
