@@ -127,6 +127,11 @@ public class Course {
         this.meetingTimes = m;
     }
 
+    public Course(String code, HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes) {
+        this.code = code;
+        this.meetingTimes = meetingTimes;
+    }
+
 
     //may be fields need to change. if so, change them here
     /**
