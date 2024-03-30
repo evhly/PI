@@ -66,6 +66,7 @@ public class CalendarComponent extends DynamicComponent {
         InputMap inputMap = calendar.getInputMap(WHEN_FOCUSED);
         ActionMap actionMap = calendar.getActionMap();
 
+
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
         actionMap.put("delete", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
