@@ -26,6 +26,12 @@ public class Filter {
     }
 
     public Filter(type filterType, String startTime, String endTime) {
+        if (startTime.charAt(1) == ':') { // if the time is not padded with a 0
+            startTime = "0" + startTime;
+        }
+        if (endTime.charAt(1) == ':') { // if the time is not padded with a 0
+            endTime = "0" + endTime;
+        }
         this.filterType = filterType;
         this.startTime = startTime;
         this.endTime = endTime;

@@ -1,3 +1,6 @@
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Search {
@@ -5,14 +8,11 @@ public class Search {
     private ArrayList<Course> results;
     private String query;
     private CourseDatabase DB;
-//    private Professor selectedProfessor;
-//    private String startTime;
-//    private String endTime;
-//    private String selectedDepartment;
     private ArrayList<Filter> filters;
 
     public Search(CourseDatabase DB){
         this.DB = DB;
+        this.filters = new ArrayList<>();
         results = new ArrayList<>();
     }
     public ArrayList<Course> modifyQuery(String query){
@@ -24,6 +24,10 @@ public class Search {
         filters.add(filter);
     }
 
+    public void clearFilters() {
+        this.filters = new ArrayList<>();
+    }
+
     public ArrayList<Course> getResults() {
         return results;
     }
@@ -31,33 +35,50 @@ public class Search {
     public ArrayList<Course> search(){
         results = new ArrayList<>();
         for(Course course : DB.getCourses()){
+            boolean filterMismatch = false;
             for (Filter filter : filters) {
                 if (filter.getType() == Filter.type.DEPARTMENT) {
                     if (!course.getDepartment().equals(filter.getDepartment())) {
-                        continue;
+                        filterMismatch = true;
                     }
                 }
-                if (filter.getType() == Filter.type.PROFESSOR) {
+                if ((filter.getType() == Filter.type.PROFESSOR) && !filterMismatch) {
                     if (!course.getProfessor().equals(filter.getProfessor())) {
-                        continue;
+                        filterMismatch = true;
                     }
                 }
-                if (filter.getType() == Filter.type.TIMES) { //TODO: finish
-                    // for each day of week
-                    // if not at least one of the days has times that match the filter's
-                    // continue;
+                // if at least one day has a matching start and end time, then the course will be considered
+                if ((filter.getType() == Filter.type.TIMES) && !filterMismatch) {
+                    boolean hasMatchingTimes = false;
+                    DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                    for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week
+                        if (course.getMeetingTimes().containsKey(day)) {
+                            LocalTime filterStart = LocalTime.parse(filter.getTimes().get(0), ampmFormatter);
+                            LocalTime filterEnd = LocalTime.parse(filter.getTimes().get(1), ampmFormatter);
+                            LocalTime courseStart = course.getMeetingTimes().get(day).get(0);
+                            LocalTime courseEnd = course.getMeetingTimes().get(day).get(1);
+                            if (filterStart.equals(courseStart) && filterEnd.equals(courseEnd)) {
+                                hasMatchingTimes = true;
+                            }
+                        }
+                    }
+                    if (!hasMatchingTimes) {
+                        filterMismatch = true;
+                    }
                 }
             }
-            String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()}; // name, code
-            for(int j = 0; j < arr.length; j++){ // for the name first, then the code
-                String nameOrCode = arr[j];
-                int index = nameOrCode.indexOf(query);
-                if(index != -1){ // index would be -1 if query is not in the course name or code
-                    if(index == 0 || nameOrCode.charAt(index-1) == ' ') { // either the name or code matches
-                                                                          // fully or is the start of a word
-                                                                          // in the name or code
-                        results.add(course);
-                        j = 2;
+            if (!filterMismatch) { // if the filters match, continue to check
+                String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()}; // name, code
+                for (int j = 0; j < arr.length; j++) { // for the name first, then the code
+                    String nameOrCode = arr[j];
+                    int index = nameOrCode.indexOf(query);
+                    if (index != -1) { // index would be -1 if query is not in the course name or code
+                        if (index == 0 || nameOrCode.charAt(index - 1) == ' ') { // either the name or code matches
+                            // fully or is the start of a word
+                            // in the name or code
+                            results.add(course);
+                            j = 2;
+                        }
                     }
                 }
             }
@@ -69,31 +90,9 @@ public class Search {
             String[] arr = new String[results.size()];
             int i = 0;
             for (Course course : results) {
-                arr[i] = course.getName();
+                arr[i] = course.getCode(); // unique identifier
                 i++;
             }
             return arr;
         }
-
-//    public ArrayList<Professor> getSelectedProfessors(){
-//        return null;
-//    }
-//    public ArrayList<String> getSelectedTimes(){
-//        return null;
-//    }
-//    public ArrayList<String> getSelectedDepartments(){
-//        return null;
-//    }
-//    public ArrayList<Course> addProfessor(Professor professorToAdd){
-//        return null;
-//    }
-//    public ArrayList<Course> addTimes(String start, String end){
-//        return null;
-//    }
-//    public ArrayList<Course> addDepartment(String deptToAdd){
-//        return null;
-//    }
-
-
-
 }
