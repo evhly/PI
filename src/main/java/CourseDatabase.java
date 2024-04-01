@@ -10,10 +10,11 @@ import java.util.Scanner;
 public class CourseDatabase {
 
     private HashSet<Course> courses;
-    public CourseDatabase(String path){
-        File in = new File(path);
-    }
 
+    /**
+     * Default constructor
+     * NOTE: to instantiate an initialized CourseDatabase, use CourseReader.getCourseDatabase(term)
+     */
     public CourseDatabase() {
         courses = new HashSet<>();
     }
@@ -21,7 +22,7 @@ public class CourseDatabase {
     public void addCourse(Course course) {
 
         // checks if a course already exists with this course code
-        try { //TODO: it may be better to use if/else since it is faster than try/catch in Java
+        try {
             Course other = getCourseData(course.getCode());
 
             // there is a different course with this same course code (likely 4-credit MATH course)
@@ -42,7 +43,7 @@ public class CourseDatabase {
 
             } else {
                 // likely duplicate course encountered
-                throw new RuntimeException("Likely duplicate course detected");
+                System.out.println("Likely duplicate course detected: " + course.getCode());
             }
 
         } catch (NoSuchElementException nse) {
