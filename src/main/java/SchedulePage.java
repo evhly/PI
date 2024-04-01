@@ -22,6 +22,7 @@ public class SchedulePage extends Page {
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
         ImageIcon plusIcon = new ImageIcon("resources/plus-line-icon.png");
+        ImageIcon deleteIcon = new ImageIcon("resources/minus-round-line-icon.png");
 
 
         Image backArrow = backArrowIcon.getImage();
@@ -39,6 +40,10 @@ public class SchedulePage extends Page {
         Image plus = plusIcon.getImage();
         Image newimg4 = plus.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         plusIcon = new ImageIcon(newimg4);
+
+        Image delete = deleteIcon.getImage();
+        Image newimg5 = delete.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        deleteIcon = new ImageIcon(newimg5);
 
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
@@ -58,12 +63,17 @@ public class SchedulePage extends Page {
 
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
-        add(plusBtn, "cell 4 0, align left, wrap");
+        add(plusBtn, "cell 4 0, align right, wrap");
+
+//        JButton deleteBtn = new JButton();
+//        deleteBtn.setIcon(deleteIcon);
+//        add(deleteBtn, "cell 5 0, align right, wrap");
+
 
         JTextField searchBar = new JTextField();
-        searchBar.setPreferredSize(new Dimension(200,20));
+        searchBar.setPreferredSize(new Dimension(150,20));
         JButton searchBtn = new JButton("SEARCH");
-        add(searchBar, "align right");
+        add(searchBar);
 
         JList<Course> list = new JList<>(searchResults);
         searchBtn.addActionListener((event) -> {
@@ -77,6 +87,9 @@ public class SchedulePage extends Page {
         });
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.blue));
+        scrollPane.setMinimumSize(new Dimension(300,500));
+        scrollPane.setMaximumSize(new Dimension(300,500));
+        scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
 
 
@@ -93,7 +106,7 @@ public class SchedulePage extends Page {
         courseInfo.setText("MORE INFO ABOUT CLASS");
         courseInfo.setEditable(false);
         courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 2 3, align right");
+        add(courseInfo, "cell 4 3, align right");
 
         plusBtn.addActionListener((event) -> {
             Course selected = searchResults.getElementAt(list.getSelectedIndex());
