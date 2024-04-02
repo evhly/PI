@@ -138,4 +138,13 @@ public class Schedule {
         return schedules;
     }
 
+    @Override
+    public String toString(){
+        String toR = "";
+        for (int i = 0; i < courses.size(); i++) {
+            toR += i + ": " +  courses.get(i).consoleString() + "\n";
+        }
+        return toR;
+    }
+
 }

@@ -39,7 +39,7 @@ public class Console {
         cr = new CourseReader();
      //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
         cr.parseCsv("C://Users//HUTCHINSEJ19//IdeaProjects//PIb//src//main//csvs//2020-2021.csv");
-        System.out.println("Done");
+      //  System.out.println("Done");
 
         scn = new Scanner(System.in);
 
@@ -65,7 +65,7 @@ public class Console {
 
     private static void homeScreen() {
         System.out.println("Welcome to console debugger :D");
-        System.out.println("\nChose an option: \nEnter 1 for search\nEnter 2 for schedule" +
+        System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for schedule" +
                 "\nEnter -1 to quit");
         //TODO: enter loadSchedule and saveSchedule options
 
@@ -84,28 +84,32 @@ public class Console {
 
     private static void scheduleScreen() {
         //TODO: show schedule and add schedule options here
-        System.out.println("\nEnter name for desired schedule:");
-        String schNm = scn.next();
-        Schedule sched = new Schedule(schNm);
-        System.out.println("--- " + schNm + " Schedule ---");
-
-
-        System.out.println("\nWhat do you want to do now?\n" +
-                "1 to return home\n2 for search");
+        System.out.println("\nEnter 1 to view current schedule\nEnter 2 to remove a course.");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1) {
-            homeScreen();
-        } else if (choice == 2) {
-            searchScreen();
+            System.out.println(sch);
+        } else if (choice == 2) {  //moving to schedule screen
+            scheduleScreen();
         }
+
+
+//        System.out.println("\nWhat do you want to do now?\n" +
+//                "1 to return home\n2 for search");
+//        int choice = scn.nextInt();
+//        //TODO(Evelyn): add error checking
+//        if (choice == 1) {
+//            homeScreen();
+//        } else if (choice == 2) {
+//            searchScreen();
+//        }
     }
 
     /**
      * screen that facilitates search
      */
     private static void searchScreen() {
-        System.out.println("Welcome to search! \n1 to search" +
+        System.out.println("Welcome to search! \n1 to search (with query)" +
                 "\n2 to filter\n3 to return home\n4 to schedule");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
@@ -166,6 +170,29 @@ public class Console {
         int numPrint = Math.min(6, results.size());
         for (int i = 0; i < numPrint; i++) {
             System.out.println(i + ": " +  results.get(i).consoleString());//+"tostring for course"
+        }
+        System.out.println("\nEnter 1 to add course to schedule\nEnter 2 to modify search" +
+                "\nEnter 3 to view schedule\nEnter 4 to return home");//add filter
+        int choice = scn.nextInt();
+        if (choice == 1) {
+            System.out.println("Which course would you like to add? (enter the index number)");
+            int toAdd = scn.nextInt();
+            if (toAdd >= 0 && toAdd < results.size()){
+                sch.addCourse(results.get(toAdd)); //add course to schedule
+                System.out.println("Course added! returning home ...\n\n");
+                homeScreen();
+            } else {
+                System.out.println("Error, search again");
+                searchWTerm();
+                //TODO: abstract and user check
+            }
+
+        } else if (choice == 2) {
+            searchScreen();
+        } else if (choice == 3) {
+            scheduleScreen();
+        } else if (choice == 4) {
+            homeScreen();
         }
     }
 
