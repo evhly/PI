@@ -14,7 +14,7 @@ public class CredentialDB {
         allCredentials = Credentials.loadAllCredentials(new File("credentials.csv"));
     }
 
-    public int newAccount(Credentials userCredentials, String confirmPw) throws FileNotFoundException {
+    public int newAccount(Credentials userCredentials, String confirmPw) {
         if(!isEmailUnique(userCredentials, confirmPw)){
             return EMAIL_ALREADY_USED;
         }else if(!userCredentials.getPassword().equals(confirmPw)){
@@ -34,10 +34,10 @@ public class CredentialDB {
         return true;
     }
 
-    public Credentials loginSuccessful(String email, String password){
+    public Student loginSuccessful(String email, String password){
         for(Credentials credential : allCredentials){
             if(credential.login(email, password)){
-                return credential;
+                return new Student(credential);
             }
         }
         return null;

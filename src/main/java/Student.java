@@ -15,6 +15,19 @@ public class Student {
 
     private Credentials information;
 
+    public Student(Credentials creds) {
+        information = creds;
+
+        if (getSaveFile().exists()) {
+            schedules = Schedule.loadSchedules(
+                getSaveFile(),
+                App.getInstance().getCourseDatabase()
+            );
+        } else {
+            schedules = new ArrayList<>();
+        }
+    }
+
     public void changeProfile(Credentials newCreds){
         information.setFirstName(newCreds.getFirstName());
         information.setLastName(newCreds.getLastName());
@@ -24,13 +37,6 @@ public class Student {
         information.setPassword(newCreds.getPassword());
     }
 
-
-    public Student(Credentials creds){
-        schedules = new ArrayList<Schedule>();
-        information = creds;
-    }
-
-    
     /**
      * Returns all schedules associated with the student's account
      * @return an ArrayList of all schedules associated with the student's account
@@ -45,6 +51,24 @@ public class Student {
      */
     public void addSchedule(Schedule schedule) {
         schedules.add(schedule);
+        save();
+    }
+
+    /**
+     * Deletes a schedule to the student's schedules list
+     * @param schedule the schedule to delete
+     */
+    public void deleteSchedule(Schedule schedule) {
+        schedules.remove(schedule);
+        save();
+    }
+
+    public void save() {
+        Schedule.saveSchedules(getSaveFile(), schedules);
+    }
+
+    private File getSaveFile() {
+        return new File(information.getId()+"_savedSchedules.csv");
     }
 
 }

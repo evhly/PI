@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class Schedule {
             sb.append(course.getCode());
             sb.append(",");
         }
+        sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
 
@@ -83,59 +85,57 @@ public class Schedule {
      * Prints schedules to a file in a format (csv) that can be read back into the program
      * @throws IOException File cannot be created or written to
      */
-    public static void saveSchedules(Student s) throws IOException {
-        PrintWriter fout = new PrintWriter(s.getInformation().getId() + "_savedSchedules.csv");
-        StringBuilder sb = new StringBuilder();
-        for (Schedule schedule : s.getSchedules()) {
-            sb.append(schedule.toSave());
-            sb.append("\n");
-            sb.append(",");
+    public static void saveSchedules(File file, ArrayList<Schedule> schedules) {
+        try {
+            PrintWriter fout = new PrintWriter(file);
+            StringBuilder sb = new StringBuilder();
+            for (Schedule schedule : schedules) {
+                sb.append(schedule.toSave());
+                sb.append("\n");
+            }
+            if (schedules.size() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            fout.print(sb);
+            fout.flush();
+            fout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        fout.print(sb);
-        fout.flush();
-        fout.close();
+    }
+
+    public static Schedule loadSchedule(String scheduleString, CourseDatabase db) {
+        String[] parts = scheduleString.split(",");
+        Schedule schedule = new Schedule(parts[0].trim());
+
+        for(int i=1; i<parts.length; i++) {
+            schedule.addCourse(db.getCourseData(parts[i]));
+        }
+
+        return schedule;
     }
 
     /**
-     * Loads schedules of a student from a file
+     * Loads schedules from a file
+     * @param file The file to load the list of schedules from
      * @param db The CourseDatabase to draw course data from, since we only have the course code
      * @throws IOException If a save data file does not exist
      */
-    public static void loadSchedules(CourseDatabase db, Student s) throws IOException {
+    public static ArrayList<Schedule> loadSchedules(File file, CourseDatabase db) {
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
         try {
-            File file = new File(s.getInformation().getId() + "_savedSchedules.csv");
             Scanner fileScanner = new Scanner(file);
-            fileScanner.useDelimiter(",");
-
+            fileScanner.useDelimiter("\n");
             while (fileScanner.hasNext()) {
-                Schedule schedule = new Schedule(fileScanner.next());
-                do {
-                    String code = fileScanner.next();
-                    if (code.equals("\n")) {
-                        break;
-                    }
-                    Course course;
-                    try {
-                        course = getCourseFromCode(code, db);
-                        schedule.addCourse(course);
-                    } catch (NoSuchElementException nse) {
-                        System.out.println(nse.getMessage());
-                    }
-                } while (true);
-
-                s.getSchedules().add(schedule);
+                schedules.add(Schedule.loadSchedule(fileScanner.next(), db));
             }
-
             fileScanner.close();
-
-        } catch (NullPointerException e) {
-            System.out.println("No saved schedules exist for " + s.getInformation().getLastName() + ", ID: " + s.getInformation().getId());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
-    }
-
-    public static Course getCourseFromCode(String code, CourseDatabase db) {;
-        return db.getCourseData(code);
+        return schedules;
     }
 
 }
