@@ -2,12 +2,6 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class SchedulePage extends Page {
 
@@ -79,7 +73,6 @@ public class SchedulePage extends Page {
         searchBtn.addActionListener((event) -> {
             String query = searchBar.getText();
             search.modifyQuery(query);
-            System.out.println(search.resultsStrs().length);
             searchResults.clear();
             for(Course c : search.getResults()) {
                 searchResults.addElement(c);
