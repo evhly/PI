@@ -16,9 +16,9 @@ public class CalendarComponent extends DynamicComponent {
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
 
-        setMinimumSize(new Dimension(550, 500));
-        setMaximumSize(new Dimension(550, 500));
-        setPreferredSize(new Dimension(550, 500));
+        setMinimumSize(new Dimension(550, 550));
+        setMaximumSize(new Dimension(550, 550));
+        setPreferredSize(new Dimension(550, 550));
         setBackground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black));
         setFocusable(true);
@@ -26,8 +26,8 @@ public class CalendarComponent extends DynamicComponent {
         //add master panel boxlayout with a left side being list and a right panel (calendar component)
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        String[][] data = new String[11][7];
-        for (int i = 0; i < 11; i++) {
+        String[][] data = new String[14][7];
+        for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 7; j++) {
                 data[i][j] = " ";
             }
@@ -57,7 +57,7 @@ public class CalendarComponent extends DynamicComponent {
             tablePanel.add(calendar.getTableHeader());
             tablePanel.add(calendar);
 
-            String[] rowNames = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm"};
+            String[] rowNames = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm"};
             JList<String> rowHeader = new JList<String>(rowNames);
             rowHeader.setFixedCellHeight(40);
         add(rowHeader);

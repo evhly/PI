@@ -67,7 +67,7 @@ public class SchedulePage extends Page {
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(150,20));
         JButton searchBtn = new JButton("SEARCH");
-        add(searchBar);
+        add(searchBar, "cell 0 1");
 
         JList<Course> list = new JList<>(searchResults);
         searchBtn.addActionListener((event) -> {
@@ -89,8 +89,8 @@ public class SchedulePage extends Page {
         CalendarComponent calendar = new CalendarComponent();
         calendar.draw();
 
-        add(searchBtn);
-        add(calendar, "span 1 2, align right, wrap");
+        add(searchBtn, "cell 3 1");
+        add(calendar, "span 1 0, align right, wrap");
         DefaultListModel<Course> model = new DefaultListModel<>();
         JList<Course> courseList = new JList<>( model );
         add(courseList, "top, align center, wrap");
