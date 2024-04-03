@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -42,7 +41,7 @@ public class CalendarComponent extends DynamicComponent {
                 for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){
                     int day = entry.getKey().getValue() % 7;
                     int time = (int)(ChronoUnit.MINUTES.between(LocalTime.parse("08:00:00"), entry.getValue().get(0)) / 15);
-                    System.out.println("time: " + time);
+//                    System.out.println("time: " + time);
                     data[time][day] = c.getCode();
 
                     int length = (int)(ChronoUnit.MINUTES.between(entry.getValue().get(0), entry.getValue().get(1)) / 15);
@@ -62,7 +61,9 @@ public class CalendarComponent extends DynamicComponent {
         };
 
         JPanel tablePanel = new JPanel();
-            calendar = new JTable(model);
+        calendar = new JTable(model);
+        calendar.setShowHorizontalLines(false);
+        calendar.setShowVerticalLines(true);
         TableCellRenderer renderer = new CustomTableCellRenderer();
         calendar.setDefaultRenderer(Object.class, renderer);
         calendar.setRowHeight(10);
