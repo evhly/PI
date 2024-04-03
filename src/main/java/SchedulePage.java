@@ -66,6 +66,7 @@ public class SchedulePage extends Page {
         });
 
 
+
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
 //        add(undoBtn, "cell 2 0, align right");
@@ -115,7 +116,7 @@ public class SchedulePage extends Page {
         add(courseList, "top, align center, wrap");
 
         JTextArea courseInfo = new JTextArea(7, 61);
-        courseInfo.setText("MORE INFO ABOUT CLASS");
+
         courseInfo.setEditable(false);
         courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
         add(courseInfo, "cell 4 3, align right");
@@ -132,7 +133,7 @@ public class SchedulePage extends Page {
                 app.getLoggedInStudent().save();
                 redraw();
             } else {
-                // TODO: error
+                courseInfo.setText("Time conflict - choose another course");
             }
         });
     }

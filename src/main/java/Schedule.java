@@ -50,8 +50,10 @@ public class Schedule {
      * @return false if there is a time conflict, true otherwise
      */
     public Boolean addCourse(Course courseToAdd){
-        if(checkConflict(courseToAdd)){
-            return false;
+        for(int i = 0 ; i < courses.size(); i++){
+            if(courseToAdd.hasConflict(courses.get(i))){
+                return false;
+            }
         }
         courses.add(courseToAdd);
         return true;
@@ -111,7 +113,7 @@ public class Schedule {
         Schedule schedule = new Schedule(parts[0].trim());
 
         for(int i=1; i<parts.length; i++) {
-            schedule.addCourse(db.getCourseData(parts[i]));
+            schedule. addCourse(db.getCourseData(parts[i]));
         }
 
         return schedule;
