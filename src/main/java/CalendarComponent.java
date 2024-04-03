@@ -1,5 +1,7 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class CalendarComponent extends DynamicComponent {
+
+    TableModel model;
+    JTable calendar;
 
     public void draw() {
         App app = App.getInstance();
@@ -26,25 +31,30 @@ public class CalendarComponent extends DynamicComponent {
         //add master panel boxlayout with a left side being list and a right panel (calendar component)
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        String[][] data = new String[11][7];
-        for (int i = 0; i < 11; i++) {
+        String[][] data = new String[44][7];
+        for (int i = 0; i < 44; i++) {
             for (int j = 0; j < 7; j++) {
-                data[i][j] = " ";
+                data[i][j] = "";
             }
         }
         for(Course c : schedule.getCourses()){
             if(c.getMeetingTimes() != null){
                 for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){
                     int day = entry.getKey().getValue() % 7;
-                    int time = (int)ChronoUnit.HOURS.between(LocalTime.parse("08:00:00"), entry.getValue().get(0));
+                    int time = (int)(ChronoUnit.MINUTES.between(LocalTime.parse("08:00:00"), entry.getValue().get(0)) / 15);
                     System.out.println("time: " + time);
                     data[time][day] = c.getCode();
+
+                    int length = (int)(ChronoUnit.MINUTES.between(entry.getValue().get(0), entry.getValue().get(1)) / 15);
+                    for(int i = 1; i < length; i++){
+                        data[time+i][day] = " ";
+                    }
                 }
             }
         }
         String[] columnNames = {"Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"};
 
-        TableModel model = new DefaultTableModel(data, columnNames)
+        model = new DefaultTableModel(data, columnNames)
         {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -52,14 +62,18 @@ public class CalendarComponent extends DynamicComponent {
         };
 
         JPanel tablePanel = new JPanel();
-            JTable calendar = new JTable(model);
-            calendar.setRowHeight(40);
+            calendar = new JTable(model);
+        TableCellRenderer renderer = new CustomTableCellRenderer();
+        calendar.setDefaultRenderer(Object.class, renderer);
+        calendar.setRowHeight(10);
             tablePanel.add(calendar.getTableHeader());
             tablePanel.add(calendar);
 
-            String[] rowNames = {"8am", "9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm"};
+            String[] rowNames = {"8am", "", "8:30am", "", "9am", "", "9:30am", "", "10am", "", "10:30am", "", "11am",
+                    "", "11:30am", "", "12pm", "", "12:30pm", "", "1pm", "", "1:30pm", "", "2pm", "", "2:30pm",
+                    "", "3pm", "", "3:30pm", "", "4pm", "", "4:30pm", "", "5pm", "", "5:30pm", "", "6pm", "", "6:30pm", ""};
             JList<String> rowHeader = new JList<String>(rowNames);
-            rowHeader.setFixedCellHeight(40);
+            rowHeader.setFixedCellHeight(10);
         add(rowHeader);
         add(tablePanel);
 
@@ -83,6 +97,5 @@ public class CalendarComponent extends DynamicComponent {
                 }
             }
         });
-
     }
 }
