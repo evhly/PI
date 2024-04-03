@@ -67,7 +67,9 @@ public class Schedule {
     public String showMoreInfo(Course sectionToCheck){
         return "";
     }
-    public void rename(){}
+    public void rename(String title){
+        this.title = title;
+    }
     public String getTitle(){
         return title;
     }
