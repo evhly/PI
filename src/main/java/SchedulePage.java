@@ -137,18 +137,18 @@ public class SchedulePage extends Page {
         scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
 
-        JTextArea scheduleTextArea = new JTextArea();
-        String scheduleText = "Current Schedule: \n";
-        for(Course c : schedule.getCourses()){
-            scheduleText += c.getCode() + "\n";
+        String[] scheduleTextList = new String[schedule.getCourses().size()];
+//        String scheduleText = "Current Schedule: \n"; // TODO: add title
+        for(int i = 0; i < schedule.getCourses().size(); i++){
+            scheduleTextList[i] = schedule.getCourses().get(i).getCode();
         }
-        scheduleTextArea.setText(scheduleText);
-        System.out.println("schedule: \n" + scheduleTextArea.getText());
-        scheduleTextArea.setEditable(false);
-        JScrollPane schedulePane = new JScrollPane(scheduleTextArea);
-        schedulePane.setBorder(BorderFactory.createLineBorder(Color.orange));
-        schedulePane.setPreferredSize(new Dimension(200, 500));
-        add(schedulePane, "cell 2 1");
+        JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
+        JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
+        scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.pink));
+        scheduleListPane.setMinimumSize(new Dimension(150,500));
+        scheduleListPane.setMaximumSize(new Dimension(150,500));
+        scheduleListPane.setPreferredSize(new Dimension(150,500));
+        add(scheduleListPane, "cell 2 1");
 
 
         CalendarComponent calendar = new CalendarComponent();
