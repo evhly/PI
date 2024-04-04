@@ -48,7 +48,8 @@ public class Search {
                         filterMismatch = true;
                     }
                 }
-                // if at least one day has a matching start and end time, then the course will be considered
+                // if at least one day has a matching* start and end time, then the course will be considered
+                // * matching means if the course's start and end time are within (inclusive) the filter's times
                 if ((filter.getType() == Filter.type.TIMES) && !filterMismatch && filter.isEnabled()) {
                     boolean hasMatchingTimes = false;
                     DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
@@ -58,7 +59,11 @@ public class Search {
                             LocalTime filterEnd = LocalTime.parse(filter.getTimes().get(1), ampmFormatter);
                             LocalTime courseStart = course.getMeetingTimes().get(day).get(0);
                             LocalTime courseEnd = course.getMeetingTimes().get(day).get(1);
-                            if (filterStart.equals(courseStart) && filterEnd.equals(courseEnd)) {
+//                            if (filterStart.equals(courseStart) && filterEnd.equals(courseEnd)) {
+//                                hasMatchingTimes = true;
+//                            }
+                            if ( ( filterStart.isBefore(courseStart) || filterStart.equals(courseStart) )
+                                    && ( ( filterEnd.isAfter(courseEnd) || filterEnd.equals(courseEnd) ) ) ) {
                                 hasMatchingTimes = true;
                             }
                         }
