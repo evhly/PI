@@ -236,7 +236,7 @@ public class Course {
 
     @Override
     public String toString(){
-        String str = code + "; ";
+        String str = code + "; " + name + "; ";
         boolean times = false;
         for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
             str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
