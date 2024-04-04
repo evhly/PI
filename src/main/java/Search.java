@@ -34,6 +34,7 @@ public class Search {
 
     public ArrayList<Course> search(){
         results = new ArrayList<>();
+        System.out.println(filters.size());
         for(Course course : DB.getCourses()){
             boolean filterMismatch = false;
             for (Filter filter : filters) {
@@ -50,6 +51,8 @@ public class Search {
                 // if at least one day has a matching start and end time, then the course will be considered
                 if ((filter.getType() == Filter.type.TIMES) && !filterMismatch) {
                     boolean hasMatchingTimes = false;
+                    System.out.println(course.getMeetingTimes() + " == " +filter.getTimes()+"?");
+
                     DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
                     for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week
                         if (course.getMeetingTimes().containsKey(day)) {

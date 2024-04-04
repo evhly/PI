@@ -113,7 +113,7 @@ public class Schedule {
         Schedule schedule = new Schedule(parts[0].trim());
 
         for(int i=1; i<parts.length; i++) {
-            schedule. addCourse(db.getCourseData(parts[i]));
+            schedule.addCourse(db.getCourseData(parts[i]));
         }
 
         return schedule;
