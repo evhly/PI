@@ -137,6 +137,19 @@ public class SchedulePage extends Page {
         scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
 
+        JTextArea scheduleTextArea = new JTextArea();
+        String scheduleText = "Current Schedule: \n";
+        for(Course c : schedule.getCourses()){
+            scheduleText += c.getCode() + "\n";
+        }
+        scheduleTextArea.setText(scheduleText);
+        System.out.println("schedule: \n" + scheduleTextArea.getText());
+        scheduleTextArea.setEditable(false);
+        JScrollPane schedulePane = new JScrollPane(scheduleTextArea);
+        schedulePane.setBorder(BorderFactory.createLineBorder(Color.orange));
+        schedulePane.setPreferredSize(new Dimension(200, 500));
+        add(schedulePane, "cell 2 1");
+
 
         CalendarComponent calendar = new CalendarComponent();
         calendar.draw();
