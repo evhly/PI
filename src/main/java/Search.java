@@ -2,6 +2,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Search {
 
@@ -71,16 +72,22 @@ public class Search {
                 }
             }
             if (!filterMismatch) { // if the filters match, continue to check
-                String[] arr = {course.getName().toLowerCase(), course.getCode().toLowerCase()}; // name, code
-                for (int j = 0; j < arr.length; j++) { // for the name first, then the code
-                    String nameOrCode = arr[j];
-                    int index = nameOrCode.indexOf(query);
+                ArrayList<String> arr = new ArrayList<>();
+                arr.add(course.getName().toLowerCase());
+                arr.add(course.getCode().toLowerCase());
+                for(Map.Entry<DayOfWeek, ArrayList<LocalTime>> c : course.getMeetingTimes().entrySet()){
+                    arr.add(c.getValue().get(0).toString());
+                    arr.add(c.getKey().toString().toLowerCase());
+                }
+                for (int j = 0; j < arr.size(); j++) { // for the name first, then the code
+                    String fieldToCheck = arr.get(j);
+                    int index = fieldToCheck.indexOf(query);
                     if (index != -1) { // index would be -1 if query is not in the course name or code
-                        if (index == 0 || nameOrCode.charAt(index - 1) == ' ') { // either the name or code matches
+                        if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // either the name or code matches
                             // fully or is the start of a word
                             // in the name or code
                             results.add(course);
-                            j = 2;
+                            j = arr.size();
                         }
                     }
                 }
@@ -89,13 +96,13 @@ public class Search {
         return results;
     }
 
-        public String[] resultsStrs() {
-            String[] arr = new String[results.size()];
-            int i = 0;
-            for (Course course : results) {
-                arr[i] = course.getCode(); // unique identifier
-                i++;
-            }
-            return arr;
+    public String[] resultsStrs() {
+        String[] arr = new String[results.size()];
+        int i = 0;
+        for (Course course : results) {
+            arr[i] = course.getCode(); // unique identifier
+            i++;
         }
+        return arr;
+    }
 }

@@ -3,11 +3,15 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Objects;
+import java.util.Set;
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+    String curTerm = "F20";
     public void draw(){
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
@@ -63,6 +67,7 @@ public class SchedulePage extends Page {
         editTitleBtn.addActionListener((event) -> {
             String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
             schedule.rename(title);
+            app.getLoggedInStudent().save();
             redraw();
         });
 
@@ -87,6 +92,13 @@ public class SchedulePage extends Page {
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
 
+        Set<String> termSet = app.getCourseReader().getTerms();
+        String[] terms = new String[termSet.size()];
+        terms = termSet.toArray(terms);
+        JComboBox<String>termsComboBox = new JComboBox<>(terms);
+        termsComboBox.setSelectedItem("F20");
+        add(termsComboBox, "cell 0 1");
+
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
 //        add(undoBtn, "cell 2 0, align right");
@@ -94,6 +106,12 @@ public class SchedulePage extends Page {
 //        JButton pdfBtn = new JButton();
 //        pdfBtn.setIcon(pdfIcon);
 //        add(pdfBtn, "cell 3 0, align left, wrap");
+
+        JTextArea courseInfo = new JTextArea();
+
+        courseInfo.setEditable(false);
+        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(courseInfo, "cell 4 0, align right");
 
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
@@ -161,11 +179,7 @@ public class SchedulePage extends Page {
         JList<Course> courseList = new JList<>( model );
         add(courseList, "top, align center, wrap");
 
-        JTextArea courseInfo = new JTextArea(7, 61);
 
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 3, align right");
 
 
         plusBtn.addActionListener((event) -> {
@@ -183,6 +197,7 @@ public class SchedulePage extends Page {
                 }
             }
         });
+
 
        Action deleteCourse = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
@@ -202,5 +217,21 @@ public class SchedulePage extends Page {
                 "delete");
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
+
+        termsComboBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent arg0) {
+                curTerm = (String)termsComboBox.getSelectedItem();
+                System.out.println(curTerm);
+                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(curTerm));
+                app.setCurrSchedule(new Schedule());
+                System.out.println("size: " + app.getCurrSchedule().getCourses().size());
+                calendar.removeAll();
+                calendar.add(new CalendarComponent());
+                calendar.repaint();
+                calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
+            }
+        });
     }
 }
