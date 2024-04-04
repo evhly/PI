@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class Filter {
 
-    private final type filterType;
-    private String department;
-    private Professor professor;
-    private String startTime;
-    private String endTime;
+    private final type filterType; // users may filter by Professor, department, or by time range
+    private String department;  // the department to filter by
+    private Professor professor; // the professor to filter by
+    private String startTime; // the beginning of the course's meeting time
+    private String endTime;   // the end of the course's meeting time
 
     public enum type {
         PROFESSOR,
@@ -15,16 +15,34 @@ public class Filter {
         TIMES
     }
 
+    //TODO: hard enforce filter types in constructors
+
+    /**
+     * Makes a DEPARTMENT filter
+     * @param filterType should be DEPARTMENT
+     * @param department what department to filter by
+     */
     public Filter(type filterType, String department) {
         this.filterType = filterType;
         this.department = department;
     }
 
+    /**
+     * Makes a PROFESSOR filter
+     * @param filterType should be PROFESSOR
+     * @param professor what Professor to filter by
+     */
     public Filter(type filterType, Professor professor) {
         this.filterType = filterType;
         this.professor = professor;
     }
 
+    /**
+     * Makes a TIMES filter
+     * @param filterType should be TIMES
+     * @param startTime the earliest time in the time range to filter by
+     * @param endTime the latest time in the time range to filter by
+     */
     public Filter(type filterType, String startTime, String endTime) {
         if (startTime.charAt(1) == ':') { // if the time is not padded with a 0
             startTime = "0" + startTime;

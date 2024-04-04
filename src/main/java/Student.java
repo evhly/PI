@@ -7,7 +7,7 @@ import static java.lang.Integer.parseInt;
 
 public class Student {
 
-    private ArrayList<Schedule> schedules;
+    private ArrayList<Schedule> schedules; // all schedules saved by the Student
 
     public Credentials getInformation() {
         return information;
@@ -15,6 +15,10 @@ public class Student {
 
     private Credentials information;
 
+    /**
+     * Creates a new Student if one does not exist with given credentials, otherwise it reloads the data of an existing student
+     * @param creds
+     */
     public Student(Credentials creds) {
         information = creds;
 

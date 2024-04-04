@@ -10,12 +10,12 @@ import static java.lang.Integer.parseInt;
 
 public class Credentials {
 
-    private String firstName;
-    private String lastName;
-    private int id;
-    private String major;
-    private String password;
-    private String email;
+    private String firstName; // Given name of the associated Student
+    private String lastName;  // Family name of the associated Student
+    private int id;           // Grove City College ID number of the associated Student
+    private String major;     // Primary major of the associated Student //TODO: handle multiple majors
+    private String password;  // Don't look too closely at this field
+    private String email;     // Email address of the associated Student (GCC email)
 
     /**
      * Constructor
@@ -42,6 +42,12 @@ public class Credentials {
         email = newEmail;
     }
 
+    /**
+     * Determines whether an email address and password are correct for a user trying to log in
+     * @param attemptEmail The email address to check
+     * @param attemptPassword The password (plain text) to check
+     * @return Whether the email address and password are correct
+     */
     public Boolean login(String attemptEmail, String attemptPassword){
          return attemptEmail.equals(email) && checkValid(attemptPassword);
     }
@@ -97,7 +103,11 @@ public class Credentials {
         }
     }
 
-
+    /**
+     * Checks whether the given password is the same as the associated Student's password
+     * @param password The password to check
+     * @return Whether the password matches this.password
+     */
     public Boolean checkValid(String password) {
         return password.equals(this.password);
     }
