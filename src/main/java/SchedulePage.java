@@ -156,6 +156,8 @@ public class SchedulePage extends Page {
         scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
 
+        add(searchBtn, "cell 3 1");
+
         String[] scheduleTextList = new String[schedule.getCourses().size()];
         for(int i = 0; i < schedule.getCourses().size(); i++){
             scheduleTextList[i] = schedule.getCourses().get(i).getCode();
@@ -167,13 +169,11 @@ public class SchedulePage extends Page {
         scheduleListPane.setMinimumSize(new Dimension(150,500));
         scheduleListPane.setMaximumSize(new Dimension(150,500));
         scheduleListPane.setPreferredSize(new Dimension(150,500));
-        add(scheduleListPane, "cell 2 1");
-
+        add(scheduleListPane, "cell 3 1");
 
         CalendarComponent calendar = new CalendarComponent();
         calendar.draw();
 
-        add(searchBtn, "cell 3 1");
         add(calendar, "span 1 0, align right, wrap");
         DefaultListModel<Course> model = new DefaultListModel<>();
         JList<Course> courseList = new JList<>( model );
