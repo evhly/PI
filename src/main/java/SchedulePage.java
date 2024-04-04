@@ -95,7 +95,7 @@ public class SchedulePage extends Page {
         terms = termSet.toArray(terms);
         JComboBox<String>termsComboBox = new JComboBox<>(terms);
         termsComboBox.setSelectedItem("F20");
-        add(termsComboBox, "cell 5 2");
+        add(termsComboBox, "cell 0 1");
 
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
