@@ -12,16 +12,6 @@ public class App extends JFrame {
     private CourseDatabase courseDatabase;
     private Schedule currSchedule;
 
-    public int getVerbosity() {
-        return verbosity;
-    }
-
-    public void setVerbosity(int verbosity) {
-        this.verbosity = verbosity;
-    }
-
-    private int verbosity;
-
     private App(){
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());
