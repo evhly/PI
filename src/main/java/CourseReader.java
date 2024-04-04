@@ -41,14 +41,51 @@ public class CourseReader {
     }
 
     public boolean sameCourse(Course c, String section) {
-        // TODO
+        // TODO: implement
         return false;
     }
 
     public void appendToCourse(){
-       // TODO
+       // TODO: implement
     }
 
+    // A list of the fields in the CSV that need to be read to create a Course
+    // Fields may need to change. If so, change them here.
+    /*
+     *
+     * yr_cde
+     * trm_cde
+     * crs_cde
+     * crs_comp1
+     * crs_comp2
+     * crs_comp3
+     * crs_title
+     * credit_hrs
+     * x_listed_parnt_crs
+     * acad_credit_varies
+     * acad_credit_label
+     * crs_capacity	max_capacity
+     * crs_enrollment
+     * bldg_cde	room_cde
+     * monday_cde
+     * tuesday_cde
+     * wednesday_cde
+     * thursday_cde
+     * friday_cde
+     * begin_tim
+     * end_tim
+     * last_name
+     * first_name
+     * preferred_name
+     * comment_txt
+     *
+     */
+
+    /**
+     * Parses a line from the CSV file (the file that holds all courses offered in a year)
+     * @param csvLine A line from the CSV file
+     * @return A newly minted Course
+     */
     public Course parseCourseInfo(String csvLine){
 
         // parse the line to get parameters for Course
@@ -114,7 +151,8 @@ public class CourseReader {
                         case "W" -> meetings.put(DayOfWeek.WEDNESDAY, beginAndEnd);
                         case "R" -> meetings.put(DayOfWeek.THURSDAY, beginAndEnd);
                         case "F" -> meetings.put(DayOfWeek.FRIDAY, beginAndEnd);
-                        default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); // more of a placeholder than anything
+                        default -> meetings.put(DayOfWeek.SATURDAY, beginAndEnd); //TODO: change to DayOfWeek.SUNDAY;
+                                                                                  // add Saturday option
                     }
             }
         }
@@ -142,7 +180,6 @@ public class CourseReader {
     public Set<String> getTerms(){
         return courseDatabaseMap.keySet();
     }
-
     public static CourseReader getAllCourseDatabases() {
         CourseReader CR = new CourseReader();
         String path = "src/main/csvs";

@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 public class Schedule {
 
-    private ArrayList<Course> courses;
-    private String title;
+    private ArrayList<Course> courses; // the courses contained in a Schedule
+    private String title; // the title given to the Schedule by the user
 
 
 
@@ -18,24 +18,34 @@ public class Schedule {
     }
 
 
+    /**
+     * Constructor
+     * //TODO: convert to real copy constructor
+     * @param courses Courses to add to the schedule
+     * @param title The name of the schedule
+     */
     public Schedule(ArrayList<Course> courses, String title) {
         this.courses = courses;
         this.title = title;
     }
 
+    /**
+     * Constructor that creates a blank schedule
+     */
     public Schedule() {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
     }
 
+    /**
+     * Creates an empty Schedule that has a name
+     * @param title a name for this schedule
+     */
     public Schedule(String title) {
         this.courses = new ArrayList<>();
         this.title = title;
     }
 
-//    public ArrayList<Course> getCourses() {
-//        return courses;
-//    }
 
     /**
      * Removes course from schedule
@@ -60,9 +70,9 @@ public class Schedule {
         return true;
     }
     public Schedule undo(){
-        return null;
+        return null; //TODO: implement
     }
-    public Boolean checkConflict(Course sectionToCheck){
+    public Boolean checkConflict(Course sectionToCheck){ //TODO: remove
         return false;
     }
     public String showMoreInfo(Course sectionToCheck){
@@ -76,6 +86,10 @@ public class Schedule {
         return title;
     }
 
+    /**
+     * Converts a Schedule and its Courses into a String that can be saved in a CSV file and reloaded later
+     * @return A String containing all necessary data to reconstruct this schedule
+     */
     public String toSave() {
         StringBuilder sb = new StringBuilder();
         sb.append(title + ",");

@@ -19,6 +19,12 @@ public class CourseDatabase {
         courses = new HashSet<>();
     }
 
+    /**
+     * Adds a course to the database. If another course with the same course code but different meeting times is
+     * found in the database, this method tries to "merge" the times. This is to accommodate classes such as
+     * 4-credit MATH courses (e.g. MATH 161 (Calculus 1))
+     * @param course The course to add to the database
+     */
     public void addCourse(Course course) {
 
         // checks if a course already exists with this course code
@@ -71,6 +77,10 @@ public class CourseDatabase {
         throw new NoSuchElementException("Course with code " + code + " does not exist in database.");
     }
 
+    /**
+     * Returns a string made of the course codes of all courses in the database.
+     * @return A string consisted of the course codes of all courses in the database
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -33,30 +33,39 @@ public class Search {
         return results;
     }
 
+    /**
+     * Searches the CourseDatabase for Courses whose first query.length() characters that match the query
+     * Filters can be used to narrow the search to Courses that match department or Professor or meeting time
+     * @return A list of Courses that match the query and filters
+     */
     public ArrayList<Course> search(){
         results = new ArrayList<>();
-//        System.out.println(filters.size());
-        for(Course course : DB.getCourses()){
-            boolean filterMismatch = false;
-            for (Filter filter : filters) {
+
+        System.out.println(filters.size());
+        for(Course course : DB.getCourses()){ // checks every Course in the DB
+            boolean filterMismatch = false; // this variable holds whether the filters rule a Course out
+            for (Filter filter : filters) { // checks every filter
+
                 if (filter.getType() == Filter.type.DEPARTMENT) {
-                    if (!course.getDepartment().equals(filter.getDepartment())) {
+                    if (!course.getDepartment().equals(filter.getDepartment())) { // checks for strict match
                         filterMismatch = true;
                     }
                 }
                 if ((filter.getType() == Filter.type.PROFESSOR) && !filterMismatch) {
-                    if (!course.getProfessor().equals(filter.getProfessor())) {
+                    if (!course.getProfessor().equals(filter.getProfessor())) { // checks for strict match
                         filterMismatch = true;
                     }
                 }
                 // if at least one day has a matching start and end time, then the course will be considered
                 if ((filter.getType() == Filter.type.TIMES) && !filterMismatch) {
                     boolean hasMatchingTimes = false;
-//                    System.out.println(course.getMeetingTimes() + " == " +filter.getTimes()+"?");
+
+                    System.out.println(course.getMeetingTimes() + " == " +filter.getTimes()+"?"); //TODO: remove? (debugging?)
+
 
                     DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
                     for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week
-                        if (course.getMeetingTimes().containsKey(day)) {
+                        if (course.getMeetingTimes().containsKey(day)) { // if the course meets during that day
                             LocalTime filterStart = LocalTime.parse(filter.getTimes().get(0), ampmFormatter);
                             LocalTime filterEnd = LocalTime.parse(filter.getTimes().get(1), ampmFormatter);
                             LocalTime courseStart = course.getMeetingTimes().get(day).get(0);

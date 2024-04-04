@@ -7,21 +7,18 @@ import java.util.Map;
 
 public class Course {
 
-    private String code;
-    private String name;
-    private String department;
-    private int credits;
-    private String description;
-    private ArrayList<Course> prereqs;
-    private Professor professor;
-    private String endDate;
-//    private ArrayList<DayOfWeek> days;
-//    private ArrayList<String> times;
-    // term should always be a String in the format like "S24" or "F22"
+    private String code; // 4-letter course code, 3-digit number, and section letter: e.g. COMP 350 B
+    private String name; // long-form name of course: e.g. Software Engineering
+    private String department; // 4-letter code: e.g. COMP
+    private int credits; // how many credit hours the course has: e.g. 4 for Calculus I
+    private String description; // A brief description of the course
+    private ArrayList<Course> prereqs; // Prerequisite courses
+    private Professor professor; // The primary instructor for that course
+    private String endDate; // When the course officially stops meeting (can be different from actual last class meeting)
+    // meetingTimes maps days of the week (e.g. Monday, Tuesday) to pairs of times (a starting time and an ending time)
     private HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes;
-    private String term;
-    private ArrayList<String> room;
-
+    private String term; // always a String in the format like "S24" or "F22"
+    private ArrayList<String> room; // Where the course meets
     public String getCode() {
         return code;
     }
@@ -46,16 +43,9 @@ public class Course {
         return prereqs;
     }
 
-//    public ArrayList<DayOfWeek> getDays() {
-//        return days;
-//    }
     public ArrayList<String> getRoom() {
         return room;
     }
-
-//    public ArrayList<String> getTimes() {
-//        return times;
-//    }
 
     public HashMap<DayOfWeek, ArrayList<LocalTime>> getMeetingTimes() {
         return meetingTimes;
@@ -82,8 +72,6 @@ public class Course {
             ArrayList<Course> prereqs,
             Professor professor,
             String endDate,
-//            ArrayList<DayOfWeek> days,
-//            ArrayList<String> times,
             HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes,
             String term,
             ArrayList<String> room
@@ -96,8 +84,6 @@ public class Course {
         this.prereqs = prereqs;
         this.professor = professor;
         this.endDate = endDate;
-//        this.days = days;
-//        this.times = times;
         this.meetingTimes = meetingTimes;
         this.term = term;
         this.room = room;
@@ -106,6 +92,12 @@ public class Course {
     public Course() {
     }
 
+    /**
+     * Primarily used for testing (makes dummy courses with just meetingTimes)
+     * @param meetingDays days of the week that the course meets on
+     * @param startTime   The start time of those meetings
+     * @param endTime     The end time of those meetings
+     */
     public Course(ArrayList<DayOfWeek> meetingDays, String startTime, String endTime) {
         HashMap<DayOfWeek, ArrayList<LocalTime>> m = new HashMap<>();
         for (DayOfWeek day : meetingDays) {
@@ -124,54 +116,18 @@ public class Course {
         this.meetingTimes = m;
     }
 
+    /**
+     * Primarily used for testing (makes dummy courses with just meetingTimes)
+     * @param code         Identifier of the course
+     * @param meetingTimes Which days and times the course meets
+     */
     public Course(String code, HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes) {
         this.code = code;
         this.meetingTimes = meetingTimes;
     }
 
-
-    //may be fields need to change. if so, change them here
     /**
-     *
-     * yr_cde
-     * trm_cde
-     * crs_cde
-     * crs_comp1
-     * crs_comp2
-     * crs_comp3
-     * crs_title
-     * credit_hrs
-     * x_listed_parnt_crs
-     * acad_credit_varies
-     * acad_credit_label
-     * crs_capacity	max_capacity
-     * crs_enrollment
-     * bldg_cde	room_cde
-     * monday_cde
-     * tuesday_cde
-     * wednesday_cde
-     * thursday_cde
-     * friday_cde
-     * begin_tim
-     * end_tim
-     * last_name
-     * first_name
-     * preferred_name
-     * comment_txt
-     *
-     */
-
-    /**
-     *
-     * @return course code
-//     */
-//    @Override
-//    public String toString() {
-//        return code;
-//    }
-
-    /**
-     * another tostring
+     * Another toString()
      * @return coures code and class name
      */
     public String consoleString() {
@@ -234,6 +190,10 @@ public class Course {
         return false;
     }
 
+    /**
+     * Creates a string representation of a Course in this format: CODE; DayOfWeek hh:mm:ss a-hh:mm:ss a, DayOfWeek2 hh:...
+     * @return A string representation of a Course with meeting time data
+     */
     @Override
     public String toString(){
         String str = code + "; ";
