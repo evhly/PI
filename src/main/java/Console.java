@@ -177,6 +177,13 @@ public class Console {
      * searches by filtering results
      */
     private static void searchWFilter() {
+
+        //after get search results, instead of return home, etc.,
+        //have an option: add a filter
+        //then get text from user
+
+
+
 //        System.out.println("Enter 1 for filtering by professor\nEnter 2 for department");
 //        int choice = scn.nextInt();
 //        if (choice == 1) {
