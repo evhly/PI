@@ -83,7 +83,6 @@ public class CalendarComponent extends DynamicComponent {
         InputMap inputMap = calendar.getInputMap(WHEN_FOCUSED);
         ActionMap actionMap = calendar.getActionMap();
 
-
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
         actionMap.put("delete", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
@@ -93,10 +92,12 @@ public class CalendarComponent extends DynamicComponent {
                     row = calendar.convertRowIndexToModel(row);
                     col = calendar.convertColumnIndexToModel(col);
                     String courseCode = (String)calendar.getModel().getValueAt(row, col);
-                    Course courseToDelete = app.getCourseDatabase().getCourseData(courseCode);
-                    schedule.deleteCourse(courseToDelete);
-                    app.getLoggedInStudent().save();
-                    redraw();
+                    if(!courseCode.equals(" ") && !courseCode.isEmpty()){
+                        Course courseToDelete = app.getCourseDatabase().getCourseData(courseCode);
+                        schedule.deleteCourse(courseToDelete);
+                        app.getLoggedInStudent().save();
+                        redraw();
+                    }
                 }
             }
         });

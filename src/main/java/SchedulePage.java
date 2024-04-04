@@ -2,6 +2,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Objects;
@@ -149,11 +150,24 @@ public class SchedulePage extends Page {
             }
         });
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.blue));
+        scrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scrollPane.setMinimumSize(new Dimension(300,500));
         scrollPane.setMaximumSize(new Dimension(300,500));
         scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
+
+        String[] scheduleTextList = new String[schedule.getCourses().size()];
+        for(int i = 0; i < schedule.getCourses().size(); i++){
+            scheduleTextList[i] = schedule.getCourses().get(i).getCode();
+        }
+        JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
+        JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
+//        scheduleListPane.add(new JLabel("Current Schedule")); // TODO: add title
+        scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
+        scheduleListPane.setMinimumSize(new Dimension(150,500));
+        scheduleListPane.setMaximumSize(new Dimension(150,500));
+        scheduleListPane.setPreferredSize(new Dimension(150,500));
+        add(scheduleListPane, "cell 2 1");
 
 
         CalendarComponent calendar = new CalendarComponent();
@@ -169,19 +183,40 @@ public class SchedulePage extends Page {
 
 
         plusBtn.addActionListener((event) -> {
-            Course selected = searchResults.getElementAt(list.getSelectedIndex());
-            System.out.println(selected);
-            if(schedule.addCourse(selected)){
-                calendar.removeAll();
-                calendar.add(new CalendarComponent());
-                calendar.repaint();
-                calendar.revalidate();
-                app.getLoggedInStudent().save();
-                redraw();
-            } else {
-                courseInfo.setText("Time conflict - choose another course");
+            if(list.getSelectedIndex() != -1) {
+                Course selected = searchResults.getElementAt(list.getSelectedIndex());
+                if (schedule.addCourse(selected)) {
+                    calendar.removeAll();
+                    calendar.add(new CalendarComponent());
+                    calendar.repaint();
+                    calendar.revalidate();
+                    app.getLoggedInStudent().save();
+                    redraw();
+                } else {
+                    courseInfo.setText("Time conflict - choose another course");
+                }
             }
         });
+
+
+       Action deleteCourse = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int row = curScheduleList.getSelectedIndex();
+                if (row >= 0) {
+                    Course courseToDelete = curScheduleList.getSelectedValue();
+//                    System.out.println("about to delete " + courseToDelete.getCode());
+                    schedule.deleteCourse(courseToDelete);
+                    app.getLoggedInStudent().save();
+                    redraw();
+                }
+            }
+        };
+        InputMap inputMap = scheduleListPane.getInputMap(
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke("DELETE"),
+                "delete");
+        scheduleListPane.getActionMap().put("delete",
+                deleteCourse);
 
         termsComboBox.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent arg0) {
