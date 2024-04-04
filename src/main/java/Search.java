@@ -35,7 +35,7 @@ public class Search {
 
     public ArrayList<Course> search(){
         results = new ArrayList<>();
-        System.out.println(filters.size());
+//        System.out.println(filters.size());
         for(Course course : DB.getCourses()){
             boolean filterMismatch = false;
             for (Filter filter : filters) {
@@ -52,7 +52,7 @@ public class Search {
                 // if at least one day has a matching start and end time, then the course will be considered
                 if ((filter.getType() == Filter.type.TIMES) && !filterMismatch) {
                     boolean hasMatchingTimes = false;
-                    System.out.println(course.getMeetingTimes() + " == " +filter.getTimes()+"?");
+//                    System.out.println(course.getMeetingTimes() + " == " +filter.getTimes()+"?");
 
                     DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
                     for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week
@@ -72,6 +72,8 @@ public class Search {
                 }
             }
             if (!filterMismatch) { // if the filters match, continue to check
+                String[] queryList = query.split(" ");
+                boolean match = true;
                 ArrayList<String> arr = new ArrayList<>();
                 arr.add(course.getName().toLowerCase());
                 arr.add(course.getCode().toLowerCase());
@@ -79,17 +81,25 @@ public class Search {
                     arr.add(c.getValue().get(0).toString());
                     arr.add(c.getKey().toString().toLowerCase());
                 }
-                for (int j = 0; j < arr.size(); j++) { // for the name first, then the code
-                    String fieldToCheck = arr.get(j);
-                    int index = fieldToCheck.indexOf(query);
-                    if (index != -1) { // index would be -1 if query is not in the course name or code
-                        if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // either the name or code matches
-                            // fully or is the start of a word
-                            // in the name or code
-                            results.add(course);
-                            j = arr.size();
+                int i = 0;
+                while(i < queryList.length && match) {
+                    match = false;
+                    for (int j = 0; j < arr.size(); j++) { // for the name first, then the code
+                        String fieldToCheck = arr.get(j);
+                        int index = fieldToCheck.indexOf(queryList[i]);
+                        if (index != -1) { // index would be -1 if query is not in the course name or code
+                            if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // either the name or code matches
+                                // fully or is the start of a word
+                                // in the name or code
+                                j = arr.size();
+                                match = true;
+                            }
                         }
                     }
+                    i++;
+                }
+                if(match){
+                    results.add(course);
                 }
             }
         }
