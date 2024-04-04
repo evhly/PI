@@ -2,6 +2,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class SchedulePage extends Page {
@@ -168,7 +169,7 @@ public class SchedulePage extends Page {
 
 
         plusBtn.addActionListener((event) -> {
-            Course selected = searchResults.getElementAt(list.getSelectedIndex());
+            Course selected = searchResults.getElementAt(list.getSelectedIndex()); // TODO: check if item is selected
             System.out.println(selected);
             if(schedule.addCourse(selected)){
                 calendar.removeAll();
@@ -181,5 +182,26 @@ public class SchedulePage extends Page {
                 courseInfo.setText("Time conflict - choose another course");
             }
         });
+
+       Action deleteCourse = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("HELLO!!!");
+                int row = curScheduleList.getSelectedIndex();
+                System.out.println("row = " + row);
+                if (row >= 0) {
+                    Course courseToDelete = curScheduleList.getSelectedValue();
+                    System.out.println("about to delete " + courseToDelete.getCode());
+                    schedule.deleteCourse(courseToDelete);
+                    app.getLoggedInStudent().save();
+                    redraw();
+                }
+            }
+        };
+        InputMap inputMap = scheduleListPane.getInputMap(
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke("DELETE"),
+                "delete");
+        scheduleListPane.getActionMap().put("delete",
+                deleteCourse);
     }
 }
