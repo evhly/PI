@@ -93,10 +93,12 @@ public class CalendarComponent extends DynamicComponent {
                     row = calendar.convertRowIndexToModel(row);
                     col = calendar.convertColumnIndexToModel(col);
                     String courseCode = (String)calendar.getModel().getValueAt(row, col);
-                    Course courseToDelete = app.getCourseDatabase().getCourseData(courseCode);
-                    schedule.deleteCourse(courseToDelete);
-                    app.getLoggedInStudent().save();
-                    redraw();
+                    if(!courseCode.equals(" ") && !courseCode.isEmpty()){
+                        Course courseToDelete = app.getCourseDatabase().getCourseData(courseCode);
+                        schedule.deleteCourse(courseToDelete);
+                        app.getLoggedInStudent().save();
+                        redraw();
+                    }
                 }
             }
         });
