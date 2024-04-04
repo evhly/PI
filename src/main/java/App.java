@@ -11,6 +11,7 @@ public class App extends JFrame {
     private Student loggedInStudent;
     private CourseDatabase courseDatabase;
     private Schedule currSchedule;
+    private CourseReader courseReader;
 
 
     private App(){
@@ -18,7 +19,8 @@ public class App extends JFrame {
         pages.put("new-account-page", new NewAccountPage());
         pages.put("choose-schedule-page", new ChooseSchedulePage());
         pages.put("schedule-page", new SchedulePage());
-        setCourseDatabase(CourseReader.getAllCourseDatabases().getCourseDatabase("F20"));
+        courseReader = CourseReader.getAllCourseDatabases();
+        setCourseDatabase(courseReader.getCourseDatabase("F20"));
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -55,6 +57,10 @@ public class App extends JFrame {
     }
     public void setCurrSchedule(Schedule currSchedule){
         this.currSchedule = currSchedule;
+    }
+
+    public CourseReader getCourseReader(){
+        return courseReader;
     }
 
     private static App instance;

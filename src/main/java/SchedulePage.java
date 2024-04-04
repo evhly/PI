@@ -2,11 +2,15 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Objects;
+import java.util.Set;
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+    String curTerm = "F20";
     public void draw(){
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
@@ -85,6 +89,13 @@ public class SchedulePage extends Page {
 
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
+
+        Set<String> termSet = app.getCourseReader().getTerms();
+        String[] terms = new String[termSet.size()];
+        terms = termSet.toArray(terms);
+        JComboBox<String>termsComboBox = new JComboBox<>(terms);
+        termsComboBox.setSelectedItem("F20");
+        add(termsComboBox, "cell 0 1");
 
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
@@ -166,6 +177,22 @@ public class SchedulePage extends Page {
                 redraw();
             } else {
                 courseInfo.setText("Time conflict - choose another course");
+            }
+        });
+
+        termsComboBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent arg0) {
+                curTerm = (String)termsComboBox.getSelectedItem();
+                System.out.println(curTerm);
+                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(curTerm));
+                app.setCurrSchedule(new Schedule());
+                System.out.println("size: " + app.getCurrSchedule().getCourses().size());
+                calendar.removeAll();
+                calendar.add(new CalendarComponent());
+                calendar.repaint();
+                calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
             }
         });
     }
