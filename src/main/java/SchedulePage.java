@@ -2,12 +2,6 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class SchedulePage extends Page {
 
@@ -23,6 +17,7 @@ public class SchedulePage extends Page {
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
         ImageIcon plusIcon = new ImageIcon("resources/plus-line-icon.png");
         ImageIcon deleteIcon = new ImageIcon("resources/minus-round-line-icon.png");
+        ImageIcon editIcon = new ImageIcon("resources/pencil-icon.png");
 
 
         Image backArrow = backArrowIcon.getImage();
@@ -45,12 +40,31 @@ public class SchedulePage extends Page {
         Image newimg5 = delete.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         deleteIcon = new ImageIcon(newimg5);
 
+        Image edit = editIcon.getImage();
+        Image newimg6 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        editIcon = new ImageIcon(newimg6);
+
+
         JButton backBtn = new JButton();
         backBtn.setIcon(backArrowIcon);
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
         });
         add(backBtn, "cell 0 0");
+
+        JLabel scheduleTitle = new JLabel(schedule.getTitle());
+        add(scheduleTitle, "cell 2 0, align right");
+
+        JButton editTitleBtn = new JButton();
+        editTitleBtn.setIcon(editIcon);
+        add(editTitleBtn, "cell 3 0, align left");
+
+        editTitleBtn.addActionListener((event) -> {
+            String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
+            schedule.rename(title);
+            redraw();
+        });
+
 
 
 //        JButton undoBtn = new JButton();
@@ -73,13 +87,12 @@ public class SchedulePage extends Page {
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(150,20));
         JButton searchBtn = new JButton("SEARCH");
-        add(searchBar);
+        add(searchBar, "cell 0 1");
 
         JList<Course> list = new JList<>(searchResults);
         searchBtn.addActionListener((event) -> {
             String query = searchBar.getText();
             search.modifyQuery(query);
-            System.out.println(search.resultsStrs().length);
             searchResults.clear();
             for(Course c : search.getResults()) {
                 searchResults.addElement(c);
@@ -96,17 +109,18 @@ public class SchedulePage extends Page {
         CalendarComponent calendar = new CalendarComponent();
         calendar.draw();
 
-        add(searchBtn);
-        add(calendar, "span 1 2, align right, wrap");
+        add(searchBtn, "cell 3 1");
+        add(calendar, "span 1 0, align right, wrap");
         DefaultListModel<Course> model = new DefaultListModel<>();
         JList<Course> courseList = new JList<>( model );
         add(courseList, "top, align center, wrap");
 
         JTextArea courseInfo = new JTextArea(7, 61);
-        courseInfo.setText("MORE INFO ABOUT CLASS");
+
         courseInfo.setEditable(false);
         courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
         add(courseInfo, "cell 4 3, align right");
+
 
         plusBtn.addActionListener((event) -> {
             Course selected = searchResults.getElementAt(list.getSelectedIndex());
@@ -119,7 +133,7 @@ public class SchedulePage extends Page {
                 app.getLoggedInStudent().save();
                 redraw();
             } else {
-                // TODO: error
+                courseInfo.setText("Time conflict - choose another course");
             }
         });
     }

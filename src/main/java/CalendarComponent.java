@@ -20,9 +20,9 @@ public class CalendarComponent extends DynamicComponent {
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
 
-        setMinimumSize(new Dimension(550, 500));
-        setMaximumSize(new Dimension(550, 500));
-        setPreferredSize(new Dimension(550, 500));
+        setMinimumSize(new Dimension(550, 550));
+        setMaximumSize(new Dimension(550, 550));
+        setPreferredSize(new Dimension(550, 550));
         setBackground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black));
         setFocusable(true);
@@ -32,6 +32,7 @@ public class CalendarComponent extends DynamicComponent {
 
         String[][] data = new String[44][7];
         for (int i = 0; i < 44; i++) {
+
             for (int j = 0; j < 7; j++) {
                 data[i][j] = "";
             }
@@ -73,6 +74,7 @@ public class CalendarComponent extends DynamicComponent {
             String[] rowNames = {"8am", "", "8:30am", "", "9am", "", "9:30am", "", "10am", "", "10:30am", "", "11am",
                     "", "11:30am", "", "12pm", "", "12:30pm", "", "1pm", "", "1:30pm", "", "2pm", "", "2:30pm",
                     "", "3pm", "", "3:30pm", "", "4pm", "", "4:30pm", "", "5pm", "", "5:30pm", "", "6pm", "", "6:30pm", ""};
+
             JList<String> rowHeader = new JList<String>(rowNames);
             rowHeader.setFixedCellHeight(10);
         add(rowHeader);

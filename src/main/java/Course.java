@@ -1,12 +1,9 @@
-import java.lang.reflect.Array;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
-
+import java.util.Map;
 
 public class Course {
 
@@ -167,11 +164,11 @@ public class Course {
     /**
      *
      * @return course code
-     */
-    @Override
-    public String toString() {
-        return code;
-    }
+//     */
+//    @Override
+//    public String toString() {
+//        return code;
+//    }
 
     /**
      * another tostring
@@ -235,6 +232,20 @@ public class Course {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString(){
+        String str = code + "; ";
+        boolean times = false;
+        for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
+            str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
+            times = true;
+        }
+        if(times){
+            str = str.substring(0, str.length()-2);
+        }
+        return str;
     }
 
 }
