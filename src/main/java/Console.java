@@ -4,9 +4,12 @@ import java.util.Scanner;
 
 public class Console {
     static Search search;
+    //current schedule
     static Schedule sch;
     static CourseReader cr;
     static Scanner scn;
+    static Student st;
+    static CourseDatabase cdb;
 
     //excel
     //ctrl+ h
@@ -33,7 +36,7 @@ public class Console {
 //                System.out.println("Successfully read " + fullPath);
 //            }
 //        }
-
+        //TODO: if student has schedules, set the first one to the initial sch
         sch = new Schedule();
         // just read in test2.csv
         cr = new CourseReader();
@@ -44,11 +47,12 @@ public class Console {
         scn = new Scanner(System.in);
 
         //CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
-        search = new Search(cr.getCourseDatabase("F20"));
-        //String fName;
-        //boolean exit = false;
-        //String fileName;
-        //String userInput;
+        cdb = cr.getCourseDatabase("F20");
+        search = new Search(cdb);
+
+        Credentials cr = getCreds();
+        st = new Student(cr,cdb);
+        st.addSchedule(sch);
 
         homeScreen();
 
@@ -63,34 +67,79 @@ public class Console {
 
     }
 
+    private static Credentials getCreds() {
+        return new Credentials("a","b", 7,"m","22","s@s.s");
+        //TODO: make interactive
+    }
+
     private static void homeScreen() {
         System.out.println("Welcome to console debugger :D");
-        System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for schedule" +
+        System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
+                "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
                 "\nEnter -1 to quit");
         //TODO: enter loadSchedule and saveSchedule options
 
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
-        if (choice == 1) {         //moving to search screen
+        // moving to search screen
+        if (choice == 1) {
             searchScreen();
-        } else if (choice == 2) {  //moving to schedule screen
+        }
+        // moving to view schedule screen
+        else if (choice == 2) {
             scheduleScreen();
-        } else if (choice == -1) { //exiting program
+        }
+        // load schedule
+        else if (choice == 3) {
+            ArrayList<Schedule> schedules = st.getSchedules();
+            //prints out schedule names
+            for (int i = 0; i < schedules.size(); i++){
+                System.out.println(i + ": " + schedules.get(i).getTitle());
+            }
+            System.out.println("Enter id of desired schedule");
+            int schToView = scn.nextInt();
+            sch = schedules.get(schToView);
+            System.out.println("Returning home ...");
+            homeScreen();
+        }
+        // save schedule
+        else if (choice == 4) {
+            st.save();
+        }
+        // overwriting and creating new schedule
+        else if (choice == 5) {
+            System.out.println("Enter schedule name:");
+            String name = scn.next();
+            sch = new Schedule(name);
+            st.addSchedule(sch);
+            System.out.println("New empty schedule created\nReturning home ... \n\n");
+            homeScreen();
+        }
+        //exiting program
+        else if (choice == -1) {
             System.out.println("quitting ...");
-        } else {                  //bad input
+        }
+        //enter bad input
+        else {                  //bad input
             System.out.println("ERROR: bad input");
         }
     }
 
     private static void scheduleScreen() {
-        //TODO: show schedule and add schedule options here
+        ArrayList<Course> schCos = sch.getCourses();
         System.out.println("\nEnter 1 to view current schedule\nEnter 2 to remove a course.");
         int choice = scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1) {
             System.out.println(sch);
-        } else if (choice == 2) {  //moving to schedule screen
-            scheduleScreen();
+            homeScreen();
+        } else if (choice == 2) {  //remove
+            System.out.println(sch);
+            System.out.println("Enter id of course you would like to remove");
+            int toRemove = scn.nextInt();
+            sch.deleteCourse(schCos.get(toRemove));
+            System.out.println("Course removed!\n" + sch + "\nReturning home ...\n\n");
+            homeScreen();
         }
 
 
@@ -128,6 +177,13 @@ public class Console {
      * searches by filtering results
      */
     private static void searchWFilter() {
+
+        //after get search results, instead of return home, etc.,
+        //have an option: add a filter
+        //then get text from user
+
+
+
 //        System.out.println("Enter 1 for filtering by professor\nEnter 2 for department");
 //        int choice = scn.nextInt();
 //        if (choice == 1) {

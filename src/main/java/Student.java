@@ -32,6 +32,21 @@ public class Student {
         }
     }
 
+    /**
+     * constructor for console
+     * @param creds
+     * @param db
+     */
+    public Student(Credentials creds, CourseDatabase db) {
+        information = creds;
+
+        if (getSaveFile().exists()) {
+            schedules = Schedule.loadSchedules(getSaveFile(),db);
+        } else {
+            schedules = new ArrayList<>();
+        }
+    }
+
     public void changeProfile(Credentials newCreds){
         information.setFirstName(newCreds.getFirstName());
         information.setLastName(newCreds.getLastName());
