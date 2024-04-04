@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class CourseDatabase {
 
     private HashSet<Course> courses;
+    private App app = App.getInstance();
+    private int verbosity = app.getVerbosity();
 
     /**
      * Default constructor
@@ -43,7 +45,9 @@ public class CourseDatabase {
 
             } else {
                 // likely duplicate course encountered
-                System.out.println("Likely duplicate course detected: " + course.getCode());
+                if (verbosity == 1) {
+                    System.out.println("Likely duplicate course detected: " + course.getCode());
+                }
             }
 
         } catch (NoSuchElementException nse) {
