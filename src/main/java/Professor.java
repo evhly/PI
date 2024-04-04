@@ -26,4 +26,8 @@ public class Professor {
     public int hashCode() {
         return Objects.hash(firstName, lastName);
     }
+
+    public String toString(){
+        return (firstName + " " + lastName);
+    }
 }

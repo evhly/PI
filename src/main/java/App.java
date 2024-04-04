@@ -12,6 +12,7 @@ public class App extends JFrame {
     private CourseDatabase courseDatabase;
     private Schedule currSchedule;
 
+
     private App(){
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());

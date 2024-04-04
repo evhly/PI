@@ -2,6 +2,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class SchedulePage extends Page {
 
@@ -9,7 +10,6 @@ public class SchedulePage extends Page {
     public void draw(){
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
-        Search search = new Search(app.getCourseDatabase());
 
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
@@ -67,6 +67,25 @@ public class SchedulePage extends Page {
         });
 
 
+        String[] departmentFilter = {
+                "",
+                "COMP",
+                "MATH"
+        };
+
+        JComboBox<String >departmentComboBox = new JComboBox<>(departmentFilter);
+        add(departmentComboBox, "cell 3 2");
+
+
+        Professor[] facultyFilter = {
+                new Professor("", ""),
+                new Professor("Brian", "Dellinger"),
+                new Professor("Brian", "Dickinson"),
+                new Professor("Dale", "McIntyre")
+        };
+
+        JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
+        add(facultyComboBox, "cell 3 2");
 
 //        JButton undoBtn = new JButton();
 //        undoBtn.setIcon(undoIcon);
@@ -98,10 +117,23 @@ public class SchedulePage extends Page {
 
         JList<Course> list = new JList<>(searchResults);
         searchBtn.addActionListener((event) -> {
+            Search search = new Search(app.getCourseDatabase());
             String query = searchBar.getText();
             search.modifyQuery(query);
             searchResults.clear();
-            for(Course c : search.getResults()) {
+            String department = (String) departmentComboBox.getSelectedItem();
+            Professor professor = (Professor) facultyComboBox.getSelectedItem();
+            Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
+            Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+
+            if(!Objects.equals(department, "")) {
+                search.addFilter(departmentFilterSelected);
+            }
+            if(!Objects.equals(professor, new Professor("", ""))) {
+                search.addFilter(facultyFilterSelected);
+            }
+
+            for(Course c : search.search()) {
                 searchResults.addElement(c);
             }
         });
