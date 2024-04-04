@@ -37,18 +37,19 @@ public class Search {
         for(Course course : DB.getCourses()){
             boolean filterMismatch = false;
             for (Filter filter : filters) {
-                if (filter.getType() == Filter.type.DEPARTMENT) {
+                // none of these checks will run if the filter is disabled
+                if ((filter.getType() == Filter.type.DEPARTMENT) && filter.isEnabled()) {
                     if (!course.getDepartment().equals(filter.getDepartment())) {
                         filterMismatch = true;
                     }
                 }
-                if ((filter.getType() == Filter.type.PROFESSOR) && !filterMismatch) {
+                if ((filter.getType() == Filter.type.PROFESSOR) && !filterMismatch && filter.isEnabled()) {
                     if (!course.getProfessor().equals(filter.getProfessor())) {
                         filterMismatch = true;
                     }
                 }
                 // if at least one day has a matching start and end time, then the course will be considered
-                if ((filter.getType() == Filter.type.TIMES) && !filterMismatch) {
+                if ((filter.getType() == Filter.type.TIMES) && !filterMismatch && filter.isEnabled()) {
                     boolean hasMatchingTimes = false;
                     DateTimeFormatter ampmFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
                     for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week

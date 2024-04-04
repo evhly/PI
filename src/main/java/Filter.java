@@ -9,23 +9,27 @@ public class Filter {
     private String startTime;
     private String endTime;
 
+    private boolean enabled;
+
     public enum type {
         PROFESSOR,
         DEPARTMENT,
         TIMES
     }
 
-    public Filter(type filterType, String department) {
+    public Filter(type filterType, String department, boolean enabled) {
         this.filterType = filterType;
         this.department = department;
+        this.enabled = enabled;
     }
 
-    public Filter(type filterType, Professor professor) {
+    public Filter(type filterType, Professor professor, boolean enabled) {
         this.filterType = filterType;
         this.professor = professor;
+        this.enabled = enabled;
     }
 
-    public Filter(type filterType, String startTime, String endTime) {
+    public Filter(type filterType, String startTime, String endTime, boolean enabled) {
         if (startTime.charAt(1) == ':') { // if the time is not padded with a 0
             startTime = "0" + startTime;
         }
@@ -35,6 +39,7 @@ public class Filter {
         this.filterType = filterType;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.enabled = enabled;
     }
 
     public type getType() {
@@ -47,6 +52,10 @@ public class Filter {
 
     public String getDepartment() {
         return department;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public ArrayList<String> getTimes() {
