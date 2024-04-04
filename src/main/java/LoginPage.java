@@ -16,6 +16,8 @@ public class LoginPage extends Page {
     JLabel passwordFieldLabel;
     JButton loginBtn;
     JButton newAccountBtn;
+
+    JLabel errorLabel;
     CredentialDB credDb = CredentialDB.getInstance();
 
     public void draw() {
@@ -40,6 +42,9 @@ public class LoginPage extends Page {
         add(passwordFieldLabel, gbc);
         add(passwordField, gbc);
 
+        errorLabel = new JLabel();
+        add(errorLabel, gbc);
+
         loginBtn = new JButton("LOGIN");
 
         loginBtn.addActionListener((event) -> {
@@ -51,7 +56,7 @@ public class LoginPage extends Page {
                 app.setLoggedInStudent(student);
                 app.switchPages("choose-schedule-page");
             }else{
-                //Error message
+                errorLabel.setText("Email or password incorrect");
             }
         });
 

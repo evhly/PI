@@ -11,7 +11,15 @@ public class CredentialDB {
     private static ArrayList<Credentials> allCredentials;
 
     private CredentialDB() {
-        allCredentials = Credentials.loadAllCredentials(new File("credentials.csv"));
+        File credentialsFile = new File("credentials.csv");
+        if(!credentialsFile.exists()) {
+            try {
+                credentialsFile.createNewFile();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        allCredentials = Credentials.loadAllCredentials(credentialsFile);
     }
 
     public int newAccount(Credentials userCredentials, String confirmPw) {
