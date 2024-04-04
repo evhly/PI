@@ -20,9 +20,9 @@ public class CalendarComponent extends DynamicComponent {
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
 
-        setMinimumSize(new Dimension(550, 550));
-        setMaximumSize(new Dimension(550, 550));
-        setPreferredSize(new Dimension(550, 550));
+        setMinimumSize(new Dimension(550, 580));
+        setMaximumSize(new Dimension(550, 580));
+        setPreferredSize(new Dimension(550, 580));
         setBackground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black));
         setFocusable(true);
@@ -30,9 +30,8 @@ public class CalendarComponent extends DynamicComponent {
         //add master panel boxlayout with a left side being list and a right panel (calendar component)
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        String[][] data = new String[44][7];
-        for (int i = 0; i < 44; i++) {
-
+        String[][] data = new String[56][7];
+        for (int i = 0; i < 56; i++) {
             for (int j = 0; j < 7; j++) {
                 data[i][j] = "";
             }
@@ -68,15 +67,16 @@ public class CalendarComponent extends DynamicComponent {
         TableCellRenderer renderer = new CustomTableCellRenderer();
         calendar.setDefaultRenderer(Object.class, renderer);
         calendar.setRowHeight(10);
-            tablePanel.add(calendar.getTableHeader());
-            tablePanel.add(calendar);
+        tablePanel.add(calendar.getTableHeader());
+        tablePanel.add(calendar);
 
-            String[] rowNames = {"8am", "", "8:30am", "", "9am", "", "9:30am", "", "10am", "", "10:30am", "", "11am",
-                    "", "11:30am", "", "12pm", "", "12:30pm", "", "1pm", "", "1:30pm", "", "2pm", "", "2:30pm",
-                    "", "3pm", "", "3:30pm", "", "4pm", "", "4:30pm", "", "5pm", "", "5:30pm", "", "6pm", "", "6:30pm", ""};
-
-            JList<String> rowHeader = new JList<String>(rowNames);
-            rowHeader.setFixedCellHeight(10);
+        String[] rowNames = {"", "", "", "8am", "", "", "", "9am", "", "", "", "10am", "", "", "", "11am",
+                "", "", "", "12pm", "", "", "", "1pm", "", "", "", "2pm", "", "",
+                "", "3pm", "", "", "", "4pm", "", "", "", "5pm", "", "", "", "6pm", "", "", "",
+                "7pm", "", "", "", "8pm", "", "", "", "9pm"
+        };
+        JList<String> rowHeader = new JList<String>(rowNames);
+        rowHeader.setFixedCellHeight(10);
         add(rowHeader);
         add(tablePanel);
 

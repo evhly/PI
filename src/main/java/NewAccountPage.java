@@ -129,6 +129,11 @@ public class NewAccountPage extends Page {
             String major = (String) majorComboBox.getSelectedItem();
 
             CredentialDB credDb = CredentialDB.getInstance();
+            if(firstName.contains(",") || lastName.contains(",") || password.contains(",") || email.contains(",")){
+                accountStatusLabel.setText("Inputs cannot contain commas");
+                return;
+            }
+
             Credentials studentCredentials = new Credentials(
                 firstName, lastName, credDb.findNextId(), major,
                 password, email

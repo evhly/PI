@@ -66,6 +66,7 @@ public class SchedulePage extends Page {
         editTitleBtn.addActionListener((event) -> {
             String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
             schedule.rename(title);
+            app.getLoggedInStudent().save();
             redraw();
         });
 
@@ -104,6 +105,12 @@ public class SchedulePage extends Page {
 //        JButton pdfBtn = new JButton();
 //        pdfBtn.setIcon(pdfIcon);
 //        add(pdfBtn, "cell 3 0, align left, wrap");
+
+        JTextArea courseInfo = new JTextArea();
+
+        courseInfo.setEditable(false);
+        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(courseInfo, "cell 4 0, align right");
 
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
@@ -158,11 +165,7 @@ public class SchedulePage extends Page {
         JList<Course> courseList = new JList<>( model );
         add(courseList, "top, align center, wrap");
 
-        JTextArea courseInfo = new JTextArea(7, 61);
 
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 3, align right");
 
 
         plusBtn.addActionListener((event) -> {

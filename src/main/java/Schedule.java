@@ -12,6 +12,7 @@ public class Schedule {
     private String title;
 
 
+
     public ArrayList<Course> getCourses(){
         return courses;
     }
@@ -69,6 +70,7 @@ public class Schedule {
     }
     public void rename(String title){
         this.title = title;
+
     }
     public String getTitle(){
         return title;
