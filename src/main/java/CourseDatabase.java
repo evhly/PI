@@ -90,4 +90,8 @@ public class CourseDatabase {
         }
         return sb.toString();
     }
+
+    public String getTerm() {
+        return courses.iterator().next().getTerm();
+    }
 }

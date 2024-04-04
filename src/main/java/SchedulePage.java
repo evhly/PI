@@ -96,7 +96,7 @@ public class SchedulePage extends Page {
         String[] terms = new String[termSet.size()];
         terms = termSet.toArray(terms);
         JComboBox<String>termsComboBox = new JComboBox<>(terms);
-        termsComboBox.setSelectedItem("F20");
+        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
         add(termsComboBox, "cell 0 1");
 
 //        JButton undoBtn = new JButton();
@@ -199,7 +199,7 @@ public class SchedulePage extends Page {
         });
 
 
-       Action deleteCourse = new AbstractAction() {
+        Action deleteCourse = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 int row = curScheduleList.getSelectedIndex();
                 if (row >= 0) {
@@ -220,11 +220,9 @@ public class SchedulePage extends Page {
 
         termsComboBox.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent arg0) {
-                curTerm = (String)termsComboBox.getSelectedItem();
-                System.out.println(curTerm);
-                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(curTerm));
+                String newTerm = (String)termsComboBox.getSelectedItem();
+                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(newTerm));
                 app.setCurrSchedule(new Schedule());
-                System.out.println("size: " + app.getCurrSchedule().getCourses().size());
                 calendar.removeAll();
                 calendar.add(new CalendarComponent());
                 calendar.repaint();
