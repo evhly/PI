@@ -248,4 +248,8 @@ public class Course {
         return str;
     }
 
+//    public String toMilitary(String time){
+//
+//    }
+
 }
