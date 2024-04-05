@@ -148,6 +148,9 @@ public class NewAccountPage extends Page {
                 case CredentialDB.EMAIL_ALREADY_USED -> {
                     accountStatusLabel.setText("Account exists with that email. Try logging in");
                 }
+                case CredentialDB.FIELD_BLANK -> {
+                    accountStatusLabel.setText("Please fill in all fields");
+                }
                 case CredentialDB.SUCCESS -> {
                     //accountStatusLabel.setText("Account created! Please log in");
                     Student student = new Student(studentCredentials);

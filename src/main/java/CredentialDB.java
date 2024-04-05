@@ -8,6 +8,7 @@ public class CredentialDB {
     public static final int SUCCESS = 0;
     public static final int PASSWORDS_DONT_MATCH = 1;
     public static final int EMAIL_ALREADY_USED = 2;
+    public static final int FIELD_BLANK = 3;
 
     private static ArrayList<Credentials> allCredentials;
 
@@ -40,6 +41,8 @@ public class CredentialDB {
             return EMAIL_ALREADY_USED;
         }else if(!userCredentials.getPassword().equals(confirmPw)){
             return PASSWORDS_DONT_MATCH;
+        }else if(!isFieldBlank(userCredentials)){
+            return FIELD_BLANK;
         }
         allCredentials.add(userCredentials);
         Credentials.saveAllCredentials(allCredentials, new File("credentials.csv"));
@@ -60,6 +63,13 @@ public class CredentialDB {
             }
         }
         return true;
+    }
+
+    private Boolean isFieldBlank(Credentials userCredentials){
+        return !userCredentials.getFirstName().isBlank() &&
+                !userCredentials.getLastName().isBlank() &&
+                !userCredentials.getEmail().isBlank() &&
+                !userCredentials.getPassword().isBlank();
     }
 
 
