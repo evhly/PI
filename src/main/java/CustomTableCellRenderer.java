@@ -12,10 +12,11 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer {
     {
         JComponent cell = (JComponent) super.getTableCellRendererComponent
                 (table, value, isSelected, hasFocus, row, column);
-        cell.setFont(new Font("Arial", Font.PLAIN, 10));
+        cell.setFont(new Font("Arial", Font.PLAIN, 8));
+        cell.setForeground(Color.white);
 
         if(!value.toString().isEmpty()){
-            cell.setBackground(new Color(194,111,109));
+            cell.setBackground(new Color(166, 38, 34));
         } else {
             cell.setBackground(Color.white);
         }
