@@ -15,7 +15,6 @@ public class Filter {
         TIMES
     }
 
-    //TODO: hard enforce filter types in constructors
 
     /**
      * Makes a DEPARTMENT filter

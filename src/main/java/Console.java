@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Console {
     static Search search;
-    //current schedule
     static Schedule sch;
     static CourseReader cr;
     static Scanner scn;

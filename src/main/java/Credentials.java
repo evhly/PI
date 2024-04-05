@@ -52,6 +52,11 @@ public class Credentials {
          return attemptEmail.equals(email) && checkValid(attemptPassword);
     }
 
+    /**
+     * Converts one line of a csv into a credentials object
+     * @param credential One line of the credential csv
+     * @return Credential object created by the read in string
+     */
     public static Credentials fromCSV(String credential){
         String[] cols = credential.split(",");
         Credentials credentials = new Credentials(
@@ -63,6 +68,12 @@ public class Credentials {
                 cols[5].trim());
         return credentials;
     }
+
+    /**
+     * Calls fromCSV to convert csv file into a list of Credential objects
+     * @param credentialDataFile file that holds all student credentials being stored
+     * @return list of all student credentials being stored
+     */
     public static ArrayList<Credentials> loadAllCredentials(File credentialDataFile) {
         try {
             ArrayList<Credentials> allCredentials = new ArrayList<>();
@@ -80,10 +91,20 @@ public class Credentials {
         }
     }
 
+
+    /**
+     * Converts one credential object into a csv formatted string
+     * @return One line of credentials.csv
+     */
     public String toCSV(){
         return(String.format("%s,%s,%d,%s,%s,%s",firstName, lastName, id, major, password, email));
     }
 
+    /**
+     * Calls toCSV to convert list of credential object to a credentials CSV file
+     * @param allCredentials List of all student credential objects
+     * @param file file where csv formatted credential strings are written
+     */
     public static void saveAllCredentials(ArrayList<Credentials> allCredentials, File file) {
         try {
             PrintWriter pw = new PrintWriter(file);

@@ -15,9 +15,7 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer {
         cell.setFont(new Font("Arial", Font.PLAIN, 10));
 
         if(!value.toString().isEmpty()){
-//            System.out.println("here I am: " + row + ", " + column + ", " + value + ".");
             cell.setBackground(new Color(194,111,109));
-
         } else {
             cell.setBackground(Color.white);
         }

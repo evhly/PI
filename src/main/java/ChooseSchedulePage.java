@@ -68,8 +68,6 @@ public class ChooseSchedulePage extends Page{
         schedulePanel.setLayout(new GridLayout(0, 3, 10, 10));
         schedulePanel.setBackground(Color.white);
 
-        //Add In New Schedule Components for Loaded Student
-
         userNameLabel.setText("Hello " + app.getLoggedInStudent().getInformation().getFirstName() + "!");
         for(Schedule schedule: loggedInStudent.getSchedules()) {
             HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
