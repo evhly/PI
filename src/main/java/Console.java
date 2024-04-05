@@ -4,16 +4,12 @@ import java.util.Scanner;
 
 public class Console {
     static Search search;
+    //current schedule
     static Schedule sch;
     static CourseReader cr;
     static Scanner scn;
     static Student st;
     static CourseDatabase cdb;
-
-    //excel
-    //ctrl+ h
-    //10 = fall class
-    //30 = spring
 
     /**
      * runner for console
@@ -22,7 +18,6 @@ public class Console {
      * @throws FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-//
 //        // read in all files in csv directory
 //        CourseReader CR = new CourseReader();
 //        String path = "src/main/csvs";
@@ -39,9 +34,9 @@ public class Console {
         sch = new Schedule();
         // just read in test2.csv
         cr = new CourseReader();
-     //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+        //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
         cr.parseCsv("C://Users//HUTCHINSEJ19//IdeaProjects//PIb//src//main//csvs//2020-2021.csv");
-      //  System.out.println("Done");
+        //  System.out.println("Done");
 
         scn = new Scanner(System.in);
 
@@ -75,11 +70,10 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter -1 to quit");
+                "\nEnter 6 to quit");
         //TODO: enter loadSchedule and saveSchedule options
 
-        int choice = scn.nextInt();
-        //TODO(Evelyn): add error checking
+        int choice = getInt(6); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -96,7 +90,7 @@ public class Console {
                 System.out.println(i + ": " + schedules.get(i).getTitle());
             }
             System.out.println("Enter id of desired schedule");
-            int schToView = scn.nextInt();
+            int schToView = getInt(schedules.size()); //scn.nextInt();
             sch = schedules.get(schToView);
             System.out.println("Returning home ...");
             homeScreen();
@@ -127,30 +121,18 @@ public class Console {
     private static void scheduleScreen() {
         ArrayList<Course> schCos = sch.getCourses();
         System.out.println("\nEnter 1 to view current schedule\nEnter 2 to remove a course.");
-        int choice = scn.nextInt();
-        //TODO(Evelyn): add error checking
+        int choice = getInt(2); // scn.nextInt();
         if (choice == 1) {
             System.out.println(sch);
             homeScreen();
         } else if (choice == 2) {  //remove
             System.out.println(sch);
             System.out.println("Enter id of course you would like to remove");
-            int toRemove = scn.nextInt();
+            int toRemove = getInt(15); //scn.nextInt(); //TODO: find the max
             sch.deleteCourse(schCos.get(toRemove));
             System.out.println("Course removed!\n" + sch + "\nReturning home ...\n\n");
             homeScreen();
         }
-
-
-//        System.out.println("\nWhat do you want to do now?\n" +
-//                "1 to return home\n2 for search");
-//        int choice = scn.nextInt();
-//        //TODO(Evelyn): add error checking
-//        if (choice == 1) {
-//            homeScreen();
-//        } else if (choice == 2) {
-//            searchScreen();
-//        }
     }
 
     /**
@@ -158,16 +140,16 @@ public class Console {
      */
     private static void searchScreen() {
         System.out.println("Welcome to search! \n1 to search (with query)" +
-                "\n2 to filter\n3 to return home\n4 to schedule");
-        int choice = scn.nextInt();
+                "\n2 to return home\n3 to schedule");
+        int choice = getInt(3); //scn.nextInt();
         //TODO(Evelyn): add error checking
         if (choice == 1) {
             searchWTerm();
-        } else if (choice == 2) {
+        } /*else if (choice == 2) {
             searchWFilter();
-        } else if (choice == 3) {
+        }*/ else if (choice == 2) {
             homeScreen();
-        } else if (choice == 4) {
+        } else if (choice == 3) {
             scheduleScreen();
         }
     }
@@ -200,9 +182,8 @@ public class Console {
 //        } else if (choice2 == 2) {
 //            searchScreen();
 //        }
-        System.out.println("Enter 1 to search" +
-                "\n2 to filter\n3 to return home\n4 to schedule");
-        int choice = scn.nextInt();
+        System.out.println("Enter 1 to search" + "\nEnter 2 to filter\nEnter 3 to return home\nEnter 4 to schedule");
+        int choice = getInt(4);  // scn.nextInt();
         if (choice == 1) {
             searchWTerm();
         } else if (choice == 2) {
@@ -218,9 +199,12 @@ public class Console {
      * searches by sending in search string
      */
     private static void searchWTerm() {
+        if (scn.hasNextLine()) {
+            scn.nextLine();
+        }
         System.out.println("Enter search term:");
         String query = scn.nextLine();
-        query = scn.nextLine();
+        //query = scn.nextLine();
         ArrayList<Course> results = search.modifyQuery(query);
         int numPrint = Math.min(6, results.size());
         for (int i = 0; i < numPrint; i++) {
@@ -228,10 +212,10 @@ public class Console {
         }
         System.out.println("\nEnter 1 to add course to schedule\nEnter 2 to modify search" +
                 "\nEnter 3 to view schedule\nEnter 4 to return home");//add filter
-        int choice = scn.nextInt();
+        int choice = getInt(4);  //scn.nextInt();
         if (choice == 1) {
             System.out.println("Which course would you like to add? (enter the index number)");
-            int toAdd = scn.nextInt();
+            int toAdd = getInt(numPrint); //scn.nextInt();
             if (toAdd >= 0 && toAdd < results.size()){
                 sch.addCourse(results.get(toAdd)); //add course to schedule
                 System.out.println("Course added! returning home ...\n\n");
@@ -254,17 +238,17 @@ public class Console {
     /**
      * add course to schedule
      */
-    private static void addToSch() {
-        //add to sch:
-        System.out.println("Enter course index from numbered list above"); //eg 1 - 10
-        //sch.addCourse();
-        //TODO: add course to schedule
-        System.out.println("Added to schedule!\nEnter 1 for search\n2 for schedule\n3 to return home");
-        //added to sch
-
-        //enter 1 for .....
-    }
-
+//    private static void addToSch() {
+//        //add to sch:
+//        System.out.println("Enter course index from numbered list above"); //eg 1 - 10
+//        //sch.addCourse();
+//        //TODO: add course to schedule
+//        System.out.println("Added to schedule!\nEnter 1 for search\n2 for schedule\n3 to return home");
+//        //added to sch
+//
+//        //enter 1 for .....
+//    }
+//
 
 
 
@@ -289,5 +273,31 @@ public class Console {
 //        //assign user info
 //        Student currUser = new Student(userCred);
 
+    }
+
+    /**
+     *
+     * @param max valid input value
+     * @return user input int
+     */
+    public static int getInt(int max){
+        int input = -1;
+        boolean valid = false;
+        while (!valid) {
+            if (!scn.hasNextInt()){
+                scn.next();//discard bad input
+                System.out.println("Please enter an integer.\nTry again");
+                //input = scn.nextInt();
+                continue; //skip to next loop
+            }
+            input = scn.nextInt();
+
+            if (input < 0 || input > max){
+                System.out.println("Must be between 0 and " + max + ".\nTry again");
+            } else {
+                valid = true;
+            }
+        }
+        return input;
     }
 }
