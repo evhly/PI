@@ -82,10 +82,17 @@ public class Student {
         save();
     }
 
+    /**
+     * Saves all schedules of a specific student
+     */
     public void save() {
         Schedule.saveSchedules(getSaveFile(), schedules);
     }
 
+    /**
+     * Creates a new file for a new student  which holds all of the student's schedules
+     * @return New file for that specific student
+     */
     private File getSaveFile() {
         return new File(information.getId()+"_savedSchedules.csv");
     }

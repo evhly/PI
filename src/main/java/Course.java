@@ -195,21 +195,16 @@ public class Course {
      * @return A string representation of a Course with meeting time data
      */
     @Override
-    public String toString(){
+    public String toString() {
         String str = code + "; " + name + "; ";
         boolean times = false;
         for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
             str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
             times = true;
         }
-        if(times){
-            str = str.substring(0, str.length()-2);
+        if (times) {
+            str = str.substring(0, str.length() - 2);
         }
         return str;
     }
-
-//    public String toMilitary(String time){
-//
-//    }
-
 }

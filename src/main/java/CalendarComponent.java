@@ -41,7 +41,6 @@ public class CalendarComponent extends DynamicComponent {
                 for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){
                     int day = entry.getKey().getValue() % 7;
                     int time = (int)(ChronoUnit.MINUTES.between(LocalTime.parse("08:00:00"), entry.getValue().get(0)) / 15);
-//                    System.out.println("time: " + time);
                     data[time][day] = c.getCode();
 
                     int length = (int)(ChronoUnit.MINUTES.between(entry.getValue().get(0), entry.getValue().get(1)) / 15);
