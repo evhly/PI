@@ -191,7 +191,7 @@ public class Course {
     }
 
     /**
-     * Creates a string representation of a Course in this format: CODE; DayOfWeek hh:mm:ss a-hh:mm:ss a, DayOfWeek2 hh:...
+     * Creates a string representation of a Course in this format: CODE; NAME; DayOfWeek hh:mm:ss a-hh:mm:ss a, DayOfWeek2 hh:...
      * @return A string representation of a Course with meeting time data
      */
     @Override

@@ -30,23 +30,27 @@ public class CalendarComponent extends DynamicComponent {
         //add master panel boxlayout with a left side being list and a right panel (calendar component)
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        String[][] data = new String[56][7];
+        String[][] data = new String[56][7]; // array containing the values of each cell in the calendar
+        // initialize all cells of the calendar to the empty string
         for (int i = 0; i < 56; i++) {
             for (int j = 0; j < 7; j++) {
                 data[i][j] = "";
             }
         }
+
+        // add text and color to cells that correspond to a course in the schedule
         for(Course c : schedule.getCourses()){
             if(c.getMeetingTimes() != null){
-                for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){
+                for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> entry : c.getMeetingTimes().entrySet()){ // for each meeting
                     int day = entry.getKey().getValue() % 7;
+                    // determine how many cells (each corresponding to 15 minutes) the course corresponds to
                     int time = (int)(ChronoUnit.MINUTES.between(LocalTime.parse("08:00:00"), entry.getValue().get(0)) / 15);
 //                    System.out.println("time: " + time);
-                    data[time][day] = c.getCode();
+                    data[time][day] = c.getCode(); // add course code to the first cell corresponding to the course
 
                     int length = (int)(ChronoUnit.MINUTES.between(entry.getValue().get(0), entry.getValue().get(1)) / 15);
                     for(int i = 1; i < length; i++){
-                        data[time+i][day] = " ";
+                        data[time+i][day] = " "; // add value to other cells corresponding to the course, which signals the cell renderer to color them in too
                     }
                 }
             }
@@ -83,6 +87,7 @@ public class CalendarComponent extends DynamicComponent {
         InputMap inputMap = calendar.getInputMap(WHEN_FOCUSED);
         ActionMap actionMap = calendar.getActionMap();
 
+        // if a course in the calendar is selected and the delete key is pressed, remove the selected course from the schedule
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
         actionMap.put("delete", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {

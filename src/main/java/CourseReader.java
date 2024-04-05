@@ -7,11 +7,21 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class CourseReader {
+
+    /**
+     * Key: term, e.g., "F20"
+     * Value: CourseDatabase containing all the courses offered during that term
+     */
     Map<String, CourseDatabase> courseDatabaseMap;
 
     public CourseReader(){
         courseDatabaseMap = new HashMap<>();
     }
+
+    /**
+     * Parses a csv file and adds all courses in the file to courseDatabaseMap
+     * @param filename path to a csv file to parse for courses
+     */
     public void parseCsv(String filename)  {
         ArrayList<Course> data = new ArrayList<>();
         File f = new File(filename);
@@ -39,47 +49,6 @@ public class CourseReader {
             System.out.println(e);
         }
     }
-
-    public boolean sameCourse(Course c, String section) {
-        // TODO: implement
-        return false;
-    }
-
-    public void appendToCourse(){
-       // TODO: implement
-    }
-
-    // A list of the fields in the CSV that need to be read to create a Course
-    // Fields may need to change. If so, change them here.
-    /*
-     *
-     * yr_cde
-     * trm_cde
-     * crs_cde
-     * crs_comp1
-     * crs_comp2
-     * crs_comp3
-     * crs_title
-     * credit_hrs
-     * x_listed_parnt_crs
-     * acad_credit_varies
-     * acad_credit_label
-     * crs_capacity	max_capacity
-     * crs_enrollment
-     * bldg_cde	room_cde
-     * monday_cde
-     * tuesday_cde
-     * wednesday_cde
-     * thursday_cde
-     * friday_cde
-     * begin_tim
-     * end_tim
-     * last_name
-     * first_name
-     * preferred_name
-     * comment_txt
-     *
-     */
 
     /**
      * Parses a line from the CSV file (the file that holds all courses offered in a year)
@@ -117,7 +86,7 @@ public class CourseReader {
         }
         s.close();
 
-        // adjust and format values from csv line
+        // adjust and format certain values from csv line
         int yr_cde = Integer.parseInt(yr_cde_str);
         if(Objects.equals(trm_cde, "10")){
             trm_cde = "F";
@@ -180,6 +149,12 @@ public class CourseReader {
     public Set<String> getTerms(){
         return courseDatabaseMap.keySet();
     }
+
+    /**
+     *
+     * @return CourseReader object, where the courseDatabaseMap member variable is initialized to contain all courses
+     * found in the csvs located in the csvs directory
+     */
     public static CourseReader getAllCourseDatabases() {
         CourseReader CR = new CourseReader();
         String path = "src/main/csvs";
