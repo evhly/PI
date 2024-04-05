@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class CustomTableCellRenderer extends DefaultTableCellRenderer {
 
+    // custom cell renderer used for the cells in the GUI calendar
     public Component getTableCellRendererComponent
             (JTable table, Object value, boolean isSelected,
              boolean hasFocus, int row, int column)

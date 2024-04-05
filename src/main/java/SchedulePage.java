@@ -107,6 +107,7 @@ public class SchedulePage extends Page {
         JButton searchBtn = new JButton("SEARCH");
         add(searchBar, "cell 0 1");
 
+        // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
@@ -160,8 +161,7 @@ public class SchedulePage extends Page {
         add(courseList, "top, align center, wrap");
 
 
-
-
+        // when the plus button is pressed, add the course currently selected in the search results
         plusBtn.addActionListener((event) -> {
             if(list.getSelectedIndex() != -1) {
                 Course selected = searchResults.getElementAt(list.getSelectedIndex());
@@ -178,7 +178,7 @@ public class SchedulePage extends Page {
             }
         });
 
-
+        // delete a course when delete key is pressed and a schedule in the schedule pane is selected
         Action deleteCourse = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 int row = curScheduleList.getSelectedIndex();
