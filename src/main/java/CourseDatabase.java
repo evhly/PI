@@ -95,3 +95,4 @@ public class CourseDatabase {
         return courses.iterator().next().getTerm();
     }
 }
+
