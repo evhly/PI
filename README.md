@@ -1,0 +1,1 @@
+To run this project, clone the repository and run Main.java.

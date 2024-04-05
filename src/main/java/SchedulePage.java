@@ -11,7 +11,7 @@ import java.util.Set;
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
-    String curTerm = "F20";
+
     public void draw(){
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
@@ -84,12 +84,12 @@ public class SchedulePage extends Page {
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
 
-        Set<String> termSet = app.getCourseReader().getTerms();
-        String[] terms = new String[termSet.size()];
-        terms = termSet.toArray(terms);
-        JComboBox<String>termsComboBox = new JComboBox<>(terms);
-        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
-        add(termsComboBox, "cell 0 1");
+//        Set<String> termSet = app.getCourseReader().getTerms();
+//        String[] terms = new String[termSet.size()];
+//        terms = termSet.toArray(terms);
+//        JComboBox<String>termsComboBox = new JComboBox<>(terms);
+//        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
+//        add(termsComboBox, "cell 0 1");
 
         JTextArea courseInfo = new JTextArea();
 
@@ -198,18 +198,18 @@ public class SchedulePage extends Page {
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
 
-        termsComboBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent arg0) {
-                String newTerm = (String)termsComboBox.getSelectedItem();
-                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(newTerm));
-                app.setCurrSchedule(new Schedule());
-                calendar.removeAll();
-                calendar.add(new CalendarComponent());
-                calendar.repaint();
-                calendar.revalidate();
-                app.getLoggedInStudent().save();
-                redraw();
-            }
-        });
+//        termsComboBox.addItemListener(new ItemListener() {
+//            public void itemStateChanged(ItemEvent arg0) {
+//                String newTerm = (String)termsComboBox.getSelectedItem();
+//                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(newTerm));
+//                app.setCurrSchedule(new Schedule());
+//                calendar.removeAll();
+//                calendar.add(new CalendarComponent());
+//                calendar.repaint();
+//                calendar.revalidate();
+//                app.getLoggedInStudent().save();
+//                redraw();
+//            }
+//        });
     }
 }
