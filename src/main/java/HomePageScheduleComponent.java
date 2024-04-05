@@ -45,7 +45,6 @@ public class HomePageScheduleComponent extends JPanel {
         editSchedule.setIcon(pencilIcon);
         editSchedule.setPreferredSize(btnDimension);
         editSchedule.addActionListener((event) -> {
-            //TODO open specific schedule
             csp.openSchedule(schedule);
         });
         add(editSchedule, "align center");

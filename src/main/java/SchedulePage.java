@@ -29,21 +29,9 @@ public class SchedulePage extends Page {
         Image newimg = backArrow.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         backArrowIcon = new ImageIcon(newimg);
 
-        Image undo = undoIcon.getImage();
-        Image newimg2 = undo.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        undoIcon = new ImageIcon(newimg2);
-
-        Image pdf = pdfIcon.getImage();
-        Image newimg3 = pdf.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        pdfIcon = new ImageIcon(newimg3);
-
         Image plus = plusIcon.getImage();
         Image newimg4 = plus.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         plusIcon = new ImageIcon(newimg4);
-
-        Image delete = deleteIcon.getImage();
-        Image newimg5 = delete.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        deleteIcon = new ImageIcon(newimg5);
 
         Image edit = editIcon.getImage();
         Image newimg6 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
@@ -66,7 +54,11 @@ public class SchedulePage extends Page {
 
         editTitleBtn.addActionListener((event) -> {
             String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
-            schedule.rename(title);
+            if(title == null) {
+                schedule.rename(scheduleTitle.getText());
+            }else {
+                schedule.rename(title);
+            }
             app.getLoggedInStudent().save();
             redraw();
         });
@@ -99,14 +91,6 @@ public class SchedulePage extends Page {
         termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
         add(termsComboBox, "cell 0 1");
 
-//        JButton undoBtn = new JButton();
-//        undoBtn.setIcon(undoIcon);
-//        add(undoBtn, "cell 2 0, align right");
-
-//        JButton pdfBtn = new JButton();
-//        pdfBtn.setIcon(pdfIcon);
-//        add(pdfBtn, "cell 3 0, align left, wrap");
-
         JTextArea courseInfo = new JTextArea();
 
         courseInfo.setEditable(false);
@@ -116,10 +100,6 @@ public class SchedulePage extends Page {
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
         add(plusBtn, "cell 4 0, align right, wrap");
-
-//        JButton deleteBtn = new JButton();
-//        deleteBtn.setIcon(deleteIcon);
-//        add(deleteBtn, "cell 5 0, align right, wrap");
 
 
         JTextField searchBar = new JTextField();

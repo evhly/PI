@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class App extends JFrame {
 
+    //App state variables
     private HashMap<String, Page> pages = new HashMap<>();
     private Page currentPage;
     private Student loggedInStudent;
@@ -28,6 +29,10 @@ public class App extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
+    /**
+     * Switches between pages
+     * @param pageName Name of page which maps to a Page class
+     */
     public void switchPages(String pageName){
         if(currentPage != null) {
             remove(currentPage);
@@ -63,6 +68,7 @@ public class App extends JFrame {
         return courseReader;
     }
 
+    //Makes App singleton
     private static App instance;
     public static App getInstance() {
         if(instance == null) {

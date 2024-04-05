@@ -12,7 +12,6 @@ public class Schedule {
     private String title; // the title given to the Schedule by the user
 
 
-
     public ArrayList<Course> getCourses(){
         return courses;
     }
@@ -72,9 +71,6 @@ public class Schedule {
     public Schedule undo(){
         return null; //TODO: implement
     }
-    public Boolean checkConflict(Course sectionToCheck){ //TODO: remove
-        return false;
-    }
     public String showMoreInfo(Course sectionToCheck){
         return "";
     }
@@ -124,10 +120,17 @@ public class Schedule {
         }
     }
 
+    /**
+     * Loads a specific student schedule
+     * @param scheduleString Line of student's schedule csv, containing title and courses
+     * @param db Course Database to read course data
+     * @return Specific schedule of a student
+     */
     public static Schedule loadSchedule(String scheduleString, CourseDatabase db) {
         String[] parts = scheduleString.split(",");
         Schedule schedule = new Schedule(parts[0].trim());
 
+        //Adds a course to the schedule for every course in the schedule.csv
         for(int i=1; i<parts.length; i++) {
             schedule.addCourse(db.getCourseData(parts[i]));
         }
