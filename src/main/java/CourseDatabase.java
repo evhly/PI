@@ -43,7 +43,8 @@ public class CourseDatabase {
 
             } else {
                 // likely duplicate course encountered
-                System.out.println("Likely duplicate course detected: " + course.getCode());
+                //I commented this out
+                //System.out.println("Likely duplicate course detected: " + course.getCode());
             }
 
         } catch (NoSuchElementException nse) {
