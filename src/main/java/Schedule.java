@@ -11,6 +11,9 @@ public class Schedule {
     private ArrayList<Course> courses; // the courses contained in a Schedule
     private String title; // the title given to the Schedule by the user
 
+    private PrintWriter logFile;
+
+    private boolean loggingEnabled;
 
     public ArrayList<Course> getCourses(){
         return courses;
@@ -26,6 +29,7 @@ public class Schedule {
     public Schedule(ArrayList<Course> courses, String title) {
         this.courses = courses;
         this.title = title;
+        createLogFile();
     }
 
     /**
@@ -34,6 +38,7 @@ public class Schedule {
     public Schedule() {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
+        createLogFile();
     }
 
     /**
@@ -43,6 +48,17 @@ public class Schedule {
     public Schedule(String title) {
         this.courses = new ArrayList<>();
         this.title = title;
+        createLogFile();
+    }
+
+    private void createLogFile(){
+        try {
+            logFile = new PrintWriter(title + "Log.txt");
+            loggingEnabled = true;
+        } catch (FileNotFoundException e) {
+            System.out.println("log file unable to be created.");
+            loggingEnabled = false;
+        }
     }
 
 
@@ -52,6 +68,12 @@ public class Schedule {
      */
     public void deleteCourse(Course courseToDelete){
         courses.remove(courseToDelete);
+        //logging
+        if (loggingEnabled){
+            logFile.println("DELETE: "+courseToDelete);
+            logFile.flush();
+            //logFile.close();
+        }
     }
 
     /**
@@ -66,6 +88,11 @@ public class Schedule {
             }
         }
         courses.add(courseToAdd);
+        //logging
+        if (loggingEnabled){
+            logFile.println("ADD: "+courseToAdd);
+            logFile.flush();
+        }
         return true;
     }
     public Schedule undo(){
