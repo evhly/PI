@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class Search {
 
@@ -10,6 +11,8 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+
+    App app = App.getInstance();
 
     public Search(CourseDatabase DB){
         this.DB = DB;
@@ -132,5 +135,21 @@ public class Search {
             i++;
         }
         return arr;
+    }
+
+    public ArrayList<Course> searchBarSearch(String query, String department, Professor professor){
+        ArrayList<Course> searchResults = new ArrayList<>();
+        modifyQuery(query);
+        Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
+        Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+
+        if(!Objects.equals(department, "")) {
+            addFilter(departmentFilterSelected);
+        }
+        if(!Objects.equals(professor, new Professor("", ""))) {
+            addFilter(facultyFilterSelected);
+        }
+        searchResults.addAll(search());
+        return searchResults;
     }
 }
