@@ -2,9 +2,8 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
@@ -104,32 +103,39 @@ public class SchedulePage extends Page {
 
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(150,20));
-        JButton searchBtn = new JButton("SEARCH");
         add(searchBar, "cell 0 1");
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
-        searchBtn.addActionListener((event) -> {
-            Search search = new Search(app.getCourseDatabase());
-            String query = searchBar.getText();
-            search.modifyQuery(query);
-            searchResults.clear();
-            String department = (String) departmentComboBox.getSelectedItem();
-            Professor professor = (Professor) facultyComboBox.getSelectedItem();
-            Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
-            Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+        searchBar.addKeyListener(new KeyListener() {
 
-            if(!Objects.equals(department, "")) {
-                search.addFilter(departmentFilterSelected);
-            }
-            if(!Objects.equals(professor, new Professor("", ""))) {
-                search.addFilter(facultyFilterSelected);
+            @Override
+            public void keyTyped(KeyEvent e) {
+
             }
 
-            for(Course c : search.search()) {
-                searchResults.addElement(c);
+            @Override
+            public void keyPressed(KeyEvent e) {
+                Search search = new Search(app.getCourseDatabase());
+                String query = searchBar.getText();
+                String department = (String) departmentComboBox.getSelectedItem();
+                Professor professor = (Professor) facultyComboBox.getSelectedItem();
+
+                ArrayList<Course> courses = search.searchBarSearch(query, department, professor);
+                searchResults.clear();
+
+                for(Course c : courses) {
+                    searchResults.addElement(c);
+                }
             }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+
         });
+
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scrollPane.setMinimumSize(new Dimension(300,500));
@@ -137,7 +143,6 @@ public class SchedulePage extends Page {
         scrollPane.setPreferredSize(new Dimension(300,500));
         add(scrollPane, "cell 2 1");
 
-        add(searchBtn, "cell 3 1");
 
         String[] scheduleTextList = new String[schedule.getCourses().size()];
         for(int i = 0; i < schedule.getCourses().size(); i++){
