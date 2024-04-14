@@ -11,8 +11,9 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+    private int verbosity = 0; // change as needed
 
-    App app = App.getInstance();
+    App app = App.getInstance(verbosity);
 
     public Search(CourseDatabase DB){
         this.DB = DB;

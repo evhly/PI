@@ -11,6 +11,8 @@ public class CourseDatabase {
 
     private HashSet<Course> courses;
 
+    private App app = App.getInstance(0); // change verbosity as needed
+
     /**
      * Default constructor
      * NOTE: to instantiate an initialized CourseDatabase, use CourseReader.getCourseDatabase(term)
@@ -49,7 +51,9 @@ public class CourseDatabase {
 
             } else {
                 // likely duplicate course encountered
-                //System.out.println("Likely duplicate course detected: " + course.getCode());
+                if (app.getVerbosity() > 0) {
+                    System.out.println("Likely duplicate course detected: " + course.getCode());
+                }
             }
 
         } catch (NoSuchElementException nse) {

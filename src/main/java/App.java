@@ -14,8 +14,10 @@ public class App extends JFrame {
     private Schedule currSchedule;
     private CourseReader courseReader;
 
+    private int verbosity;
 
-    private App(){
+
+    private App(int verbosity){
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());
         pages.put("choose-schedule-page", new ChooseSchedulePage());
@@ -27,6 +29,7 @@ public class App extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.verbosity = verbosity;
     }
 
     /**
@@ -68,11 +71,15 @@ public class App extends JFrame {
         return courseReader;
     }
 
+    public int getVerbosity() {
+        return verbosity;
+    }
+
     //Makes App singleton
     private static App instance;
-    public static App getInstance() {
+    public static App getInstance(int verbosity) {
         if(instance == null) {
-            instance = new App();
+            instance = new App(verbosity);
         }
         return instance;
     }

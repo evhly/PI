@@ -20,8 +20,10 @@ public class LoginPage extends Page {
     JLabel errorLabel;
     CredentialDB credDb = CredentialDB.getInstance();
 
+    private int verbosity = 0; // change this as needed
+
     public void draw() {
-        App app = App.getInstance();
+        App app = App.getInstance(verbosity);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,5, 5, 5);

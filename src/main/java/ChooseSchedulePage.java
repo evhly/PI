@@ -8,16 +8,19 @@ public class ChooseSchedulePage extends Page{
 
     private JPanel schedulePanel;
     private JLabel userNameLabel;
+
+    private int verbosity = 0; // change this as needed
+
     public void openSchedule(Schedule schedule){
-        App app = App.getInstance();
+        App app = App.getInstance(verbosity);
         app.setCurrSchedule(schedule);
         app.switchPages("schedule-page");
     }
     public void deleteSchedule(Schedule scheduleToDelete){
-        App.getInstance().getLoggedInStudent().deleteSchedule(scheduleToDelete);
+        App.getInstance(verbosity).getLoggedInStudent().deleteSchedule(scheduleToDelete);
     }
     public void draw(){
-        App app = App.getInstance();
+        App app = App.getInstance(verbosity);
         Student loggedInStudent = app.getLoggedInStudent();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -60,7 +63,7 @@ public class ChooseSchedulePage extends Page{
         gbc.anchor = GridBagConstraints.NORTHEAST;
         JButton logoutBtn = new JButton("LOG OUT");
         logoutBtn.addActionListener((event) ->{
-            App.getInstance().switchPages("login-page");
+            App.getInstance(verbosity).switchPages("login-page");
         });
         homeButtonsContainer.add(logoutBtn, gbc);
 

@@ -15,6 +15,8 @@ public class Student {
 
     private Credentials information;
 
+    private int verbosity = 0; // change as needed
+
     /**
      * Creates a new Student if one does not exist with given credentials, otherwise it reloads the data of an existing student
      * @param creds
@@ -25,7 +27,7 @@ public class Student {
         if (getSaveFile().exists()) {
             schedules = Schedule.loadSchedules(
                 getSaveFile(),
-                App.getInstance().getCourseDatabase()
+                App.getInstance(verbosity).getCourseDatabase()
             );
         } else {
             schedules = new ArrayList<>();

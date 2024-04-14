@@ -16,8 +16,10 @@ public class CalendarComponent extends DynamicComponent {
     TableModel model;
     JTable calendar;
 
+    private int verbosity = 0; // change this as needed
+
     public void draw() {
-        App app = App.getInstance();
+        App app = App.getInstance(verbosity);
         Schedule schedule = app.getCurrSchedule();
 
         setMinimumSize(new Dimension(550, 580));

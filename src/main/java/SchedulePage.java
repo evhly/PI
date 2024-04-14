@@ -11,8 +11,10 @@ public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
 
+    private int verbosity = 0; // change as needed
+
     public void draw(){
-        App app = App.getInstance();
+        App app = App.getInstance(verbosity);
         Schedule schedule = app.getCurrSchedule();
 
         setLayout(new MigLayout("fill"));
