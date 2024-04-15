@@ -6,10 +6,18 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import javax.swing.text.MaskFormatter;
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+
+    JFormattedTextField startTimeField;
+    MaskFormatter startTimeMask;
+
+    JFormattedTextField endTimeField;
+    MaskFormatter endTimeMask;
+
 
     public void draw(){
         App app = App.getInstance();
@@ -83,6 +91,28 @@ public class SchedulePage extends Page {
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
 
+
+        try {
+            startTimeMask = new MaskFormatter("##:##");
+            startTimeMask.setPlaceholderCharacter('#');
+            startTimeField = new JFormattedTextField(startTimeMask);
+            startTimeField.setColumns(12);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        add(startTimeField, "cell 3 2");
+
+        try {
+            endTimeMask = new MaskFormatter("##:##");
+            endTimeMask.setPlaceholderCharacter('#');
+            endTimeField = new JFormattedTextField(endTimeMask);
+            endTimeField.setColumns(12);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        add(endTimeField, "cell 3 2");
+
+
 //        Set<String> termSet = app.getCourseReader().getTerms();
 //        String[] terms = new String[termSet.size()];
 //        terms = termSet.toArray(terms);
@@ -104,6 +134,38 @@ public class SchedulePage extends Page {
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(150,20));
         add(searchBar, "cell 0 1");
+
+        JButton searchBtn = new JButton("SEARCH");
+        searchBtn.addActionListener((event) -> {
+            Search search = new Search(app.getCourseDatabase());
+            String query = searchBar.getText();
+            search.modifyQuery(query);
+            searchResults.clear();
+            String department = (String) departmentComboBox.getSelectedItem();
+            Professor professor = (Professor) facultyComboBox.getSelectedItem();
+            String startTime = startTimeField.getText();
+            System.out.println("START TIME: " + startTime);
+            String endTime = endTimeField.getText();
+            System.out.println("END TIME: " + endTime);
+            Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
+            Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+            Filter timeFilterSelected = new Filter(Filter.type.TIMES, startTime+":00 AM", endTime+":00 AM");
+
+            if(!Objects.equals(department, "")) {
+                search.addFilter(departmentFilterSelected);
+            }
+            if(!Objects.equals(professor, new Professor("", ""))) {
+                search.addFilter(facultyFilterSelected);
+            }
+            if(!Objects.equals(startTime, "") && !Objects.equals(endTime, "")) {
+                search.addFilter(timeFilterSelected);
+            }
+
+            for(Course c : search.search()) {
+                searchResults.addElement(c);
+            }
+        });
+        add(searchBtn, "cell 3 1");
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);

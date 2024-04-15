@@ -76,10 +76,16 @@ public class Search {
                     for (DayOfWeek day : DayOfWeek.values()) { // for each day of the week
                         if (course.getMeetingTimes().containsKey(day)) { // if the course meets during that day
                             LocalTime filterStart = LocalTime.parse(filter.getTimes().get(0), ampmFormatter);
+                            System.out.println("filter start" + filterStart);
                             LocalTime filterEnd = LocalTime.parse(filter.getTimes().get(1), ampmFormatter);
+                            System.out.println("filter end" + filterEnd);
                             LocalTime courseStart = course.getMeetingTimes().get(day).get(0);
+                            System.out.println("course start" + courseStart);
                             LocalTime courseEnd = course.getMeetingTimes().get(day).get(1);
-                            if (filterStart.equals(courseStart) && filterEnd.equals(courseEnd)) {
+                            System.out.println("course end" + courseEnd);
+                            if ((courseStart.isAfter(filterStart) && courseEnd.isBefore(filterEnd))
+                            || (courseStart.equals(filterStart))
+                            || (courseEnd.equals(filterEnd))) {
                                 hasMatchingTimes = true;
                             }
                         }
