@@ -92,26 +92,51 @@ public class SchedulePage extends Page {
         add(facultyComboBox, "cell 3 2");
 
 
-        try {
-            startTimeMask = new MaskFormatter("##:##");
-            startTimeMask.setPlaceholderCharacter('#');
-            startTimeField = new JFormattedTextField(startTimeMask);
-            startTimeField.setColumns(12);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        add(startTimeField, "cell 3 2");
+        String[] startTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JComboBox<String> startTimeFilterCB = new JComboBox<>(startTimeFilter);
+        String[] amPm = {
+                "",
+                "AM",
+                "PM"
+        };
+        JComboBox<String> startTimeAmPm = new JComboBox<>(amPm);
+        add(startTimeFilterCB, "cell 3 2");
+        add(startTimeAmPm, "cell 3 2");
 
-        try {
-            endTimeMask = new MaskFormatter("##:##");
-            endTimeMask.setPlaceholderCharacter('#');
-            endTimeField = new JFormattedTextField(endTimeMask);
-            endTimeField.setColumns(12);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        add(endTimeField, "cell 3 2");
 
+        String[] endTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JComboBox<String> endTimeFilterCB = new JComboBox<>(endTimeFilter);
+        JComboBox<String> endTimeAmPm = new JComboBox<>(amPm);
+        add(endTimeFilterCB, "cell 3 2");
+        add(endTimeAmPm, "cell 3 2");
 
 //        Set<String> termSet = app.getCourseReader().getTerms();
 //        String[] terms = new String[termSet.size()];
@@ -143,13 +168,15 @@ public class SchedulePage extends Page {
             searchResults.clear();
             String department = (String) departmentComboBox.getSelectedItem();
             Professor professor = (Professor) facultyComboBox.getSelectedItem();
-            String startTime = startTimeField.getText();
+            String startTime = (String)startTimeFilterCB.getSelectedItem();
+            String startAmPm = (String)startTimeAmPm.getSelectedItem();
             System.out.println("START TIME: " + startTime);
-            String endTime = endTimeField.getText();
+            String endTime = (String)endTimeFilterCB.getSelectedItem();
+            String endAmPm = (String)endTimeAmPm.getSelectedItem();
             System.out.println("END TIME: " + endTime);
             Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
             Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
-            Filter timeFilterSelected = new Filter(Filter.type.TIMES, startTime+":00 AM", endTime+":00 AM");
+            Filter timeFilterSelected = new Filter(Filter.type.TIMES, startTime + ":00:00 " + startAmPm, endTime + ":00:00 " + endAmPm /*startAmPm, endAmPm*/);
 
             if(!Objects.equals(department, "")) {
                 search.addFilter(departmentFilterSelected);
@@ -157,7 +184,8 @@ public class SchedulePage extends Page {
             if(!Objects.equals(professor, new Professor("", ""))) {
                 search.addFilter(facultyFilterSelected);
             }
-            if(!Objects.equals(startTime, "") && !Objects.equals(endTime, "")) {
+            if(!Objects.equals(startTime, "") && !Objects.equals(endTime, "")
+                    && !Objects.equals(startAmPm, "") && !Objects.equals(endAmPm, "")) {
                 search.addFilter(timeFilterSelected);
             }
 
