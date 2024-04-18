@@ -2,9 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Schedule {
 
@@ -15,10 +13,11 @@ public class Schedule {
 
     private boolean loggingEnabled;
 
+    private Deque<ScheduleChange> changeStack;
+
     public ArrayList<Course> getCourses(){
         return courses;
     }
-
 
     /**
      * Constructor
@@ -29,6 +28,7 @@ public class Schedule {
     public Schedule(ArrayList<Course> courses, String title) {
         this.courses = courses;
         this.title = title;
+        this.changeStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -38,6 +38,7 @@ public class Schedule {
     public Schedule() {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
+        this.changeStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -48,6 +49,7 @@ public class Schedule {
     public Schedule(String title) {
         this.courses = new ArrayList<>();
         this.title = title;
+        this.changeStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -68,6 +70,7 @@ public class Schedule {
      */
     public void deleteCourse(Course courseToDelete){
         courses.remove(courseToDelete);
+        changeStack.push(new ScheduleChange("DELETE", courseToDelete));
         //logging
         if (loggingEnabled){
             logFile.println("DELETE: "+courseToDelete);
@@ -88,6 +91,7 @@ public class Schedule {
             }
         }
         courses.add(courseToAdd);
+        changeStack.push(new ScheduleChange("ADD", courseToAdd));
         //logging
         if (loggingEnabled){
             logFile.println("ADD: "+courseToAdd);
@@ -95,8 +99,40 @@ public class Schedule {
         }
         return true;
     }
-    public Schedule undo(){
-        return null; //TODO: implement
+
+    /**
+     * Adds the most recently deleted class or deletes the most recently added class
+     * NOTE: Does NOT put this change onto the changeStack
+     * @return true if the undo is successful, false if it fails
+     */
+    public boolean undo(){
+        if (!changeStack.isEmpty()) {
+            ScheduleChange lastChange = changeStack.pop();
+            if (lastChange.action.equals("ADD")) {
+                courses.remove(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("DELETE: "+lastChange.course);
+                    logFile.flush();
+                    //logFile.close();
+                }
+                return true;
+            } else {
+                for(int i = 0 ; i < courses.size(); i++){
+                    if(lastChange.course.hasConflict(courses.get(i))){
+                        return false;
+                    }
+                }
+                courses.add(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("ADD: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            }
+        }
+        return false;
     }
     public String showMoreInfo(Course sectionToCheck){
         return "";
@@ -195,6 +231,16 @@ public class Schedule {
             toR += i + ": " +  courses.get(i).consoleString() + "\n";
         }
         return toR;
+    }
+
+    private class ScheduleChange {
+        private final String action;
+        private final Course course;
+
+        private ScheduleChange(String action, Course course) {
+            this.action = action;
+            this.course = course;
+        }
     }
 
 }
