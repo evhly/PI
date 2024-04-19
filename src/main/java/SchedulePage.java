@@ -268,7 +268,21 @@ public class SchedulePage extends Page {
                     app.getLoggedInStudent().save();
                     redraw();
                 } else {
-                    courseInfo.setText("Time conflict - choose another course");
+                    int popupChoice = JOptionPane.showConfirmDialog(null, "Time conflict - Replace current course with new course?");
+                    if(popupChoice == JOptionPane.YES_OPTION){
+                        for(int i = 0; i < schedule.getCourses().size(); i++){
+                            if(schedule.getCourses().get(i).hasConflict(selected)){
+                                schedule.deleteCourse(schedule.getCourses().get(i));
+                                schedule.addCourse(selected);
+                                calendar.removeAll();
+                                calendar.add(new CalendarComponent());
+                                calendar.repaint();
+                                calendar.revalidate();
+                                app.getLoggedInStudent().save();
+                                redraw();
+                            }
+                        }
+                    }
                 }
             }
         });
