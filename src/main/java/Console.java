@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -70,10 +71,16 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter 6 to quit");
+                "\nEnter 6 to recover schedule from logs\nEnter 7 to quit");
         //TODO: enter loadSchedule and saveSchedule options
+        //restore schedule from file option using logs
+        //ask for course name
+        //Log.txt added to it
+        //create that file
+        //send that + name to restore the schedule
+        //test by going to view schedule
 
-        int choice = getInt(6); //scn.nextInt();
+        int choice = getInt(7); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -107,9 +114,16 @@ public class Console {
             st.addSchedule(sch);
             System.out.println("New empty schedule created\nReturning home ... \n\n");
             homeScreen();
+        } else if (choice == 6) {
+            System.out.println("Enter schedule name:");
+            String schName = scn.next();
+            File schFile = new File(schName+"Log.txt");//accessing log file for that schedule
+            sch = new Schedule(schFile,schName+"1",cdb);//////////////////////////////////////
+            System.out.println("Schedule restored!\nReturning home ... \n\n");
+            homeScreen();
         }
         //exiting program
-        else if (choice == -1) {
+        else if (choice == 7) {
             System.out.println("quitting ...");
         }
         //enter bad input
