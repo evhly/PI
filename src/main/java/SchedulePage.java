@@ -14,6 +14,7 @@ public class SchedulePage extends Page {
     public void draw(){
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
+        app.setCourseDatabase(app.getCourseReader().getCourseDatabase(schedule.getTerm()));
 
         setLayout(new MigLayout("fill"));
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
@@ -82,13 +83,6 @@ public class SchedulePage extends Page {
 
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
-
-//        Set<String> termSet = app.getCourseReader().getTerms();
-//        String[] terms = new String[termSet.size()];
-//        terms = termSet.toArray(terms);
-//        JComboBox<String>termsComboBox = new JComboBox<>(terms);
-//        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
-//        add(termsComboBox, "cell 0 1");
 
         JTextArea courseInfo = new JTextArea();
 
@@ -170,6 +164,7 @@ public class SchedulePage extends Page {
         plusBtn.addActionListener((event) -> {
             if(list.getSelectedIndex() != -1) {
                 Course selected = searchResults.getElementAt(list.getSelectedIndex());
+                System.out.println(selected.getTerm());
                 if (schedule.addCourse(selected)) {
                     calendar.removeAll();
                     calendar.add(new CalendarComponent());
@@ -189,7 +184,6 @@ public class SchedulePage extends Page {
                 int row = curScheduleList.getSelectedIndex();
                 if (row >= 0) {
                     Course courseToDelete = curScheduleList.getSelectedValue();
-//                    System.out.println("about to delete " + courseToDelete.getCode());
                     schedule.deleteCourse(courseToDelete);
                     app.getLoggedInStudent().save();
                     redraw();
@@ -202,19 +196,5 @@ public class SchedulePage extends Page {
                 "delete");
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
-
-//        termsComboBox.addItemListener(new ItemListener() {
-//            public void itemStateChanged(ItemEvent arg0) {
-//                String newTerm = (String)termsComboBox.getSelectedItem();
-//                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(newTerm));
-//                app.setCurrSchedule(new Schedule());
-//                calendar.removeAll();
-//                calendar.add(new CalendarComponent());
-//                calendar.repaint();
-//                calendar.revalidate();
-//                app.getLoggedInStudent().save();
-//                redraw();
-//            }
-//        });
     }
 }
