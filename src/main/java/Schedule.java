@@ -10,6 +10,7 @@ public class Schedule {
 
     private ArrayList<Course> courses; // the courses contained in a Schedule
     private String title; // the title given to the Schedule by the user
+    private String term;
 
 
     public ArrayList<Course> getCourses(){
@@ -23,9 +24,10 @@ public class Schedule {
      * @param courses Courses to add to the schedule
      * @param title The name of the schedule
      */
-    public Schedule(ArrayList<Course> courses, String title) {
+    public Schedule(ArrayList<Course> courses, String title, String term) {
         this.courses = courses;
         this.title = title;
+        this.term = term;
     }
 
     /**
@@ -34,15 +36,24 @@ public class Schedule {
     public Schedule() {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
+        this.term = "Unselected";
+    }
+
+    // TODO: fix console
+    public Schedule(String term) {
+        this.courses = new ArrayList<Course>();
+        this.title = "Untitled";
+        this.term = term;
     }
 
     /**
      * Creates an empty Schedule that has a name
      * @param title a name for this schedule
      */
-    public Schedule(String title) {
+    public Schedule(String title, String term) {
         this.courses = new ArrayList<>();
         this.title = title;
+        this.term = term;
     }
 
 
@@ -81,6 +92,8 @@ public class Schedule {
     public String getTitle(){
         return title;
     }
+
+    public String getTerm() {return term; }
 
     /**
      * Converts a Schedule and its Courses into a String that can be saved in a CSV file and reloaded later

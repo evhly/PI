@@ -22,6 +22,8 @@ public class HomePageScheduleComponent extends JPanel {
 
         JLabel scheduleTitle = new JLabel(schedule.getTitle());
         add(scheduleTitle, "span, wrap, align center");
+        JLabel scheduleTerm = new JLabel(schedule.getTerm());
+        add(scheduleTerm, "span, wrap, align center");
 
         JButton deleteSchedule = new JButton();
         Image trashcan = trashcanIcon.getImage();

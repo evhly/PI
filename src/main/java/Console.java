@@ -103,7 +103,7 @@ public class Console {
         else if (choice == 5) {
             System.out.println("Enter schedule name:");
             String name = scn.next();
-            sch = new Schedule(name);
+            sch = new Schedule(name); // TODO: this method needs to be changed
             st.addSchedule(sch);
             System.out.println("New empty schedule created\nReturning home ... \n\n");
             homeScreen();
