@@ -71,6 +71,7 @@ public class SchedulePage extends Page {
         });
 
 
+
         String[] departmentFilter = {
                 "",
                 "COMP",
@@ -78,7 +79,7 @@ public class SchedulePage extends Page {
         };
 
         JComboBox<String >departmentComboBox = new JComboBox<>(departmentFilter);
-        add(departmentComboBox, "cell 3 2");
+        add(departmentComboBox, "cell 2 2");
 
 
         Professor[] facultyFilter = {
@@ -89,7 +90,7 @@ public class SchedulePage extends Page {
         };
 
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
-        add(facultyComboBox, "cell 3 2");
+        add(facultyComboBox, "cell 2 2");
 
 
         String[] startTimeFilter = {
