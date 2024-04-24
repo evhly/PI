@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Schedule {
@@ -102,6 +101,7 @@ public class Schedule {
     public String toSave() {
         StringBuilder sb = new StringBuilder();
         sb.append(title + ",");
+        sb.append(term + ",");
         for (Course course : courses) {
             sb.append(course.getCode());
             sb.append(",");
@@ -141,7 +141,9 @@ public class Schedule {
      */
     public static Schedule loadSchedule(String scheduleString, CourseDatabase db) {
         String[] parts = scheduleString.split(",");
-        Schedule schedule = new Schedule(parts[0].trim());
+        String title = parts[0].trim();
+        String term = parts[1].trim();
+        Schedule schedule = new Schedule(title, term);
 
         //Adds a course to the schedule for every course in the schedule.csv
         for(int i=1; i<parts.length; i++) {
