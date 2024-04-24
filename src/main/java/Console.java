@@ -36,7 +36,7 @@ public class Console {
         // just read in test2.csv
         cr = new CourseReader();
         //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-        cr.parseCsv("C://Users//HUTCHINSEJ19//IdeaProjects//PIb//src//main//csvs//2020-2021.csv");
+        cr.parseCsv("C://Users//MARSTONAD20//IdeaProjects//PI//src//main//csvs//2020-2021.csv");
         //  System.out.println("Done");
 
         scn = new Scanner(System.in);
@@ -71,7 +71,7 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter 6 to recover schedule from logs\nEnter 7 to quit");
+                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to quit");
         //TODO: enter loadSchedule and saveSchedule options
         //restore schedule from file option using logs
         //ask for course name
@@ -80,7 +80,7 @@ public class Console {
         //send that + name to restore the schedule
         //test by going to view schedule
 
-        int choice = getInt(7); //scn.nextInt();
+        int choice = getInt(8); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -122,8 +122,19 @@ public class Console {
             System.out.println("Schedule restored!\nReturning home ... \n\n");
             homeScreen();
         }
-        //exiting program
+        //undoing last change
         else if (choice == 7) {
+            boolean success = consoleUndo();
+            if (success) {
+                System.out.println("Undo successful\n\n");
+                homeScreen();
+            } else {
+                System.out.println("Undo not successful\n\n");
+                homeScreen();
+            }
+        }
+        //exiting program
+        else if (choice == 8) {
             System.out.println("quitting ...");
         }
         //enter bad input
@@ -314,4 +325,9 @@ public class Console {
         }
         return input;
     }
+
+    public static boolean consoleUndo() {
+        return sch.undo();
+    }
+
 }
