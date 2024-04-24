@@ -36,7 +36,7 @@ public class Console {
         // just read in test2.csv
         cr = new CourseReader();
         //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-        cr.parseCsv("C://Users//MARSTONAD20//IdeaProjects//PI//src//main//csvs//2020-2021.csv");
+        cr.parseCsv("src//main//csvs//2020-2021.csv");
         //  System.out.println("Done");
 
         scn = new Scanner(System.in);
