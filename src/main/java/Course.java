@@ -140,6 +140,9 @@ public class Course {
      * @return True if there is a conflict, false otherwise
      */
     public boolean hasConflict(Course other) {
+        if (this.meetingTimes == null || other.meetingTimes == null) {
+            return false;
+        }
         HashMap<DayOfWeek, ArrayList<LocalTime>> otherTimes = other.getMeetingTimes();
         for (DayOfWeek day : DayOfWeek.values()) { // for each day in the week
             if (otherTimes.containsKey(day) && this.meetingTimes.containsKey(day)) { // if both classes meet on that day
