@@ -8,6 +8,8 @@ public class Filter {
     private Professor professor; // the professor to filter by
     private String startTime; // the beginning of the course's meeting time
     private String endTime;   // the end of the course's meeting time
+    private String startAmPm;
+    private String endAmPm;
 
     public enum type {
         PROFESSOR,
@@ -42,7 +44,7 @@ public class Filter {
      * @param startTime the earliest time in the time range to filter by
      * @param endTime the latest time in the time range to filter by
      */
-    public Filter(type filterType, String startTime, String endTime) {
+    public Filter(type filterType, String startTime, String endTime /*String startAmPm, String endAmPm*/) {
         if (startTime.charAt(1) == ':') { // if the time is not padded with a 0
             startTime = "0" + startTime;
         }
@@ -52,6 +54,8 @@ public class Filter {
         this.filterType = filterType;
         this.startTime = startTime;
         this.endTime = endTime;
+//        this.startAmPm = startAmPm;
+//        this.endAmPm = endAmPm;
     }
 
     public type getType() {

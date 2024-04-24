@@ -6,10 +6,18 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import javax.swing.text.MaskFormatter;
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+
+    JFormattedTextField startTimeField;
+    MaskFormatter startTimeMask;
+
+    JFormattedTextField endTimeField;
+    MaskFormatter endTimeMask;
+
 
     public void draw(){
         App app = App.getInstance();
@@ -83,6 +91,53 @@ public class SchedulePage extends Page {
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
         add(facultyComboBox, "cell 3 2");
 
+
+        String[] startTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JComboBox<String> startTimeFilterCB = new JComboBox<>(startTimeFilter);
+        String[] amPm = {
+                "",
+                "AM",
+                "PM"
+        };
+        JComboBox<String> startTimeAmPm = new JComboBox<>(amPm);
+        add(startTimeFilterCB, "cell 3 2");
+        add(startTimeAmPm, "cell 3 2");
+
+
+        String[] endTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JComboBox<String> endTimeFilterCB = new JComboBox<>(endTimeFilter);
+        JComboBox<String> endTimeAmPm = new JComboBox<>(amPm);
+        add(endTimeFilterCB, "cell 3 2");
+        add(endTimeAmPm, "cell 3 2");
+
 //        Set<String> termSet = app.getCourseReader().getTerms();
 //        String[] terms = new String[termSet.size()];
 //        terms = termSet.toArray(terms);
@@ -104,6 +159,41 @@ public class SchedulePage extends Page {
         JTextField searchBar = new JTextField();
         searchBar.setPreferredSize(new Dimension(150,20));
         add(searchBar, "cell 0 1");
+
+        JButton searchBtn = new JButton("SEARCH");
+        searchBtn.addActionListener((event) -> {
+            Search search = new Search(app.getCourseDatabase());
+            String query = searchBar.getText();
+            search.modifyQuery(query);
+            searchResults.clear();
+            String department = (String) departmentComboBox.getSelectedItem();
+            Professor professor = (Professor) facultyComboBox.getSelectedItem();
+            String startTime = (String)startTimeFilterCB.getSelectedItem();
+            String startAmPm = (String)startTimeAmPm.getSelectedItem();
+            System.out.println("START TIME: " + startTime);
+            String endTime = (String)endTimeFilterCB.getSelectedItem();
+            String endAmPm = (String)endTimeAmPm.getSelectedItem();
+            System.out.println("END TIME: " + endTime);
+            Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
+            Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+            Filter timeFilterSelected = new Filter(Filter.type.TIMES, startTime + ":00:00 " + startAmPm, endTime + ":00:00 " + endAmPm /*startAmPm, endAmPm*/);
+
+            if(!Objects.equals(department, "")) {
+                search.addFilter(departmentFilterSelected);
+            }
+            if(!Objects.equals(professor, new Professor("", ""))) {
+                search.addFilter(facultyFilterSelected);
+            }
+            if(!Objects.equals(startTime, "") && !Objects.equals(endTime, "")
+                    && !Objects.equals(startAmPm, "") && !Objects.equals(endAmPm, "")) {
+                search.addFilter(timeFilterSelected);
+            }
+
+            for(Course c : search.search()) {
+                searchResults.addElement(c);
+            }
+        });
+        add(searchBtn, "cell 3 1");
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
@@ -178,7 +268,21 @@ public class SchedulePage extends Page {
                     app.getLoggedInStudent().save();
                     redraw();
                 } else {
-                    courseInfo.setText("Time conflict - choose another course");
+                    int popupChoice = JOptionPane.showConfirmDialog(null, "Time conflict - Replace current course with new course?");
+                    if(popupChoice == JOptionPane.YES_OPTION){
+                        for(int i = 0; i < schedule.getCourses().size(); i++){
+                            if(schedule.getCourses().get(i).hasConflict(selected)){
+                                schedule.deleteCourse(schedule.getCourses().get(i));
+                                schedule.addCourse(selected);
+                                calendar.removeAll();
+                                calendar.add(new CalendarComponent());
+                                calendar.repaint();
+                                calendar.revalidate();
+                                app.getLoggedInStudent().save();
+                                redraw();
+                            }
+                        }
+                    }
                 }
             }
         });

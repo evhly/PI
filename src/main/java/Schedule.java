@@ -20,6 +20,42 @@ public class Schedule {
     }
 
     /**
+     * constructor for restoring schedule from logs for recovering from a crash
+     * @param logFile file of schedule to restore
+     * @param schName name of schedule to restore
+     * @param cdb course database
+     */
+    public Schedule(File logFile, String schName, CourseDatabase cdb){
+        this();
+        Scanner logScn;
+
+        try {
+            logScn = new Scanner(logFile);
+        } catch (FileNotFoundException e) {
+            // if no log file, untitled schedule is created
+            return;
+        }
+        title = schName;
+        while (logScn.hasNextLine()){
+            String nLine = logScn.nextLine();
+            Scanner lineScn = new Scanner(nLine);
+            String action = lineScn.next();
+            lineScn.useDelimiter(";");
+            String courseCode = lineScn.next();
+            courseCode = courseCode.trim();
+            Course c = cdb.getCourseData(courseCode); //create course from course code
+
+            //add
+            if (action.equals("ADD:")){
+                courses.add(c); //add course to schedule
+            } else {
+                deleteCourse(c); //delete course from schedule
+            }
+        }
+        createLogFile();
+    }
+
+    /**
      * Constructor
      * //TODO: convert to real copy constructor
      * @param courses Courses to add to the schedule
