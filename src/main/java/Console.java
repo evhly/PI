@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -148,6 +149,15 @@ public class Console {
         //exiting program
         else if (choice == 9) {
             System.out.println("quitting ...");
+            System.out.println("   3.141592\n" +
+                    "  653589793\n" +
+                    " 23    84\n" +
+                    "6 2    64\n" +
+                    "  3    38\n" +
+                    "  3    27\n" +
+                    "  9    50 2\n" +
+                    "8 8    4197\n" +
+                    " 16     93  SS\n");
             System.exit(0);
         }
         //enter bad input
