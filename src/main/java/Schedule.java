@@ -146,7 +146,7 @@ public class Schedule {
         Schedule schedule = new Schedule(title, term);
 
         //Adds a course to the schedule for every course in the schedule.csv
-        for(int i=1; i<parts.length; i++) {
+        for(int i=2; i<parts.length; i++) {
             schedule.addCourse(db.getCourseData(parts[i]));
         }
 

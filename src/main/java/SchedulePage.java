@@ -9,10 +9,11 @@ import java.util.Set;
 
 public class SchedulePage extends Page {
 
-    final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+    DefaultListModel<Course> searchResults;
 
     public void draw(){
         App app = App.getInstance();
+        searchResults = new DefaultListModel<>();
         Schedule schedule = app.getCurrSchedule();
         app.setCourseDatabase(app.getCourseReader().getCourseDatabase(schedule.getTerm()));
 
