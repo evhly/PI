@@ -99,17 +99,14 @@ public class SchedulePage extends Page {
         JMenuItem mathStatusSheet = new JMenuItem("Math");
         mathStatusSheet.setActionCommand("Math");
         MenuItemListener menuListener = new MenuItemListener();
-
         CSStatusSheet.addActionListener(menuListener);
         mathStatusSheet.addActionListener(menuListener);
-
         statusSheetPopup.add(CSStatusSheet);
         statusSheetPopup.add(mathStatusSheet);
-
+        add(statusSheetPopup);
         statusSheetBtn.addActionListener((event) -> {
             statusSheetPopup.setVisible(true);
             statusSheetPopup.setPopupSize(200, 100);
-            add(statusSheetPopup);
             statusSheetPopup.show(this,500, 80);
         });
 
