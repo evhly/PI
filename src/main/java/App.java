@@ -22,11 +22,15 @@ public class App extends JFrame {
         pages.put("schedule-page", new SchedulePage());
         courseReader = CourseReader.getAllCourseDatabases();
         setCourseDatabase(courseReader.getCourseDatabase("F20"));
+    }
+
+    public void open() {
+        switchPages("login-page");
         this.setTitle("Scheduling App");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     /**
