@@ -11,6 +11,7 @@ public abstract class Page extends DynamicComponent {
         setPreferredSize(screenSize);
         setBackground(Color.white);
         setFocusable(true);
+
     }
 
 }
