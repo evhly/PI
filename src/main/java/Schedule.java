@@ -67,6 +67,7 @@ public class Schedule {
         this.courses = courses;
         this.title = title;
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -77,6 +78,7 @@ public class Schedule {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -88,6 +90,7 @@ public class Schedule {
         this.courses = new ArrayList<>();
         this.title = title;
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
