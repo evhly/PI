@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -71,7 +72,7 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to quit");
+                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to redo\nEnter 9 to quit");
         //TODO: enter loadSchedule and saveSchedule options
         //restore schedule from file option using logs
         //ask for course name
@@ -80,7 +81,7 @@ public class Console {
         //send that + name to restore the schedule
         //test by going to view schedule
 
-        int choice = getInt(8); //scn.nextInt();
+        int choice = getInt(9); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -133,9 +134,31 @@ public class Console {
                 homeScreen();
             }
         }
-        //exiting program
+
         else if (choice == 8) {
+            boolean success = consoleRedo();
+            if (success) {
+                System.out.println("Redo successful\n\n");
+                homeScreen();
+            } else {
+                System.out.println("Redo not successful\n\n");
+                homeScreen();
+            }
+        }
+
+        //exiting program
+        else if (choice == 9) {
             System.out.println("quitting ...");
+            System.out.println("   3.141592\n" +
+                    "  653589793\n" +
+                    " 23    84\n" +
+                    "6 2    64\n" +
+                    "  3    38\n" +
+                    "  3    27\n" +
+                    "  9    50 2\n" +
+                    "8 8    4197\n" +
+                    " 16     93  SS\n");
+            System.exit(0);
         }
         //enter bad input
         else {                  //bad input
@@ -328,6 +351,10 @@ public class Console {
 
     public static boolean consoleUndo() {
         return sch.undo();
+    }
+
+    public static boolean consoleRedo() {
+        return sch.redo();
     }
 
 }

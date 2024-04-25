@@ -15,6 +15,8 @@ public class Schedule {
 
     private Deque<ScheduleChange> changeStack;
 
+    private Deque<ScheduleChange> redoStack;
+
     public ArrayList<Course> getCourses(){
         return courses;
     }
@@ -65,6 +67,7 @@ public class Schedule {
         this.courses = courses;
         this.title = title;
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -75,6 +78,7 @@ public class Schedule {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -86,6 +90,7 @@ public class Schedule {
         this.courses = new ArrayList<>();
         this.title = title;
         this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
@@ -144,16 +149,17 @@ public class Schedule {
     public boolean undo(){
         if (!changeStack.isEmpty()) {
             ScheduleChange lastChange = changeStack.pop();
+            redoStack.push(lastChange);
             if (lastChange.action.equals("ADD")) {
                 courses.remove(lastChange.course);
                 //logging
                 if (loggingEnabled){
                     logFile.println("DELETE: "+lastChange.course);
                     logFile.flush();
-                    //logFile.close();
                 }
                 return true;
             } else {
+                // conflict checking
                 for(int i = 0 ; i < courses.size(); i++){
                     if(lastChange.course.hasConflict(courses.get(i))){
                         return false;
@@ -170,6 +176,42 @@ public class Schedule {
         }
         return false;
     }
+
+    /**
+     * Reverses the action taken by the last call to undo()
+     * @return whether the redo operation is successful
+     */
+    public boolean redo() {
+        if (!redoStack.isEmpty()) {
+            ScheduleChange lastChange = redoStack.pop();
+            changeStack.push(lastChange);
+            if (lastChange.action.equals("ADD")) {
+                // conflict checking
+                for(int i = 0 ; i < courses.size(); i++){
+                    if(lastChange.course.hasConflict(courses.get(i))){
+                        return false;
+                    }
+                }
+                courses.add(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("ADD: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            } else {
+                courses.remove(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("DELETE: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            }
+        }
+        return false; // redo stack is empty
+    }
+
     public String showMoreInfo(Course sectionToCheck){
         return "";
     }
