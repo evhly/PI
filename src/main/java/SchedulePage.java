@@ -3,15 +3,34 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.html.CSS;
+
+class MenuItemListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+        try {
+            if (e.getActionCommand().equals("Computer Science")) {
+                Desktop.getDesktop().browse(new URI("https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/ComputerScienceBS_2027.pdf"));
+            } else {
+                Desktop.getDesktop().browse(new URI("https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/Mathematics_2027.pdf"));
+            }
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+    }
+}
 
 public class SchedulePage extends Page {
 
     final DefaultListModel<Course> searchResults = new DefaultListModel<>();
 
+    boolean viewStatusSheets = false;
     JFormattedTextField startTimeField;
     MaskFormatter startTimeMask;
 
@@ -70,7 +89,29 @@ public class SchedulePage extends Page {
             redraw();
         });
 
+        JButton statusSheetBtn = new JButton("View Status Sheets");
 
+        add(statusSheetBtn, "cell 3 0");
+
+        JPopupMenu statusSheetPopup = new JPopupMenu();
+        JMenuItem CSStatusSheet = new JMenuItem("Computer Science");
+        CSStatusSheet.setActionCommand("Computer Science");
+        JMenuItem mathStatusSheet = new JMenuItem("Math");
+        mathStatusSheet.setActionCommand("Math");
+        MenuItemListener menuListener = new MenuItemListener();
+
+        CSStatusSheet.addActionListener(menuListener);
+        mathStatusSheet.addActionListener(menuListener);
+
+        statusSheetPopup.add(CSStatusSheet);
+        statusSheetPopup.add(mathStatusSheet);
+
+        statusSheetBtn.addActionListener((event) -> {
+            statusSheetPopup.setVisible(true);
+            statusSheetPopup.setPopupSize(200, 100);
+            add(statusSheetPopup);
+            statusSheetPopup.show(this,500, 80);
+        });
 
         String[] departmentFilter = {
                 "",
