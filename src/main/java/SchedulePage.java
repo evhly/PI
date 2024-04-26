@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
@@ -239,6 +240,14 @@ public class SchedulePage extends Page {
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
 
+        CalendarComponent calendar = new CalendarComponent();
+        calendar.draw();
+
+        add(calendar, "span 1 0, align right, wrap");
+        DefaultListModel<Course> model = new DefaultListModel<>();
+        JList<Course> courseList = new JList<>( model );
+        add(courseList, "top, align center, wrap");
+
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -247,11 +256,43 @@ public class SchedulePage extends Page {
                     String title = list.getSelectedValue().getName();
                     String profFN = list.getSelectedValue().getProfessor().getFirstName();
                     String profLN = list.getSelectedValue().getProfessor().getLastName();
-                    String time = list.getSelectedValue().getMeetingTimes().toString();
-                    toDisplay = (title + ": " + profFN + " " + profLN + "\n" + time);
+                    String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
+                            .map(map-> map.getKey()+": "+map.getValue())
+                            .collect(Collectors.joining(", "));
+                    toDisplay = ("Add Course? \n" + title + ": " + profFN + " " + profLN + "\n" + times);
                 }
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+                // when the plus button is pressed, add the course currently selected in the search results
+                if(popupChoice == JOptionPane.YES_OPTION) {
+                    if(list.getSelectedIndex() != -1) {
+                        Course selected = searchResults.getElementAt(list.getSelectedIndex());
+                        if (schedule.addCourse(selected)) {
+                            calendar.removeAll();
+                            calendar.add(new CalendarComponent());
+                            calendar.repaint();
+                            calendar.revalidate();
+                            app.getLoggedInStudent().save();
+                            redraw();
+                        } else {
+                            int popupConflict = JOptionPane.showConfirmDialog(null, "Time conflict - Replace current course with new course?");
+                            if(popupConflict == JOptionPane.YES_OPTION){
+                                for(int i = 0; i < schedule.getCourses().size(); i++){
+                                    if(schedule.getCourses().get(i).hasConflict(selected)){
+                                        schedule.deleteCourse(schedule.getCourses().get(i));
+                                        schedule.addCourse(selected);
+                                        calendar.removeAll();
+                                        calendar.add(new CalendarComponent());
+                                        calendar.repaint();
+                                        calendar.revalidate();
+                                        app.getLoggedInStudent().save();
+                                        redraw();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
 
@@ -305,45 +346,7 @@ public class SchedulePage extends Page {
         scheduleListPane.setPreferredSize(new Dimension(150,500));
         add(scheduleListPane, "cell 3 1");
 
-        CalendarComponent calendar = new CalendarComponent();
-        calendar.draw();
 
-        add(calendar, "span 1 0, align right, wrap");
-        DefaultListModel<Course> model = new DefaultListModel<>();
-        JList<Course> courseList = new JList<>( model );
-        add(courseList, "top, align center, wrap");
-
-
-        // when the plus button is pressed, add the course currently selected in the search results
-        plusBtn.addActionListener((event) -> {
-            if(list.getSelectedIndex() != -1) {
-                Course selected = searchResults.getElementAt(list.getSelectedIndex());
-                if (schedule.addCourse(selected)) {
-                    calendar.removeAll();
-                    calendar.add(new CalendarComponent());
-                    calendar.repaint();
-                    calendar.revalidate();
-                    app.getLoggedInStudent().save();
-                    redraw();
-                } else {
-                    int popupChoice = JOptionPane.showConfirmDialog(null, "Time conflict - Replace current course with new course?");
-                    if(popupChoice == JOptionPane.YES_OPTION){
-                        for(int i = 0; i < schedule.getCourses().size(); i++){
-                            if(schedule.getCourses().get(i).hasConflict(selected)){
-                                schedule.deleteCourse(schedule.getCourses().get(i));
-                                schedule.addCourse(selected);
-                                calendar.removeAll();
-                                calendar.add(new CalendarComponent());
-                                calendar.repaint();
-                                calendar.revalidate();
-                                app.getLoggedInStudent().save();
-                                redraw();
-                            }
-                        }
-                    }
-                }
-            }
-        });
 
         // delete a course when delete key is pressed and a schedule in the schedule pane is selected
         Action deleteCourse = new AbstractAction() {
