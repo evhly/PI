@@ -45,7 +45,7 @@ public class SchedulePage extends Page {
         App app = App.getInstance();
         Schedule schedule = app.getCurrSchedule();
 
-        setLayout(new MigLayout("fill"));
+        setLayout(null);
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
@@ -72,14 +72,17 @@ public class SchedulePage extends Page {
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
         });
-        add(backBtn, "cell 0 0");
+        backBtn.setBounds(25, 0, 60, 35);
+        add(backBtn);
 
         JLabel scheduleTitle = new JLabel(schedule.getTitle());
-        add(scheduleTitle, "cell 2 0, align right");
+        scheduleTitle.setBounds(300, 0, 100, 50);
+        add(scheduleTitle);
 
         JButton editTitleBtn = new JButton();
         editTitleBtn.setIcon(editIcon);
-        add(editTitleBtn, "cell 3 0, align left");
+        editTitleBtn.setBounds(400, 0, 60, 35);
+        add(editTitleBtn);
 
         editTitleBtn.addActionListener((event) -> {
             String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
@@ -93,8 +96,8 @@ public class SchedulePage extends Page {
         });
 
         JButton statusSheetBtn = new JButton("View Status Sheets");
-
-        add(statusSheetBtn, "cell 3 0");
+        statusSheetBtn.setBounds(500, 0, 150, 35);
+        add(statusSheetBtn);
 
         JPopupMenu statusSheetPopup = new JPopupMenu();
         JMenuItem CSStatusSheet = new JMenuItem("Computer Science");
@@ -119,8 +122,12 @@ public class SchedulePage extends Page {
                 "MATH"
         };
 
+        JLabel departmentLabel = new JLabel("Department");
+        departmentLabel.setBounds(25, 625, 100, 25);
+        add(departmentLabel);
         JComboBox<String >departmentComboBox = new JComboBox<>(departmentFilter);
-        add(departmentComboBox, "cell 2 2");
+        departmentComboBox.setBounds(25, 650, 100, 25);
+        add(departmentComboBox);
 
 
         Professor[] facultyFilter = {
@@ -130,8 +137,12 @@ public class SchedulePage extends Page {
                 new Professor("Dale", "McIntyre")
         };
 
+        JLabel professorLabel = new JLabel("Professor");
+        professorLabel.setBounds(150, 625, 100, 25);
+        add(professorLabel);
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
-        add(facultyComboBox, "cell 2 2");
+        facultyComboBox.setBounds(150, 650, 100, 25);
+        add(facultyComboBox);
 
 
         String[] startTimeFilter = {
@@ -155,9 +166,17 @@ public class SchedulePage extends Page {
                 "AM",
                 "PM"
         };
+        JLabel startTimeLabel = new JLabel("Start Time");
+        startTimeLabel.setBounds(275, 625, 100, 25);
+        add(startTimeLabel);
+        JLabel ampm = new JLabel("AM/PM");
+        ampm.setBounds(400, 625, 100, 25);
+        add(ampm);
         JComboBox<String> startTimeAmPm = new JComboBox<>(amPm);
-        add(startTimeFilterCB, "cell 3 2");
-        add(startTimeAmPm, "cell 3 2");
+        startTimeFilterCB.setBounds(275, 650, 100, 25);
+        add(startTimeFilterCB);
+        startTimeAmPm.setBounds(400, 650, 100, 25);
+        add(startTimeAmPm);
 
 
         String[] endTimeFilter = {
@@ -175,10 +194,18 @@ public class SchedulePage extends Page {
                 "11",
                 "12"
         };
+        JLabel endTimeLabel = new JLabel("End time");
+        endTimeLabel.setBounds(525, 625, 100, 25);
+        add(endTimeLabel);
+        JLabel ampm2 = new JLabel("AM/PM");
+        ampm2.setBounds(650, 625, 100, 25);
+        add(ampm2);
         JComboBox<String> endTimeFilterCB = new JComboBox<>(endTimeFilter);
         JComboBox<String> endTimeAmPm = new JComboBox<>(amPm);
-        add(endTimeFilterCB, "cell 3 2");
-        add(endTimeAmPm, "cell 3 2");
+        endTimeFilterCB.setBounds(525, 650, 100, 25);
+        add(endTimeFilterCB);
+        endTimeAmPm.setBounds(650, 650, 100, 25);
+        add(endTimeAmPm);
 
 //        Set<String> termSet = app.getCourseReader().getTerms();
 //        String[] terms = new String[termSet.size()];
@@ -187,20 +214,11 @@ public class SchedulePage extends Page {
 //        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
 //        add(termsComboBox, "cell 0 1");
 
-        JTextArea courseInfo = new JTextArea();
-
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-//        add(courseInfo, "cell 4 0, align right");
-
-        JButton plusBtn = new JButton();
-        plusBtn.setIcon(plusIcon);
-//        add(plusBtn, "cell 4 0, align right, wrap");
 
 
         JTextField searchBar = new JTextField();
-        searchBar.setPreferredSize(new Dimension(150,20));
-        add(searchBar, "cell 0 1");
+        searchBar.setBounds(25, 100, 150, 25);
+        add(searchBar);
 
         JButton searchBtn = new JButton("SEARCH");
         searchBtn.addActionListener((event) -> {
@@ -235,7 +253,8 @@ public class SchedulePage extends Page {
                 searchResults.addElement(c);
             }
         });
-        add(searchBtn, "cell 3 1");
+        searchBtn.setBounds(175, 100, 100, 30);
+        add(searchBtn);
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
@@ -326,26 +345,26 @@ public class SchedulePage extends Page {
 
         });
 
+        JLabel searchResultsLabel = new JLabel("Search Results");
+        searchResultsLabel.setBounds(300, 75, 100, 25);
+        add(searchResultsLabel);
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
-        scrollPane.setMinimumSize(new Dimension(300,500));
-        scrollPane.setMaximumSize(new Dimension(300,500));
-        scrollPane.setPreferredSize(new Dimension(300,500));
-        add(scrollPane, "cell 2 1");
+        scrollPane.setBounds(300, 100, 175, 500);
+        add(scrollPane);
 
 
         String[] scheduleTextList = new String[schedule.getCourses().size()];
         for(int i = 0; i < schedule.getCourses().size(); i++){
             scheduleTextList[i] = schedule.getCourses().get(i).getCode();
         }
+
+
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
-        scheduleListPane.setMinimumSize(new Dimension(150,500));
-        scheduleListPane.setMaximumSize(new Dimension(150,500));
-        scheduleListPane.setPreferredSize(new Dimension(150,500));
-        add(scheduleListPane, "cell 3 1");
-
+        scheduleListPane.setBounds(475, 100, 175, 500);
+        add(scheduleListPane);
 
 
         // delete a course when delete key is pressed and a schedule in the schedule pane is selected
