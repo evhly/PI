@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.html.CSS;
 
@@ -188,11 +190,11 @@ public class SchedulePage extends Page {
 
         courseInfo.setEditable(false);
         courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 0, align right");
+//        add(courseInfo, "cell 4 0, align right");
 
         JButton plusBtn = new JButton();
         plusBtn.setIcon(plusIcon);
-        add(plusBtn, "cell 4 0, align right, wrap");
+//        add(plusBtn, "cell 4 0, align right, wrap");
 
 
         JTextField searchBar = new JTextField();
@@ -236,6 +238,24 @@ public class SchedulePage extends Page {
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
+
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String toDisplay = "";
+                if (e.getValueIsAdjusting()) {
+                    String title = list.getSelectedValue().getName();
+                    String profFN = list.getSelectedValue().getProfessor().getFirstName();
+                    String profLN = list.getSelectedValue().getProfessor().getLastName();
+                    String time = list.getSelectedValue().getMeetingTimes().toString();
+                    toDisplay = (title + ": " + profFN + " " + profLN + "\n" + time);
+                }
+
+                int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+            }
+        });
+
+
         searchBar.addKeyListener(new KeyListener() {
 
             @Override
@@ -279,7 +299,6 @@ public class SchedulePage extends Page {
         }
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
-//        scheduleListPane.add(new JLabel("Current Schedule")); // TODO: add title
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scheduleListPane.setMinimumSize(new Dimension(150,500));
         scheduleListPane.setMaximumSize(new Dimension(150,500));
