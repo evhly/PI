@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Course {
 
@@ -199,15 +200,16 @@ public class Course {
      */
     @Override
     public String toString() {
-        String str = code + "; " + name + "; ";
-        boolean times = false;
-        for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
-            str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
-            times = true;
-        }
-        if (times) {
-            str = str.substring(0, str.length() - 2);
-        }
-        return str;
+//        String str = code + "; " + name + "; ";
+//        boolean times = false;
+//        for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
+//            str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
+//            times = true;
+//        }
+//        if (times) {
+//            str = str.substring(0, str.length() - 2);
+//        }
+//        return str;
+        return(code + " " + name);
     }
 }
