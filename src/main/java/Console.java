@@ -64,7 +64,7 @@ public class Console {
     }
 
     private static Credentials getCreds() {
-        return new Credentials("a","b", 7,"m","22","s@s.s");
+        return new Credentials("a","b", 7,"m","22","s@s.s", false);
         //TODO: make interactive
     }
 

@@ -1,9 +1,5 @@
 import java.util.ArrayList;
 import java.io.*;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-
-import static java.lang.Integer.parseInt;
 
 public class Student {
 
@@ -53,7 +49,7 @@ public class Student {
         information.setId(newCreds.getId());
         information.setMajor(newCreds.getMajor());
         information.setEmail(newCreds.getEmail());
-        information.setPassword(newCreds.getPassword());
+        information.setPasswordHash(newCreds.getPasswordHash());
     }
 
     /**
