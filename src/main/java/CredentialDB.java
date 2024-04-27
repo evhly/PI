@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class CredentialDB {
@@ -39,7 +38,7 @@ public class CredentialDB {
     public int newAccount(Credentials userCredentials, String confirmPw) {
         if(!isEmailUnique(userCredentials, confirmPw)){
             return EMAIL_ALREADY_USED;
-        }else if(!userCredentials.getPassword().equals(confirmPw)){
+        }else if(!userCredentials.getPasswordHash().equals(userCredentials.hashRawPassword(confirmPw))){
             return PASSWORDS_DONT_MATCH;
         }else if(!isFieldBlank(userCredentials)){
             return FIELD_BLANK;
@@ -69,7 +68,7 @@ public class CredentialDB {
         return !userCredentials.getFirstName().isBlank() &&
                 !userCredentials.getLastName().isBlank() &&
                 !userCredentials.getEmail().isBlank() &&
-                !userCredentials.getPassword().isBlank();
+                !userCredentials.getPasswordHash().isBlank();
     }
 
 
