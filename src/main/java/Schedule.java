@@ -9,7 +9,7 @@ public class Schedule {
 
     private ArrayList<Course> courses; // the courses contained in a Schedule
     private String title; // the title given to the Schedule by the user
-    private String term;
+    private final String term;
 
 
     public ArrayList<Course> getCourses(){
@@ -22,6 +22,7 @@ public class Schedule {
      * //TODO: convert to real copy constructor
      * @param courses Courses to add to the schedule
      * @param title The name of the schedule
+     * @param term The term of the schedule
      */
     public Schedule(ArrayList<Course> courses, String title, String term) {
         this.courses = courses;
@@ -31,6 +32,8 @@ public class Schedule {
 
     /**
      * Constructor that creates a blank schedule
+     * THIS METHOD SHOULDN'T BE CALLED because a schedule should always correspond to a term
+     * Call the constructor below this one instead
      */
     public Schedule() {
         this.courses = new ArrayList<Course>();
@@ -38,7 +41,6 @@ public class Schedule {
         this.term = "Unselected";
     }
 
-    // TODO: fix console
     public Schedule(String term) {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
@@ -46,8 +48,9 @@ public class Schedule {
     }
 
     /**
-     * Creates an empty Schedule that has a name
+     * Creates an empty Schedule that has a name and term
      * @param title a name for this schedule
+     * @param term a term for the schedule
      */
     public Schedule(String title, String term) {
         this.courses = new ArrayList<>();

@@ -31,7 +31,7 @@ public class Console {
 //            }
 //        }
         //TODO: if student has schedules, set the first one to the initial sch
-        sch = new Schedule();
+        sch = new Schedule("F20");
         // just read in test2.csv
         cr = new CourseReader();
         //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
