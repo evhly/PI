@@ -1,9 +1,9 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -14,7 +14,7 @@ public class Credentials {
     private String lastName;  // Family name of the associated Student
     private int id;           // Grove City College ID number of the associated Student
     private String major;     // Primary major of the associated Student //TODO: handle multiple majors
-    private String password;  // Don't look too closely at this field
+    private String passwordHash;  // Hash of user password, hashed using SHA-512
     private String email;     // Email address of the associated Student (GCC email)
 
     /**
@@ -25,6 +25,8 @@ public class Credentials {
      * @param newMajor
      * @param newPassword
      * @param newEmail
+     * @param passwordIsHashed true if passwordIsHashed is the hashed password,
+     *                         false if passwordIsHashed is the raw input from the user
      */
     public Credentials(
             String newFirst,
@@ -32,13 +34,18 @@ public class Credentials {
             int newId,
             String newMajor,
             String newPassword,
-            String newEmail
+            String newEmail,
+            Boolean passwordIsHashed
     ){
         firstName =newFirst;
         lastName = newLast;
         id = newId;
         major = newMajor;
-        password = newPassword;
+        if(passwordIsHashed){
+            passwordHash = newPassword;
+        } else {
+            passwordHash = hashRawPassword(newPassword);
+        }
         email = newEmail;
     }
 
@@ -65,7 +72,8 @@ public class Credentials {
                 parseInt(cols[2].trim()),
                 cols[3].trim(),
                 cols[4].trim(),
-                cols[5].trim());
+                cols[5].trim(),
+                true);
         return credentials;
     }
 
@@ -97,7 +105,7 @@ public class Credentials {
      * @return One line of credentials.csv
      */
     public String toCSV(){
-        return(String.format("%s,%s,%d,%s,%s,%s",firstName, lastName, id, major, password, email));
+        return(String.format("%s,%s,%d,%s,%s,%s",firstName, lastName, id, major, passwordHash, email));
     }
 
     /**
@@ -126,11 +134,11 @@ public class Credentials {
 
     /**
      * Checks whether the given password is the same as the associated Student's password
-     * @param password The password to check
-     * @return Whether the password matches this.password
+     * @param rawPassword The password (unhashed) to check
+     * @return Whether the hash of rawPassword matches this.passwordHash
      */
-    public Boolean checkValid(String password) {
-        return password.equals(this.password);
+    public Boolean checkValid(String rawPassword) {
+        return hashRawPassword(rawPassword).equals(this.passwordHash);
     }
 
     public String getFirstName() {
@@ -153,8 +161,8 @@ public class Credentials {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     public void setFirstName(String first) {
@@ -173,11 +181,38 @@ public class Credentials {
         this.major = major;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String rawPassword) {
+        this.passwordHash = hashRawPassword(rawPassword);
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * @param rawPassword plaintext of password to be hashed
+     * @return rawPassword hashed using SHA-512
+     */
+    public String hashRawPassword(String rawPassword){
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(rawPassword.getBytes(StandardCharsets.UTF_8));
+            byte[] rawHash = md.digest();
+            String hash = byteArrToHex(rawHash);
+            System.out.println("Hashing: ");
+            System.out.println(hash);
+            return hash;
+        }catch(Exception e){
+            System.out.println("hashRawPassword exception: " + e);
+        }
+        return null;
+    }
+
+    private String byteArrToHex(byte[] arr){
+        StringBuilder str = new StringBuilder();
+        for(byte b : arr){
+            str.append(Integer.toHexString(0xFF & b));
+        }
+        return str.toString();
     }
 }

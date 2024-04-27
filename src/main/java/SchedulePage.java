@@ -3,13 +3,43 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.html.CSS;
+
+class MenuItemListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+        try {
+            if (e.getActionCommand().equals("Computer Science")) {
+                Desktop.getDesktop().browse(new URI("https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/ComputerScienceBS_2027.pdf"));
+            } else {
+                Desktop.getDesktop().browse(new URI("https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/Mathematics_2027.pdf"));
+            }
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+    }
+}
 
 public class SchedulePage extends Page {
 
     DefaultListModel<Course> searchResults;
+
+    boolean viewStatusSheets = false;
+    JFormattedTextField startTimeField;
+    MaskFormatter startTimeMask;
+
+    JFormattedTextField endTimeField;
+    MaskFormatter endTimeMask;
+
 
     public void draw(){
         App app = App.getInstance();
@@ -17,7 +47,7 @@ public class SchedulePage extends Page {
         Schedule schedule = app.getCurrSchedule();
         app.setCourseDatabase(app.getCourseReader().getCourseDatabase(schedule.getTerm()));
 
-        setLayout(new MigLayout("fill"));
+        setLayout(null);
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
@@ -44,14 +74,17 @@ public class SchedulePage extends Page {
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
         });
-        add(backBtn, "cell 0 0");
+        backBtn.setBounds(25, 0, 60, 35);
+        add(backBtn);
 
         JLabel scheduleTitle = new JLabel(schedule.getTitle());
-        add(scheduleTitle, "cell 2 0, align right");
+        scheduleTitle.setBounds(300, 0, 100, 50);
+        add(scheduleTitle);
 
         JButton editTitleBtn = new JButton();
         editTitleBtn.setIcon(editIcon);
-        add(editTitleBtn, "cell 3 0, align left");
+        editTitleBtn.setBounds(400, 0, 60, 35);
+        add(editTitleBtn);
 
         editTitleBtn.addActionListener((event) -> {
             String title = JOptionPane.showInputDialog("Enter Schedule Name", null);
@@ -64,6 +97,26 @@ public class SchedulePage extends Page {
             redraw();
         });
 
+        JButton statusSheetBtn = new JButton("View Status Sheets");
+        statusSheetBtn.setBounds(500, 0, 150, 35);
+        add(statusSheetBtn);
+
+        JPopupMenu statusSheetPopup = new JPopupMenu();
+        JMenuItem CSStatusSheet = new JMenuItem("Computer Science");
+        CSStatusSheet.setActionCommand("Computer Science");
+        JMenuItem mathStatusSheet = new JMenuItem("Math");
+        mathStatusSheet.setActionCommand("Math");
+        MenuItemListener menuListener = new MenuItemListener();
+        CSStatusSheet.addActionListener(menuListener);
+        mathStatusSheet.addActionListener(menuListener);
+        statusSheetPopup.add(CSStatusSheet);
+        statusSheetPopup.add(mathStatusSheet);
+        add(statusSheetPopup);
+        statusSheetBtn.addActionListener((event) -> {
+            statusSheetPopup.setVisible(true);
+            statusSheetPopup.setPopupSize(200, 100);
+            statusSheetPopup.show(this,500, 80);
+        });
 
         String[] departmentFilter = {
                 "",
@@ -71,8 +124,12 @@ public class SchedulePage extends Page {
                 "MATH"
         };
 
+        JLabel departmentLabel = new JLabel("Department");
+        departmentLabel.setBounds(25, 625, 100, 25);
+        add(departmentLabel);
         JComboBox<String >departmentComboBox = new JComboBox<>(departmentFilter);
-        add(departmentComboBox, "cell 3 2");
+        departmentComboBox.setBounds(25, 650, 100, 25);
+        add(departmentComboBox);
 
 
         Professor[] facultyFilter = {
@@ -82,8 +139,75 @@ public class SchedulePage extends Page {
                 new Professor("Dale", "McIntyre")
         };
 
+        JLabel professorLabel = new JLabel("Professor");
+        professorLabel.setBounds(150, 625, 100, 25);
+        add(professorLabel);
         JComboBox<Professor>facultyComboBox = new JComboBox<>(facultyFilter);
-        add(facultyComboBox, "cell 3 2");
+        facultyComboBox.setBounds(150, 650, 100, 25);
+        add(facultyComboBox);
+
+
+        String[] startTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JComboBox<String> startTimeFilterCB = new JComboBox<>(startTimeFilter);
+        String[] amPm = {
+                "",
+                "AM",
+                "PM"
+        };
+        JLabel startTimeLabel = new JLabel("Start Time");
+        startTimeLabel.setBounds(275, 625, 100, 25);
+        add(startTimeLabel);
+        JLabel ampm = new JLabel("AM/PM");
+        ampm.setBounds(400, 625, 100, 25);
+        add(ampm);
+        JComboBox<String> startTimeAmPm = new JComboBox<>(amPm);
+        startTimeFilterCB.setBounds(275, 650, 100, 25);
+        add(startTimeFilterCB);
+        startTimeAmPm.setBounds(400, 650, 100, 25);
+        add(startTimeAmPm);
+
+
+        String[] endTimeFilter = {
+                "",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+        };
+        JLabel endTimeLabel = new JLabel("End time");
+        endTimeLabel.setBounds(525, 625, 100, 25);
+        add(endTimeLabel);
+        JLabel ampm2 = new JLabel("AM/PM");
+        ampm2.setBounds(650, 625, 100, 25);
+        add(ampm2);
+        JComboBox<String> endTimeFilterCB = new JComboBox<>(endTimeFilter);
+        JComboBox<String> endTimeAmPm = new JComboBox<>(amPm);
+        endTimeFilterCB.setBounds(525, 650, 100, 25);
+        add(endTimeFilterCB);
+        endTimeAmPm.setBounds(650, 650, 100, 25);
+        add(endTimeAmPm);
 
         JTextArea courseInfo = new JTextArea();
 
@@ -96,12 +220,107 @@ public class SchedulePage extends Page {
         add(plusBtn, "cell 4 0, align right, wrap");
 
 
+
         JTextField searchBar = new JTextField();
-        searchBar.setPreferredSize(new Dimension(150,20));
-        add(searchBar, "cell 0 1");
+        searchBar.setBounds(25, 100, 150, 25);
+        add(searchBar);
+
+        JButton searchBtn = new JButton("SEARCH");
+        searchBtn.addActionListener((event) -> {
+            Search search = new Search(app.getCourseDatabase());
+            String query = searchBar.getText();
+            search.modifyQuery(query);
+            searchResults.clear();
+            String department = (String) departmentComboBox.getSelectedItem();
+            Professor professor = (Professor) facultyComboBox.getSelectedItem();
+            String startTime = (String)startTimeFilterCB.getSelectedItem();
+            String startAmPm = (String)startTimeAmPm.getSelectedItem();
+            System.out.println("START TIME: " + startTime);
+            String endTime = (String)endTimeFilterCB.getSelectedItem();
+            String endAmPm = (String)endTimeAmPm.getSelectedItem();
+            System.out.println("END TIME: " + endTime);
+            Filter departmentFilterSelected = new Filter(Filter.type.DEPARTMENT, department);
+            Filter facultyFilterSelected = new Filter(Filter.type.PROFESSOR, (Professor) professor);
+            Filter timeFilterSelected = new Filter(Filter.type.TIMES, startTime + ":00:00 " + startAmPm, endTime + ":00:00 " + endAmPm /*startAmPm, endAmPm*/);
+
+            if(!Objects.equals(department, "")) {
+                search.addFilter(departmentFilterSelected);
+            }
+            if(!Objects.equals(professor, new Professor("", ""))) {
+                search.addFilter(facultyFilterSelected);
+            }
+            if(!Objects.equals(startTime, "") && !Objects.equals(endTime, "")
+                    && !Objects.equals(startAmPm, "") && !Objects.equals(endAmPm, "")) {
+                search.addFilter(timeFilterSelected);
+            }
+
+            for(Course c : search.search()) {
+                searchResults.addElement(c);
+            }
+        });
+        searchBtn.setBounds(175, 100, 100, 30);
+        add(searchBtn);
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
+
+        CalendarComponent calendar = new CalendarComponent();
+        calendar.draw();
+
+        add(calendar, "span 1 0, align right, wrap");
+        DefaultListModel<Course> model = new DefaultListModel<>();
+        JList<Course> courseList = new JList<>( model );
+        add(courseList, "top, align center, wrap");
+
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String toDisplay = "";
+                if (e.getValueIsAdjusting()) {
+                    String title = list.getSelectedValue().getName();
+                    String profFN = list.getSelectedValue().getProfessor().getFirstName();
+                    String profLN = list.getSelectedValue().getProfessor().getLastName();
+                    String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
+                            .map(map-> map.getKey()+": "+map.getValue())
+                            .collect(Collectors.joining(", "));
+                    toDisplay = ("Add Course? \n" + title + ": " + profFN + " " + profLN + "\n" + times);
+                }
+
+                int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+                // when the plus button is pressed, add the course currently selected in the search results
+                if(popupChoice == JOptionPane.YES_OPTION) {
+                    if(list.getSelectedIndex() != -1) {
+                        Course selected = searchResults.getElementAt(list.getSelectedIndex());
+                        if (schedule.addCourse(selected)) {
+                            calendar.removeAll();
+                            calendar.add(new CalendarComponent());
+                            calendar.repaint();
+                            calendar.revalidate();
+                            app.getLoggedInStudent().save();
+                            redraw();
+                        } else {
+                            int popupConflict = JOptionPane.showConfirmDialog(null, "Time conflict - Replace current course with new course?");
+                            if(popupConflict == JOptionPane.YES_OPTION){
+                                for(int i = 0; i < schedule.getCourses().size(); i++){
+                                    if(schedule.getCourses().get(i).hasConflict(selected)){
+                                        schedule.deleteCourse(schedule.getCourses().get(i));
+                                        schedule.addCourse(selected);
+                                        calendar.removeAll();
+                                        calendar.add(new CalendarComponent());
+                                        calendar.repaint();
+                                        calendar.revalidate();
+                                        app.getLoggedInStudent().save();
+                                        redraw();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
         searchBar.addKeyListener(new KeyListener() {
 
             @Override
@@ -111,6 +330,11 @@ public class SchedulePage extends Page {
 
             @Override
             public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
                 Search search = new Search(app.getCourseDatabase());
                 String query = searchBar.getText();
                 String department = (String) departmentComboBox.getSelectedItem();
@@ -124,59 +348,29 @@ public class SchedulePage extends Page {
                 }
             }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-
         });
 
+        JLabel searchResultsLabel = new JLabel("Search Results");
+        searchResultsLabel.setBounds(300, 75, 100, 25);
+        add(searchResultsLabel);
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
-        scrollPane.setMinimumSize(new Dimension(300,500));
-        scrollPane.setMaximumSize(new Dimension(300,500));
-        scrollPane.setPreferredSize(new Dimension(300,500));
-        add(scrollPane, "cell 2 1");
+        scrollPane.setBounds(300, 100, 175, 500);
+        add(scrollPane);
 
 
         String[] scheduleTextList = new String[schedule.getCourses().size()];
         for(int i = 0; i < schedule.getCourses().size(); i++){
             scheduleTextList[i] = schedule.getCourses().get(i).getCode();
         }
+
+
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
-//        scheduleListPane.add(new JLabel("Current Schedule")); // TODO: add title
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
-        scheduleListPane.setMinimumSize(new Dimension(150,500));
-        scheduleListPane.setMaximumSize(new Dimension(150,500));
-        scheduleListPane.setPreferredSize(new Dimension(150,500));
-        add(scheduleListPane, "cell 3 1");
+        scheduleListPane.setBounds(475, 100, 175, 500);
+        add(scheduleListPane);
 
-        CalendarComponent calendar = new CalendarComponent();
-        calendar.draw();
-
-        add(calendar, "span 1 0, align right, wrap");
-        DefaultListModel<Course> model = new DefaultListModel<>();
-        JList<Course> courseList = new JList<>( model );
-        add(courseList, "top, align center, wrap");
-
-
-        // when the plus button is pressed, add the course currently selected in the search results
-        plusBtn.addActionListener((event) -> {
-            if(list.getSelectedIndex() != -1) {
-                Course selected = searchResults.getElementAt(list.getSelectedIndex());
-                if (schedule.addCourse(selected)) {
-                    calendar.removeAll();
-                    calendar.add(new CalendarComponent());
-                    calendar.repaint();
-                    calendar.revalidate();
-                    app.getLoggedInStudent().save();
-                    redraw();
-                } else {
-                    courseInfo.setText("Time conflict - choose another course");
-                }
-            }
-        });
 
         // delete a course when delete key is pressed and a schedule in the schedule pane is selected
         Action deleteCourse = new AbstractAction() {

@@ -1,11 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class NewAccountPage extends Page {
 
@@ -136,7 +130,7 @@ public class NewAccountPage extends Page {
 
             Credentials studentCredentials = new Credentials(
                 firstName, lastName, credDb.findNextId(), major,
-                password, email
+                password, email, false
             );
 
             int result = credDb.newAccount(studentCredentials, confirmPassword);

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.*;
 
 public class Schedule {
 
@@ -11,11 +12,53 @@ public class Schedule {
     private String title; // the title given to the Schedule by the user
     private final String term;
 
+    private PrintWriter logFile;
+
+    private boolean loggingEnabled;
+
+    private Deque<ScheduleChange> changeStack;
+
+    private Deque<ScheduleChange> redoStack;
 
     public ArrayList<Course> getCourses(){
         return courses;
     }
 
+    /**
+     * constructor for restoring schedule from logs for recovering from a crash
+     * @param logFile file of schedule to restore
+     * @param schName name of schedule to restore
+     * @param cdb course database
+     */
+    public Schedule(File logFile, String schName, CourseDatabase cdb){
+        this();
+        Scanner logScn;
+
+        try {
+            logScn = new Scanner(logFile);
+        } catch (FileNotFoundException e) {
+            // if no log file, untitled schedule is created
+            return;
+        }
+        title = schName;
+        while (logScn.hasNextLine()){
+            String nLine = logScn.nextLine();
+            Scanner lineScn = new Scanner(nLine);
+            String action = lineScn.next();
+            lineScn.useDelimiter(";");
+            String courseCode = lineScn.next();
+            courseCode = courseCode.trim();
+            Course c = cdb.getCourseData(courseCode); //create course from course code
+
+            //add
+            if (action.equals("ADD:")){
+                courses.add(c); //add course to schedule
+            } else {
+                deleteCourse(c); //delete course from schedule
+            }
+        }
+        createLogFile();
+    }
 
     /**
      * Constructor
@@ -28,6 +71,9 @@ public class Schedule {
         this.courses = courses;
         this.title = title;
         this.term = term;
+        this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
+        createLogFile();
     }
 
     /**
@@ -45,6 +91,10 @@ public class Schedule {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
         this.term = term;
+
+        this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
+        createLogFile();
     }
 
     /**
@@ -56,6 +106,19 @@ public class Schedule {
         this.courses = new ArrayList<>();
         this.title = title;
         this.term = term;
+        this.changeStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
+        createLogFile();
+    }
+
+    private void createLogFile(){
+        try {
+            logFile = new PrintWriter(title + "Log.txt");
+            loggingEnabled = true;
+        } catch (FileNotFoundException e) {
+            System.out.println("log file unable to be created.");
+            loggingEnabled = false;
+        }
     }
 
 
@@ -65,6 +128,13 @@ public class Schedule {
      */
     public void deleteCourse(Course courseToDelete){
         courses.remove(courseToDelete);
+        changeStack.push(new ScheduleChange("DELETE", courseToDelete));
+        //logging
+        if (loggingEnabled){
+            logFile.println("DELETE: "+courseToDelete);
+            logFile.flush();
+            //logFile.close();
+        }
     }
 
     /**
@@ -79,11 +149,86 @@ public class Schedule {
             }
         }
         courses.add(courseToAdd);
+        changeStack.push(new ScheduleChange("ADD", courseToAdd));
+        //logging
+        if (loggingEnabled){
+            logFile.println("ADD: "+courseToAdd);
+            logFile.flush();
+        }
         return true;
     }
-    public Schedule undo(){
-        return null; //TODO: implement
+
+    /**
+     * Adds the most recently deleted class or deletes the most recently added class
+     * NOTE: Does NOT put this change onto the changeStack
+     * @return true if the undo is successful, false if it fails
+     */
+    public boolean undo(){
+        if (!changeStack.isEmpty()) {
+            ScheduleChange lastChange = changeStack.pop();
+            redoStack.push(lastChange);
+            if (lastChange.action.equals("ADD")) {
+                courses.remove(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("DELETE: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            } else {
+                // conflict checking
+                for(int i = 0 ; i < courses.size(); i++){
+                    if(lastChange.course.hasConflict(courses.get(i))){
+                        return false;
+                    }
+                }
+                courses.add(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("ADD: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            }
+        }
+        return false;
     }
+
+    /**
+     * Reverses the action taken by the last call to undo()
+     * @return whether the redo operation is successful
+     */
+    public boolean redo() {
+        if (!redoStack.isEmpty()) {
+            ScheduleChange lastChange = redoStack.pop();
+            changeStack.push(lastChange);
+            if (lastChange.action.equals("ADD")) {
+                // conflict checking
+                for(int i = 0 ; i < courses.size(); i++){
+                    if(lastChange.course.hasConflict(courses.get(i))){
+                        return false;
+                    }
+                }
+                courses.add(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("ADD: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            } else {
+                courses.remove(lastChange.course);
+                //logging
+                if (loggingEnabled){
+                    logFile.println("DELETE: "+lastChange.course);
+                    logFile.flush();
+                }
+                return true;
+            }
+        }
+        return false; // redo stack is empty
+    }
+
     public String showMoreInfo(Course sectionToCheck){
         return "";
     }
@@ -186,6 +331,16 @@ public class Schedule {
             toR += i + ": " +  courses.get(i).consoleString() + "\n";
         }
         return toR;
+    }
+
+    private class ScheduleChange {
+        private final String action;
+        private final Course course;
+
+        private ScheduleChange(String action, Course course) {
+            this.action = action;
+            this.course = course;
+        }
     }
 
 }

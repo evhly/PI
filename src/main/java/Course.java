@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Course {
 
@@ -140,6 +141,9 @@ public class Course {
      * @return True if there is a conflict, false otherwise
      */
     public boolean hasConflict(Course other) {
+        if (this.meetingTimes == null || other.meetingTimes == null) {
+            return false;
+        }
         HashMap<DayOfWeek, ArrayList<LocalTime>> otherTimes = other.getMeetingTimes();
         for (DayOfWeek day : DayOfWeek.values()) { // for each day in the week
             if (otherTimes.containsKey(day) && this.meetingTimes.containsKey(day)) { // if both classes meet on that day
@@ -196,15 +200,16 @@ public class Course {
      */
     @Override
     public String toString() {
-        String str = code + "; " + name + "; ";
-        boolean times = false;
-        for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
-            str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
-            times = true;
-        }
-        if (times) {
-            str = str.substring(0, str.length() - 2);
-        }
-        return str;
+//        String str = code + "; " + name + "; ";
+//        boolean times = false;
+//        for (Map.Entry<DayOfWeek, ArrayList<LocalTime>> meeting : meetingTimes.entrySet()) {
+//            str += meeting.getKey().toString() + " " + meeting.getValue().get(0) + "-" + meeting.getValue().get(1) + ", ";
+//            times = true;
+//        }
+//        if (times) {
+//            str = str.substring(0, str.length() - 2);
+//        }
+//        return str;
+        return(code + " " + name);
     }
 }

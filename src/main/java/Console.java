@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -35,7 +37,7 @@ public class Console {
         // just read in test2.csv
         cr = new CourseReader();
         //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-        cr.parseCsv("C://Users//HUTCHINSEJ19//IdeaProjects//PIb//src//main//csvs//2020-2021.csv");
+        cr.parseCsv("src//main//csvs//2020-2021.csv");
         //  System.out.println("Done");
 
         scn = new Scanner(System.in);
@@ -62,7 +64,7 @@ public class Console {
     }
 
     private static Credentials getCreds() {
-        return new Credentials("a","b", 7,"m","22","s@s.s");
+        return new Credentials("a","b", 7,"m","22","s@s.s", false);
         //TODO: make interactive
     }
 
@@ -70,10 +72,16 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter 6 to quit");
+                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to redo\nEnter 9 to quit");
         //TODO: enter loadSchedule and saveSchedule options
+        //restore schedule from file option using logs
+        //ask for course name
+        //Log.txt added to it
+        //create that file
+        //send that + name to restore the schedule
+        //test by going to view schedule
 
-        int choice = getInt(6); //scn.nextInt();
+        int choice = getInt(9); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -107,10 +115,50 @@ public class Console {
             st.addSchedule(sch);
             System.out.println("New empty schedule created\nReturning home ... \n\n");
             homeScreen();
+        } else if (choice == 6) {
+            System.out.println("Enter schedule name:");
+            String schName = scn.next();
+            File schFile = new File(schName+"Log.txt");//accessing log file for that schedule
+            sch = new Schedule(schFile,schName+"1",cdb);//////////////////////////////////////
+            System.out.println("Schedule restored!\nReturning home ... \n\n");
+            homeScreen();
         }
+        //undoing last change
+        else if (choice == 7) {
+            boolean success = consoleUndo();
+            if (success) {
+                System.out.println("Undo successful\n\n");
+                homeScreen();
+            } else {
+                System.out.println("Undo not successful\n\n");
+                homeScreen();
+            }
+        }
+
+        else if (choice == 8) {
+            boolean success = consoleRedo();
+            if (success) {
+                System.out.println("Redo successful\n\n");
+                homeScreen();
+            } else {
+                System.out.println("Redo not successful\n\n");
+                homeScreen();
+            }
+        }
+
         //exiting program
-        else if (choice == -1) {
+        else if (choice == 9) {
             System.out.println("quitting ...");
+            System.out.println("   3.141592\n" +
+                    "  653589793\n" +
+                    " 23    84\n" +
+                    "6 2    64\n" +
+                    "  3    38\n" +
+                    "  3    27\n" +
+                    "  9    50 2\n" +
+                    "8 8    4197\n" +
+                    " 16     93  SS\n");
+            System.exit(0);
         }
         //enter bad input
         else {                  //bad input
@@ -300,4 +348,13 @@ public class Console {
         }
         return input;
     }
+
+    public static boolean consoleUndo() {
+        return sch.undo();
+    }
+
+    public static boolean consoleRedo() {
+        return sch.redo();
+    }
+
 }
