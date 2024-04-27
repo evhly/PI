@@ -2,12 +2,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.*;
 
 public class Schedule {
 
     private ArrayList<Course> courses; // the courses contained in a Schedule
     private String title; // the title given to the Schedule by the user
+    private final String term;
 
     private PrintWriter logFile;
 
@@ -62,10 +65,12 @@ public class Schedule {
      * //TODO: convert to real copy constructor
      * @param courses Courses to add to the schedule
      * @param title The name of the schedule
+     * @param term The term of the schedule
      */
-    public Schedule(ArrayList<Course> courses, String title) {
+    public Schedule(ArrayList<Course> courses, String title, String term) {
         this.courses = courses;
         this.title = title;
+        this.term = term;
         this.changeStack = new ArrayDeque<>();
         this.redoStack = new ArrayDeque<>();
         createLogFile();
@@ -73,22 +78,34 @@ public class Schedule {
 
     /**
      * Constructor that creates a blank schedule
+     * THIS METHOD SHOULDN'T BE CALLED because a schedule should always correspond to a term
+     * Call the constructor below this one instead
      */
     public Schedule() {
         this.courses = new ArrayList<Course>();
         this.title = "Untitled";
+        this.term = "Unselected";
+    }
+
+    public Schedule(String term) {
+        this.courses = new ArrayList<Course>();
+        this.title = "Untitled";
+        this.term = term;
+
         this.changeStack = new ArrayDeque<>();
         this.redoStack = new ArrayDeque<>();
         createLogFile();
     }
 
     /**
-     * Creates an empty Schedule that has a name
+     * Creates an empty Schedule that has a name and term
      * @param title a name for this schedule
+     * @param term a term for the schedule
      */
-    public Schedule(String title) {
+    public Schedule(String title, String term) {
         this.courses = new ArrayList<>();
         this.title = title;
+        this.term = term;
         this.changeStack = new ArrayDeque<>();
         this.redoStack = new ArrayDeque<>();
         createLogFile();
@@ -223,6 +240,8 @@ public class Schedule {
         return title;
     }
 
+    public String getTerm() {return term; }
+
     /**
      * Converts a Schedule and its Courses into a String that can be saved in a CSV file and reloaded later
      * @return A String containing all necessary data to reconstruct this schedule
@@ -230,6 +249,7 @@ public class Schedule {
     public String toSave() {
         StringBuilder sb = new StringBuilder();
         sb.append(title + ",");
+        sb.append(term + ",");
         for (Course course : courses) {
             sb.append(course.getCode());
             sb.append(",");
@@ -269,10 +289,12 @@ public class Schedule {
      */
     public static Schedule loadSchedule(String scheduleString, CourseDatabase db) {
         String[] parts = scheduleString.split(",");
-        Schedule schedule = new Schedule(parts[0].trim());
+        String title = parts[0].trim();
+        String term = parts[1].trim();
+        Schedule schedule = new Schedule(title, term);
 
         //Adds a course to the schedule for every course in the schedule.csv
-        for(int i=1; i<parts.length; i++) {
+        for(int i=2; i<parts.length; i++) {
             schedule.addCourse(db.getCourseData(parts[i]));
         }
 

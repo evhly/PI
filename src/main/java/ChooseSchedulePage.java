@@ -43,12 +43,21 @@ public class ChooseSchedulePage extends Page{
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         JButton addScheduleBtn = new JButton("ADD SCHEDULE");
         addScheduleBtn.addActionListener((e) -> {
-            Schedule schedule = new Schedule();
-            loggedInStudent.addSchedule(schedule);
-            HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
-            schedulePanel.add(scheduleComponent);
-            schedulePanel.revalidate();
-            scheduleComponent.repaint();
+            JPanel panel = new JPanel(new GridBagLayout());
+            JComboBox comboBox = new JComboBox(App.getInstance().getCourseReader().getTerms().toArray()); // TODO: could have this saved?
+
+            int selected = JOptionPane.showOptionDialog(null, comboBox, "Select Term for New Schedule",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"OK", "CANCEL"}, 0);
+            panel.add(comboBox);
+
+            if(selected == 0){
+                Schedule schedule = new Schedule(comboBox.getSelectedItem().toString());
+                loggedInStudent.addSchedule(schedule);
+                HomePageScheduleComponent scheduleComponent = new HomePageScheduleComponent(schedule, this);
+                schedulePanel.add(scheduleComponent);
+                schedulePanel.revalidate();
+                scheduleComponent.repaint();
+            }
         });
         homeButtonsContainer.add(addScheduleBtn, gbc);
 

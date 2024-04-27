@@ -31,7 +31,7 @@ class MenuItemListener implements ActionListener {
 
 public class SchedulePage extends Page {
 
-    final DefaultListModel<Course> searchResults = new DefaultListModel<>();
+    DefaultListModel<Course> searchResults;
 
     boolean viewStatusSheets = false;
     JFormattedTextField startTimeField;
@@ -43,7 +43,9 @@ public class SchedulePage extends Page {
 
     public void draw(){
         App app = App.getInstance();
+        searchResults = new DefaultListModel<>();
         Schedule schedule = app.getCurrSchedule();
+        app.setCourseDatabase(app.getCourseReader().getCourseDatabase(schedule.getTerm()));
 
         setLayout(null);
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
@@ -207,12 +209,15 @@ public class SchedulePage extends Page {
         endTimeAmPm.setBounds(650, 650, 100, 25);
         add(endTimeAmPm);
 
-//        Set<String> termSet = app.getCourseReader().getTerms();
-//        String[] terms = new String[termSet.size()];
-//        terms = termSet.toArray(terms);
-//        JComboBox<String>termsComboBox = new JComboBox<>(terms);
-//        termsComboBox.setSelectedItem(app.getCourseDatabase().getTerm());
-//        add(termsComboBox, "cell 0 1");
+        JTextArea courseInfo = new JTextArea();
+
+        courseInfo.setEditable(false);
+        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(courseInfo, "cell 4 0, align right");
+
+        JButton plusBtn = new JButton();
+        plusBtn.setIcon(plusIcon);
+        add(plusBtn, "cell 4 0, align right, wrap");
 
 
 
@@ -373,7 +378,6 @@ public class SchedulePage extends Page {
                 int row = curScheduleList.getSelectedIndex();
                 if (row >= 0) {
                     Course courseToDelete = curScheduleList.getSelectedValue();
-//                    System.out.println("about to delete " + courseToDelete.getCode());
                     schedule.deleteCourse(courseToDelete);
                     app.getLoggedInStudent().save();
                     redraw();
@@ -386,19 +390,5 @@ public class SchedulePage extends Page {
                 "delete");
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
-
-//        termsComboBox.addItemListener(new ItemListener() {
-//            public void itemStateChanged(ItemEvent arg0) {
-//                String newTerm = (String)termsComboBox.getSelectedItem();
-//                app.setCourseDatabase(app.getCourseReader().getCourseDatabase(newTerm));
-//                app.setCurrSchedule(new Schedule());
-//                calendar.removeAll();
-//                calendar.add(new CalendarComponent());
-//                calendar.repaint();
-//                calendar.revalidate();
-//                app.getLoggedInStudent().save();
-//                redraw();
-//            }
-//        });
     }
 }

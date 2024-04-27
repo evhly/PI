@@ -33,7 +33,7 @@ public class Console {
 //            }
 //        }
         //TODO: if student has schedules, set the first one to the initial sch
-        sch = new Schedule();
+        sch = new Schedule("F20");
         // just read in test2.csv
         cr = new CourseReader();
         //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
@@ -111,7 +111,7 @@ public class Console {
         else if (choice == 5) {
             System.out.println("Enter schedule name:");
             String name = scn.next();
-            sch = new Schedule(name);
+            sch = new Schedule(name, "F20");
             st.addSchedule(sch);
             System.out.println("New empty schedule created\nReturning home ... \n\n");
             homeScreen();
