@@ -325,6 +325,11 @@ public class SchedulePage extends Page {
 
             @Override
             public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
                 Search search = new Search(app.getCourseDatabase());
                 String query = searchBar.getText();
                 String department = (String) departmentComboBox.getSelectedItem();
@@ -336,11 +341,6 @@ public class SchedulePage extends Page {
                 for(Course c : courses) {
                     searchResults.addElement(c);
                 }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
             }
 
         });
