@@ -165,7 +165,6 @@ public class SchedulePage extends Page {
         plusBtn.addActionListener((event) -> {
             if(list.getSelectedIndex() != -1) {
                 Course selected = searchResults.getElementAt(list.getSelectedIndex());
-                System.out.println(selected.getTerm());
                 if (schedule.addCourse(selected)) {
                     calendar.removeAll();
                     calendar.add(new CalendarComponent());
