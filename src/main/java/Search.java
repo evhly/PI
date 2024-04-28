@@ -96,36 +96,43 @@ public class Search {
                 }
             }
             if (!filterMismatch) { // if the filters match, continue to check
-                String[] queryList = query.split(" "); // list of each individual word in the query
-                boolean match = true; // keeps track of whether a query matches the current Course
-                ArrayList<String> arr = new ArrayList<>(); // contains each aspect of the Course that the query is checked against
-                arr.add(course.getName().toLowerCase());
-                arr.add(course.getCode().toLowerCase());
-                // add days and start times for each course meeting to arr
-                for(Map.Entry<DayOfWeek, ArrayList<LocalTime>> c : course.getMeetingTimes().entrySet()){
-                    arr.add(c.getValue().get(0).toString());
-                    arr.add(c.getKey().toString().toLowerCase());
-                }
-                int i = 0;
-                while(i < queryList.length && match) { // check each word in the query, and stop if a word in any query is not found in any aspect of the Course
-                    match = false;
-                    for (int j = 0; j < arr.size(); j++) {
-                        String fieldToCheck = arr.get(j);
-                        int index = fieldToCheck.indexOf(queryList[i]);
-                        if (index != -1) { // index would be -1 if query is not in fieldToCheck
-                            if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // the beginning of the name, code, or a meeting descriptor matches the current query word
-                                j = arr.size();
-                                match = true;
-                            }
-                        }
-                    }
-                    i++;
-                }
-                if(match){
-                    results.add(course); // if each query word is found in an aspect of course, add course to search results
-                }
+                results.add(course);
             }
         }
+        results = searchWithQuery(query, results);
+//        }
+//                String[] queryList = query.split(" ");
+//                results = searchWithQuery(String query);
+//                String[] queryList = query.split(" "); // list of each individual word in the query
+//                boolean match = true; // keeps track of whether a query matches the current Course
+//                ArrayList<String> arr = new ArrayList<>(); // contains each aspect of the Course that the query is checked against
+//                arr.add(course.getName().toLowerCase());
+//                arr.add(course.getCode().toLowerCase());
+//                // add days and start times for each course meeting to arr
+//                for(Map.Entry<DayOfWeek, ArrayList<LocalTime>> c : course.getMeetingTimes().entrySet()){
+//                    arr.add(c.getValue().get(0).toString());
+//                    arr.add(c.getKey().toString().toLowerCase());
+//                }
+//                int i = 0;
+//                while(i < queryList.length && match) { // check each word in the query, and stop if a word in any query is not found in any aspect of the Course
+//                    match = false;
+//                    for (int j = 0; j < arr.size(); j++) {
+//                        String fieldToCheck = arr.get(j);
+//                        int index = fieldToCheck.indexOf(queryList[i]);
+//                        if (index != -1) { // index would be -1 if query is not in fieldToCheck
+//                            if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // the beginning of the name, code, or a meeting descriptor matches the current query word
+//                                j = arr.size();
+//                                match = true;
+//                            }
+//                        }
+//                    }
+//                    i++;
+//                }
+//                if(match){
+//                    results.add(course); // if each query word is found in an aspect of course, add course to search results
+//                }
+//            }
+//        }
         return results;
     }
 
@@ -157,5 +164,40 @@ public class Search {
         }
         searchResults.addAll(search());
         return searchResults;
+    }
+
+    private ArrayList<Course> searchWithQuery(String q, ArrayList<Course> courses){
+        ArrayList<Course> orderedResults = new ArrayList<>();
+        ArrayList<Course> t0 = new ArrayList<>();
+        ArrayList<Course> t1 = new ArrayList<>();
+        ArrayList<Course> t2 = new ArrayList<>();
+        // tier 0: contained in beginning of first word
+        // tier 1: beginning of other word
+        // tier 2: contained in a word
+        for(Course course : courses){
+            String[] nameWords = course.getName().toLowerCase().split(" ");
+
+            boolean t2bool = false;
+            for(int i = 0; i < nameWords.length; i++){
+                int idx = nameWords[i].indexOf(q);
+                if(idx == 0) {
+                    if(i == 0){
+                        t0.add(course);
+                    } else {
+                        t1.add(course);
+                    }
+                    i = nameWords.length;
+                } else if(idx != -1){
+                    t2bool = true;
+                }
+            }
+            if(t2bool){
+                t2.add(course);
+            }
+        }
+
+        t0.addAll(t1);
+        t0.addAll(t2);
+        return t0;
     }
 }
