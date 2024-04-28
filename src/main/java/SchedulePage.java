@@ -266,11 +266,13 @@ public class SchedulePage extends Page {
 
         CalendarComponent calendar = new CalendarComponent();
         calendar.draw();
+        calendar.setBounds(700, 0, 550, 600);
+        add(calendar);
 
-        add(calendar, "span 1 0, align right, wrap");
-        DefaultListModel<Course> model = new DefaultListModel<>();
-        JList<Course> courseList = new JList<>( model );
-        add(courseList, "top, align center, wrap");
+        JLabel currentCoursesLabel = new JLabel("Current Courses");
+        currentCoursesLabel.setBounds(500, 75, 100, 25);
+        add(currentCoursesLabel);
+        add(currentCoursesLabel);
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
