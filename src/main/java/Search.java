@@ -2,6 +2,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -157,5 +158,54 @@ public class Search {
         }
         searchResults.addAll(search());
         return searchResults;
+    }
+
+    /**
+     *
+     * @return map containing the frequency of each word that appears in any course name in the DB
+     * key: word in the course name
+     * value: how many times it appears across all course names
+     */
+    public HashMap<String, Integer> getWordFreqMap(){
+        // key: word
+        // value: how many times it appears in course names
+        HashMap<String, Integer> wordFreq = new HashMap<String, Integer>();
+
+        for(Course course : DB.getCourses()){
+            String[] words = course.getName().split(" ");
+            for(String word : words){
+                word = word.toLowerCase();
+                wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+            }
+        }
+        return wordFreq;
+    }
+
+    /**
+     *
+     * @param query word to suggest a completed word for
+     * @return a suggested word if one is found, else null
+     */
+    public String suggestWord(String query){
+        HashMap<String, Integer> map = getWordFreqMap();
+        ArrayList<String> matches = new ArrayList<>();
+        for(String s : map.keySet()){
+            if(s.contains(query)){
+                matches.add(s);
+            }
+        }
+        System.out.println(matches.size());
+        if(!matches.isEmpty() && matches.size() < 5){
+            String match = matches.get(0);
+            int count = map.get(match);
+            for(int i = 1; i < matches.size(); i++){
+                if(map.get(matches.get(i)) > count){
+                    match = matches.get(i);
+                    count = map.get(match);
+                }
+            }
+            return match;
+        }
+        return null;
     }
 }
