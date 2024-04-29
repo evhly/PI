@@ -64,7 +64,8 @@ public class Console {
     }
 
     private static Credentials getCreds() {
-        return new Credentials("a","b", 7,"m","22","s@s.s", false);
+        return new Credentials("a","b", 7,"m","22",
+                "s@s.s", false);
         //TODO: make interactive
     }
 
@@ -119,7 +120,7 @@ public class Console {
             System.out.println("Enter schedule name:");
             String schName = scn.next();
             File schFile = new File(schName+"Log.txt");//accessing log file for that schedule
-            sch = new Schedule(schFile,schName+"1",cdb);//////////////////////////////////////
+            sch = new Schedule(schFile,schName+"1",cdb);
             System.out.println("Schedule restored!\nReturning home ... \n\n");
             homeScreen();
         }
