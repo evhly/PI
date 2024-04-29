@@ -6,6 +6,7 @@ public class PDFTest {
 
     @Test
     void pdfHelloWorld() throws IOException {
-        PDF.create(null);
+        Schedule schedule = new Schedule("MySchedule","F20");
+        PDF.create(schedule);
     }
 }

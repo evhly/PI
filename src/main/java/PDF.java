@@ -20,12 +20,17 @@ public class PDF  {
         PDPageContentStream contentStream = new PDPageContentStream(doc,page);
         contentStream.beginText();
         contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
-        contentStream.newLineAtOffset(8,200);
-        contentStream.showText("Hello world");
+        contentStream.setLeading(17.5f);
+
+        contentStream.newLineAtOffset(50,700);
+        contentStream.showText(schedule.getTitle());
+        contentStream.newLine();
+        contentStream.showText(schedule.getTerm());
+
         contentStream.endText();
         contentStream.close();
 
-        doc.save(new File("C:\\Users\\MARSTONAD20\\IdeaProjects\\PI\\src\\main\\PDFs\\simple.pdf"));
+        doc.save(new File("src\\main\\PDFs\\simple.pdf"));
         doc.close();
     }
 
