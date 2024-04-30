@@ -14,7 +14,7 @@ public class PDFTest {
         Schedule schedule = new Schedule("MySchedule","XYZ");
         for (int i = 1; i <= 5; i++) {
             HashMap<DayOfWeek, ArrayList<LocalTime>> meetingTimes = new HashMap<>();
-            ArrayList<LocalTime> times = new ArrayList();
+            ArrayList<LocalTime> times = new ArrayList<>();
             times.add(LocalTime.NOON);
             meetingTimes.put(DayOfWeek.MONDAY, times);
             meetingTimes.put(DayOfWeek.TUESDAY, times);
