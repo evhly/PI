@@ -12,7 +12,8 @@ import java.util.HashMap;
 
 
 public class PDF  {
-    public static void create (Schedule schedule) throws IOException {
+
+    public static void create (Schedule schedule, Student student) throws IOException {
         PDDocument doc = new PDDocument();
         PDPage page = new PDPage();
         doc.addPage(page);
@@ -23,6 +24,8 @@ public class PDF  {
         contentStream.setLeading(17.5f);
 
         contentStream.newLineAtOffset(50,700);
+        contentStream.showText(student.getInformation().getFirstName() + " " + student.getInformation().getLastName());
+        contentStream.newLine();
         contentStream.showText(schedule.getTitle());
         contentStream.newLine();
         contentStream.showText("TERM: " + schedule.getTerm());
@@ -55,7 +58,9 @@ public class PDF  {
         contentStream.endText();
         contentStream.close();
 
-        doc.save(new File("src\\main\\PDFs\\schedule.pdf"));
+        doc.save(new File("src\\main\\PDFs\\"
+                + student.getInformation().getLastName() +
+                "_schedule_ " + schedule.getTerm() + ".pdf"));
         doc.close();
     }
 }

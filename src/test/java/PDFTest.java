@@ -11,6 +11,9 @@ public class PDFTest {
     @Test
     void pdfHelloWorld() throws IOException {
         Schedule schedule = new Schedule("MySchedule","XYZ");
+        Student student = new Student(new Credentials("Jon", "Do",
+                1001, "Underwater Basket Weaving",
+                "bestPa55word3ver", "e@e.com", false));
         for (int i = 1; i <= 5; i++) {
             HashMap<DayOfWeek, ArrayList<LocalTime>> meetingTimes = new HashMap<>();
             ArrayList<LocalTime> times = new ArrayList<>();
@@ -20,6 +23,6 @@ public class PDFTest {
             schedule.addCourseWithoutCheckingOrLogging(new Course("TEST 10" + i,
                     "Test Class Number " + i, meetingTimes));
         }
-        PDF.create(schedule);
+        PDF.create(schedule, student);
     }
 }
