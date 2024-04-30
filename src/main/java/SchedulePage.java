@@ -284,20 +284,20 @@ public class SchedulePage extends Page {
         currentCoursesLabel2.setBounds(500, 75, 100, 25);
         add(currentCoursesLabel2);
 
-        list.addListSelectionListener(new ListSelectionListener() {
+
+        list.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String toDisplay = "";
-                if (e.getValueIsAdjusting()) {
-                    String title = list.getSelectedValue().getName();
-                    String profFN = list.getSelectedValue().getProfessor().getFirstName();
-                    String profLN = list.getSelectedValue().getProfessor().getLastName();
-                    String code = list.getSelectedValue().getCode();
-                    String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
-                            .map(map-> map.getKey()+": "+map.getValue())
-                            .collect(Collectors.joining(", "));
-                    toDisplay = ("Add Course? \n" + title + ": " + code + " " + profFN + " " + profLN + "\n" + times);
-                }
+            public void mouseClicked(MouseEvent e) {
+                Course course = list.getSelectedValue();
+
+                String title = course.getName();
+                String profFN = course.getProfessor().getFirstName();
+                String profLN = course.getProfessor().getLastName();
+                String code = course.getCode();
+                String times = course.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                String toDisplay = ("Add Course? \n" + title + ": " + code + " " + profFN + " " + profLN + "\n" + times);
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
                 // when the plus button is pressed, add the course currently selected in the search results
@@ -332,7 +332,6 @@ public class SchedulePage extends Page {
                 }
             }
         });
-
 
         searchBar.addKeyListener(new KeyListener() {
 
@@ -379,24 +378,23 @@ public class SchedulePage extends Page {
 
 
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
-        curScheduleList.addListSelectionListener(new ListSelectionListener() {
+        curScheduleList.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 String toDisplay = "";
-                if (e.getValueIsAdjusting()) {
-                    String title = curScheduleList.getSelectedValue().getName();
-                    String code = curScheduleList.getSelectedValue().getCode();
-                    String times = curScheduleList.getSelectedValue().getMeetingTimes().entrySet().stream()
-                            .map(map-> map.getKey()+": "+map.getValue())
-                            .collect(Collectors.joining(", "));
-                    toDisplay = ("Delete Course? \n" + title + ": " + code + "\n" + times);
-                }
+                Course selected = curScheduleList.getSelectedValue();
+                String title = selected.getName();
+                String code = selected.getCode();
+                String times = selected.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                toDisplay = ("Delete Course? \n" + title + ": " + code + "\n" + times);
+
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
                 // when the plus button is pressed, add the course currently selected in the search results
                 if(popupChoice == JOptionPane.YES_OPTION) {
                     if (curScheduleList.getSelectedIndex() != -1) {
-                        Course selected = curScheduleList.getSelectedValue();
                         schedule.deleteCourse(selected);
                         calendar.removeAll();
                         calendar.add(new CalendarComponent());
