@@ -1,9 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Search {
 
@@ -157,5 +155,32 @@ public class Search {
         }
         searchResults.addAll(search());
         return searchResults;
+    }
+
+    public String getBestMatch(String word){
+        DiffAlgorithm diff = new DiffAlgorithm();
+        char[] wordArr = word.toLowerCase().toCharArray();
+        HashSet<String> wordSet = setOfWords();
+        for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
+            String next = it.next().toLowerCase();
+            if(Math.abs(word.length() - next.length()) <= 2){
+                if(diff.getDiff(wordArr, next.toCharArray()) <= 3){
+                    return next;
+                }
+            }
+        }
+        return null;
+    }
+
+    public HashSet<String> setOfWords(){
+        HashSet<String> wordSet = new HashSet<>();
+        for(Course course : DB.getCourses()){
+            String[] words = course.getName().split(" ");
+            for(String word : words){
+                word = word.toLowerCase();
+                wordSet.add(word);
+            }
+        }
+        return wordSet;
     }
 }
