@@ -277,9 +277,12 @@ public class SchedulePage extends Page {
         add(calendar);
 
         JLabel currentCoursesLabel = new JLabel("Current Courses");
-        currentCoursesLabel.setBounds(500, 75, 100, 25);
+        currentCoursesLabel.setBounds(500, 60, 100, 25);
         add(currentCoursesLabel);
-        add(currentCoursesLabel);
+
+        JLabel currentCoursesLabel2 = new JLabel("(select to delete)");
+        currentCoursesLabel2.setBounds(500, 75, 100, 25);
+        add(currentCoursesLabel2);
 
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -289,10 +292,11 @@ public class SchedulePage extends Page {
                     String title = list.getSelectedValue().getName();
                     String profFN = list.getSelectedValue().getProfessor().getFirstName();
                     String profLN = list.getSelectedValue().getProfessor().getLastName();
+                    String code = list.getSelectedValue().getCode();
                     String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
                             .map(map-> map.getKey()+": "+map.getValue())
                             .collect(Collectors.joining(", "));
-                    toDisplay = ("Add Course? \n" + title + ": " + profFN + " " + profLN + "\n" + times);
+                    toDisplay = ("Add Course? \n" + title + ": " + code + " " + profFN + " " + profLN + "\n" + times);
                 }
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
@@ -375,6 +379,35 @@ public class SchedulePage extends Page {
 
 
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
+        curScheduleList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String toDisplay = "";
+                if (e.getValueIsAdjusting()) {
+                    String title = curScheduleList.getSelectedValue().getName();
+                    String code = curScheduleList.getSelectedValue().getCode();
+                    String times = curScheduleList.getSelectedValue().getMeetingTimes().entrySet().stream()
+                            .map(map-> map.getKey()+": "+map.getValue())
+                            .collect(Collectors.joining(", "));
+                    toDisplay = ("Delete Course? \n" + title + ": " + code + "\n" + times);
+                }
+
+                int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+                // when the plus button is pressed, add the course currently selected in the search results
+                if(popupChoice == JOptionPane.YES_OPTION) {
+                    if (curScheduleList.getSelectedIndex() != -1) {
+                        Course selected = curScheduleList.getSelectedValue();
+                        schedule.deleteCourse(selected);
+                        calendar.removeAll();
+                        calendar.add(new CalendarComponent());
+                        calendar.repaint();
+                        calendar.revalidate();
+                        app.getLoggedInStudent().save();
+                        redraw();
+                    }
+                }
+            }
+        });
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scheduleListPane.setBounds(475, 100, 175, 500);
