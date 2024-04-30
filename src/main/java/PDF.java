@@ -1,7 +1,3 @@
-
-
-//TODO: implement
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -36,8 +32,6 @@ public class PDF  {
 
         for (Course course : schedule.getCourses()) {
 
-            //TODO: test
-
             HashMap<DayOfWeek, ArrayList<LocalTime>> meetingTimes = course.getMeetingTimes();
             StringBuilder meetingSB = new StringBuilder();
             meetingSB.append("Meeting times: ");
@@ -61,10 +55,7 @@ public class PDF  {
         contentStream.endText();
         contentStream.close();
 
-        doc.save(new File("src\\main\\PDFs\\simple.pdf"));
+        doc.save(new File("src\\main\\PDFs\\schedule.pdf"));
         doc.close();
     }
-
-    // public void export(){}
-
 }
