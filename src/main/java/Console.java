@@ -150,7 +150,9 @@ public class Console {
 
         else if (choice == 9) {
             try {
-                PDF.create(sch);
+                PDF.create(sch, new Student(new Credentials("Jon", "Do",
+                        1001, "Underwater Basket Weaving",
+                        "be5tPa55w0rd3v3r", "e@e.com", false)));
             } catch (IOException e) {
                 System.err.println("Issue with PDF exporting");;
             }
