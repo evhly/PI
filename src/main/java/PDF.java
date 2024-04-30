@@ -9,6 +9,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class PDF  {
@@ -25,7 +29,34 @@ public class PDF  {
         contentStream.newLineAtOffset(50,700);
         contentStream.showText(schedule.getTitle());
         contentStream.newLine();
-        contentStream.showText(schedule.getTerm());
+        contentStream.showText("TERM: " + schedule.getTerm());
+        contentStream.newLine();
+        contentStream.showText("_____________________________________________");
+        contentStream.newLine();
+
+        for (Course course : schedule.getCourses()) {
+
+            //TODO: test
+
+            HashMap<DayOfWeek, ArrayList<LocalTime>> meetingTimes = course.getMeetingTimes();
+            StringBuilder meetingSB = new StringBuilder();
+            meetingSB.append("Meeting times: ");
+            for (DayOfWeek day : meetingTimes.keySet()) {
+                meetingSB.append(day.toString());
+                meetingSB.append(" ");
+                for (LocalTime time : meetingTimes.get(day)) {
+                    meetingSB.append(time.toString());
+                    meetingSB.append(" ");
+                }
+            }
+
+            contentStream.showText(course.getName() + " (" + course.getCode() + ")");
+            contentStream.newLine();
+            contentStream.showText(meetingSB.toString());
+            contentStream.newLine();
+            contentStream.showText("___________________");
+            contentStream.newLine();
+        }
 
         contentStream.endText();
         contentStream.close();
