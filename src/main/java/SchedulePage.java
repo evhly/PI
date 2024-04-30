@@ -70,6 +70,7 @@ public class SchedulePage extends Page {
 
 
         JButton backBtn = new JButton();
+        backBtn.setBackground(Color.decode("#99002a"));
         backBtn.setIcon(backArrowIcon);
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
@@ -82,6 +83,7 @@ public class SchedulePage extends Page {
         add(scheduleTitle);
 
         JButton editTitleBtn = new JButton();
+        editTitleBtn.setBackground(Color.decode("#99002a"));
         editTitleBtn.setIcon(editIcon);
         editTitleBtn.setBounds(400, 0, 60, 35);
         add(editTitleBtn);
@@ -98,6 +100,8 @@ public class SchedulePage extends Page {
         });
 
         JButton statusSheetBtn = new JButton("View Status Sheets");
+        statusSheetBtn.setBackground(Color.decode("#99002a"));
+        statusSheetBtn.setForeground(Color.white);
         statusSheetBtn.setBounds(500, 0, 150, 35);
         add(statusSheetBtn);
 
@@ -211,13 +215,14 @@ public class SchedulePage extends Page {
 
         JTextArea courseInfo = new JTextArea();
 
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 0, align right");
-
-        JButton plusBtn = new JButton();
-        plusBtn.setIcon(plusIcon);
-        add(plusBtn, "cell 4 0, align right, wrap");
+//        courseInfo.setEditable(false);
+//        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+//        add(courseInfo, "cell 4 0, align right");
+//
+//        JButton plusBtn = new JButton();
+//        plusBtn.setBackground(Color.decode("#99002a"));
+//        plusBtn.setIcon(plusIcon);
+//        add(plusBtn, "cell 4 0, align right, wrap");
 
 
 
@@ -226,6 +231,8 @@ public class SchedulePage extends Page {
         add(searchBar);
 
         JButton searchBtn = new JButton("SEARCH");
+        searchBtn.setBackground(Color.decode("#99002a"));
+        searchBtn.setForeground(Color.white);
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
             String query = searchBar.getText();

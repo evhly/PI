@@ -108,6 +108,8 @@ public class NewAccountPage extends Page {
         add(majorComboBox, gbc);
 
         JButton submitBtn = new JButton("Submit");
+        submitBtn.setBackground(Color.decode("#99002a"));
+        submitBtn.setForeground(Color.white);
         gbc.gridx = 0;
         gbc.gridy = 10;
         gbc.gridwidth = 2;
@@ -162,6 +164,8 @@ public class NewAccountPage extends Page {
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
         JButton backToLoginBtn = new JButton("Back to Log In Screen");
+        backToLoginBtn.setBackground(Color.decode("#99002a"));
+        backToLoginBtn.setForeground(Color.white);
         backToLoginBtn.addActionListener((event) -> {
             app.switchPages("login-page");
         });

@@ -42,6 +42,8 @@ public class ChooseSchedulePage extends Page{
         gbc.weightx = 1;
         gbc.anchor = GridBagConstraints.SOUTHWEST;
         JButton addScheduleBtn = new JButton("ADD SCHEDULE");
+        addScheduleBtn.setBackground(Color.decode("#99002a"));
+        addScheduleBtn.setForeground(Color.white);
         addScheduleBtn.addActionListener((e) -> {
             JPanel panel = new JPanel(new GridBagLayout());
             JComboBox comboBox = new JComboBox(App.getInstance().getCourseReader().getTerms().toArray()); // TODO: could have this saved?
@@ -68,6 +70,8 @@ public class ChooseSchedulePage extends Page{
 
         gbc.anchor = GridBagConstraints.NORTHEAST;
         JButton logoutBtn = new JButton("LOG OUT");
+        logoutBtn.setBackground(Color.decode("#99002a"));
+        logoutBtn.setForeground(Color.white);
         logoutBtn.addActionListener((event) ->{
             App.getInstance().switchPages("login-page");
         });

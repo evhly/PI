@@ -26,6 +26,7 @@ public class HomePageScheduleComponent extends JPanel {
         add(scheduleTerm, "span, wrap, align center");
 
         JButton deleteSchedule = new JButton();
+        deleteSchedule.setBackground(Color.decode("#99002a"));
         Image trashcan = trashcanIcon.getImage();
         Image newimg = trashcan.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         trashcanIcon = new ImageIcon(newimg);
@@ -41,6 +42,7 @@ public class HomePageScheduleComponent extends JPanel {
         add(deleteSchedule,"align center");
 
         JButton editSchedule = new JButton();
+        editSchedule.setBackground(Color.decode("#99002a"));
         Image pencil = pencilIcon.getImage();
         Image newimg2 = pencil.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         pencilIcon = new ImageIcon(newimg2);
