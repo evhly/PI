@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -226,7 +227,10 @@ public class SchedulePage extends Page implements DocumentListener {
 
 
         searchBar = new JTextArea();
-        searchBar.setBounds(25, 100, 150, 25);
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        searchBar.setBorder(BorderFactory.createCompoundBorder(border,
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        searchBar.setBounds(25, 100, 140, 25);
         add(searchBar);
 
         searchBar.getDocument().addDocumentListener(this);
@@ -238,7 +242,7 @@ public class SchedulePage extends Page implements DocumentListener {
         JButton searchBtn = new JButton("SEARCH");
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
-            String query = searchBar.getText();
+            String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
             search.modifyQuery(query);
             searchResults.clear();
             String department = (String) departmentComboBox.getSelectedItem();
@@ -348,7 +352,7 @@ public class SchedulePage extends Page implements DocumentListener {
             @Override
             public void keyReleased(KeyEvent e) {
                 Search search = new Search(app.getCourseDatabase());
-                String query = searchBar.getText();
+                String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
                 String department = (String) departmentComboBox.getSelectedItem();
                 Professor professor = (Professor) facultyComboBox.getSelectedItem();
 
@@ -414,7 +418,7 @@ public class SchedulePage extends Page implements DocumentListener {
         String content = null;
         try {
             content = searchBar.getText(0, pos + 1);
-            System.out.println("searchbar: " + content);
+//            System.out.println("searchbar: " + content);
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
@@ -426,13 +430,13 @@ public class SchedulePage extends Page implements DocumentListener {
                 break;
             }
         }
-        if (pos - w < 2) {
+        if (pos - w < 1) {
             // Too few chars
             return;
         }
 
         String prefix = content.substring(w + 1).toLowerCase();
-        System.out.println("prefix: " + prefix);
+//        System.out.println("prefix: " + prefix);
         Search search = new Search(App.getInstance().getCourseDatabase());
         String suggest = search.suggestWord(prefix);
         if(suggest != null){
@@ -442,7 +446,7 @@ public class SchedulePage extends Page implements DocumentListener {
             // so we submit a task that does the change later
             SwingUtilities.invokeLater(
                     new CompletionTask(completion, pos + 1));
-            System.out.println("completion: " + completion);
+//            System.out.println("completion: " + completion);
         } else {
             // Nothing found
             mode = Mode.INSERT;

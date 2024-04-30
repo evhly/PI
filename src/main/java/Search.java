@@ -190,12 +190,13 @@ public class Search {
         HashMap<String, Integer> map = getWordFreqMap();
         ArrayList<String> matches = new ArrayList<>();
         for(String s : map.keySet()){
-            if(s.contains(query)){
+            if(s.indexOf(query) == 0){
                 matches.add(s);
+//                System.out.println("match: " + s);
             }
         }
         System.out.println(matches.size());
-        if(!matches.isEmpty() && matches.size() < 5){
+        if(!matches.isEmpty() && matches.size() < 10){ // TODO: fine tune this threshold
             String match = matches.get(0);
             int count = map.get(match);
             for(int i = 1; i < matches.size(); i++){
