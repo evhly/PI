@@ -1,9 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Search {
 
@@ -167,51 +165,60 @@ public class Search {
     }
 
     private ArrayList<Course> searchWithQuery(String q, ArrayList<Course> courses){
-        ArrayList<Course> t0 = new ArrayList<>(); // word of query is in any word
-        ArrayList<Course> t1 = new ArrayList<>(); // word of query is contained in beginning of any word but the first
-        ArrayList<Course> t2 = new ArrayList<>(); // word of query is contained in the beginning of the first word
+        TreeMap<Double, ArrayList<Course>> resultsMap = new TreeMap<>(Collections.reverseOrder());
+
         for(Course course : courses){
-            int tier = -1;
-            boolean match = false;
+            double score = 0.0;
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
             for(int i = 0; i < queryWords.length; i++){
+                String queryWord = queryWords[i];
+                double addToScore = 0.0;
                 for(int j = 0; j < nameWords.length; j++){
-                    int idx = nameWords[j].indexOf(queryWords[i]);
-                    if (idx != -1) {
-                        match = true;
-                        if (idx == 0) {
-                            if (j == 0) {
-                                tier = 2;
-                            } else if (tier < 1) {
-                                tier = 1;
+                    String nameWord = nameWords[j];
+                    int idx = nameWord.indexOf(queryWord);
+                    if(queryWord.equals(nameWord)){ // query matches current word from course name
+                        if(j == 0){ // matches first word in course name
+                            addToScore = 1;
+                        } else {
+                            addToScore = 0.9;
+                        }
+                        j = nameWords.length; // stop checking words from course name
+                    }
+                    else if (idx != -1) { // if query appears in current course name word
+                        if (idx == 0) { // if it appears at the beginning of course name word
+                            if (j == 0) { // if it appears in the first word of the course name
+                                addToScore = 0.8;
+                            } else if(addToScore < 0.7){ // if it appears in a word of the course name other than the first
+                                addToScore = 0.7;
                             }
-                            j = nameWords.length;
-                        } else if (tier < 0) {
-                            tier = 0;
+                        } else if (queryWord.length() > 1 && addToScore < 0.4) { // query is inside of a word
+                            addToScore = 0.4;
                         }
                     }
                 }
-                if(!match){
-                    tier = -1;
-                    i = queryWords.length;
+                if(addToScore == 0.0){
+                    score -= 0.4;
+                } else{
+                    score += addToScore;
                 }
             }
-            switch(tier){
-                case 0:
-                    t0.add(course);
-                    break;
-                case 1:
-                    t1.add(course);
-                    break;
-                case 2:
-                    t2.add(course);
-                    break;
+            score = score / queryWords.length;
+            if(score > 0) {
+                if (resultsMap.containsKey(score)) {
+                    resultsMap.get(score).add(course);
+                } else {
+                    ArrayList<Course> toAdd = new ArrayList<>();
+                    toAdd.add(course);
+                    resultsMap.put(score, toAdd);
+                }
             }
         }
 
-        t2.addAll(t1);
-        t2.addAll(t0);
-        return t2;
+        ArrayList<Course> orderedResults = new ArrayList<>();
+        for(ArrayList<Course> cArr : resultsMap.values()){
+            orderedResults.addAll(cArr);
+        }
+        return orderedResults;
     }
 }
