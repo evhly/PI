@@ -3,17 +3,17 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
-import javax.swing.text.html.CSS;
 
 class MenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
@@ -29,7 +29,7 @@ class MenuItemListener implements ActionListener {
     }
 }
 
-public class SchedulePage extends Page {
+public class SchedulePage extends Page implements DocumentListener {
 
     DefaultListModel<Course> searchResults;
 
@@ -39,6 +39,12 @@ public class SchedulePage extends Page {
 
     JFormattedTextField endTimeField;
     MaskFormatter endTimeMask;
+
+    JTextArea searchBar;
+
+    private static final String COMMIT_ACTION = "commit";
+    private static enum Mode { INSERT, COMPLETION };
+    private Mode mode = Mode.INSERT;
 
 
     public void draw(){
@@ -225,17 +231,25 @@ public class SchedulePage extends Page {
 //        add(plusBtn, "cell 4 0, align right, wrap");
 
 
-
-        JTextField searchBar = new JTextField();
-        searchBar.setBounds(25, 100, 150, 25);
+        searchBar = new JTextArea();
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        searchBar.setBorder(BorderFactory.createCompoundBorder(border,
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        searchBar.setBounds(25, 100, 140, 35);
         add(searchBar);
+
+        searchBar.getDocument().addDocumentListener(this);
+        InputMap im = searchBar.getInputMap();
+        ActionMap am = searchBar.getActionMap();
+        im.put(KeyStroke.getKeyStroke("ENTER"), COMMIT_ACTION);
+        am.put(COMMIT_ACTION, new CommitAction());
 
         JButton searchBtn = new JButton("SEARCH");
         searchBtn.setBackground(Color.decode("#99002a"));
         searchBtn.setForeground(Color.white);
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
-            String query = searchBar.getText();
+            String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
             search.modifyQuery(query);
             searchResults.clear();
             String department = (String) departmentComboBox.getSelectedItem();
@@ -265,7 +279,7 @@ public class SchedulePage extends Page {
                 searchResults.addElement(c);
             }
         });
-        searchBtn.setBounds(175, 100, 100, 30);
+        searchBtn.setBounds(175, 103, 100, 30);
         add(searchBtn);
 
         // when search button is pressed, display all the search results for the current search query
@@ -348,7 +362,7 @@ public class SchedulePage extends Page {
             @Override
             public void keyReleased(KeyEvent e) {
                 Search search = new Search(app.getCourseDatabase());
-                String query = searchBar.getText();
+                String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
                 String department = (String) departmentComboBox.getSelectedItem();
                 Professor professor = (Professor) facultyComboBox.getSelectedItem();
 
@@ -430,5 +444,83 @@ public class SchedulePage extends Page {
                 "delete");
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent ev){
+        if (ev.getLength() != 1) {
+            return;
+        }
+
+        int pos = ev.getOffset();
+        String content = null;
+        try {
+            content = searchBar.getText(0, pos + 1);
+//            System.out.println("searchbar: " + content);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+
+        // Find where the word starts
+        int w;
+        for (w = pos; w >= 0; w--) {
+            if (!Character.isLetter(content.charAt(w))) {
+                break;
+            }
+        }
+        if (pos - w < 1) {
+            // Too few chars
+            return;
+        }
+
+        String prefix = content.substring(w + 1).toLowerCase();
+//        System.out.println("prefix: " + prefix);
+        Search search = new Search(App.getInstance().getCourseDatabase());
+        String suggest = search.suggestWord(prefix);
+        if(suggest != null){
+            String completion = suggest.substring(pos - w);
+            SwingUtilities.invokeLater(
+                    new CompletionTask(completion, pos + 1));
+        } else {
+            mode = Mode.INSERT;
+        }
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+
+    }
+
+    private class CompletionTask implements Runnable {
+        String completion;
+        int position;
+
+        CompletionTask(String completion, int position) {
+            this.completion = completion;
+            this.position = position;
+        }
+
+        public void run() {
+            searchBar.insert(completion, position);
+            searchBar.setCaretPosition(position + completion.length());
+            searchBar.moveCaretPosition(position);
+            mode = Mode.COMPLETION;
+        }
+    }
+
+    private class CommitAction extends AbstractAction {
+        public void actionPerformed(ActionEvent ev) {
+            if (mode == Mode.COMPLETION) {
+                int pos = searchBar.getSelectionEnd();
+                searchBar.insert(" ", pos);
+                searchBar.setCaretPosition(pos + 1);
+                mode = Mode.INSERT;
+            }
+        }
     }
 }

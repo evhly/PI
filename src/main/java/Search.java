@@ -9,6 +9,7 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+    private HashMap<String, Integer> wordFreqMap;
 
     App app = App.getInstance();
 
@@ -16,6 +17,7 @@ public class Search {
         this.DB = DB;
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
+        wordFreqMap = getWordFreqMap();
     }
 
     /**
@@ -132,6 +134,53 @@ public class Search {
     }
 
     /**
+     *
+     * @return map containing the frequency of each word that appears in any course name in the DB
+     * key: word in the course name
+     * value: how many times it appears across all course names
+     */
+    public HashMap<String, Integer> getWordFreqMap(){
+        // key: word
+        // value: how many times it appears in course names
+        HashMap<String, Integer> wordFreqs = new HashMap<>();
+
+        for(Course course : DB.getCourses()){
+            String[] words = course.getName().split(" ");
+            for(String word : words){
+                word = word.toLowerCase();
+                wordFreqs.put(word, wordFreqs.getOrDefault(word, 0) + 1);
+            }
+        }
+        return wordFreqs;
+    }
+
+    /**
+     *
+     * @param query word to suggest a completed word for
+     * @return a suggested word if one is found, else null
+     */
+    public String suggestWord(String query){
+        ArrayList<String> matches = new ArrayList<>();
+        for(String s : wordFreqMap.keySet()){
+            if(s.indexOf(query) == 0){
+                matches.add(s);
+            }
+        }
+//        System.out.println(matches.size());
+        if(!matches.isEmpty() && matches.size() < 10){ // TODO: fine tune this threshold
+            String match = matches.get(0);
+            int count = wordFreqMap.get(match);
+            for(int i = 1; i < matches.size(); i++){
+                if(wordFreqMap.get(matches.get(i)) > count){
+                    match = matches.get(i);
+                    count = wordFreqMap.get(match);
+                }
+            }
+            return match;
+        }
+        return null;
+
+    /*
      *
      * @param q query to search with
      * @param courses courses to check against query
