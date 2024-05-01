@@ -98,39 +98,6 @@ public class Search {
             }
         }
         results = searchWithQuery(query, results);
-//        }
-//                String[] queryList = query.split(" ");
-//                results = searchWithQuery(String query);
-//                String[] queryList = query.split(" "); // list of each individual word in the query
-//                boolean match = true; // keeps track of whether a query matches the current Course
-//                ArrayList<String> arr = new ArrayList<>(); // contains each aspect of the Course that the query is checked against
-//                arr.add(course.getName().toLowerCase());
-//                arr.add(course.getCode().toLowerCase());
-//                // add days and start times for each course meeting to arr
-//                for(Map.Entry<DayOfWeek, ArrayList<LocalTime>> c : course.getMeetingTimes().entrySet()){
-//                    arr.add(c.getValue().get(0).toString());
-//                    arr.add(c.getKey().toString().toLowerCase());
-//                }
-//                int i = 0;
-//                while(i < queryList.length && match) { // check each word in the query, and stop if a word in any query is not found in any aspect of the Course
-//                    match = false;
-//                    for (int j = 0; j < arr.size(); j++) {
-//                        String fieldToCheck = arr.get(j);
-//                        int index = fieldToCheck.indexOf(queryList[i]);
-//                        if (index != -1) { // index would be -1 if query is not in fieldToCheck
-//                            if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // the beginning of the name, code, or a meeting descriptor matches the current query word
-//                                j = arr.size();
-//                                match = true;
-//                            }
-//                        }
-//                    }
-//                    i++;
-//                }
-//                if(match){
-//                    results.add(course); // if each query word is found in an aspect of course, add course to search results
-//                }
-//            }
-//        }
         return results;
     }
 
