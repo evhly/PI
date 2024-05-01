@@ -46,6 +46,8 @@ public class LoginPage extends Page {
         add(errorLabel, gbc);
 
         loginBtn = new JButton("LOGIN");
+        loginBtn.setBackground(Color.decode("#99002a"));
+        loginBtn.setForeground(Color.white);
 
         loginBtn.addActionListener((event) -> {
             String userEmail = emailField.getText();
@@ -63,6 +65,8 @@ public class LoginPage extends Page {
         add(loginBtn, gbc);
 
         newAccountBtn = new JButton("Create New Account");
+        newAccountBtn.setBackground(Color.decode("#99002a"));
+        newAccountBtn.setForeground(Color.white);
         newAccountBtn.addActionListener((event) ->{
             clearTextBoxes();
             app.switchPages("new-account-page");

@@ -76,6 +76,7 @@ public class SchedulePage extends Page implements DocumentListener {
 
 
         JButton backBtn = new JButton();
+        backBtn.setBackground(Color.decode("#99002a"));
         backBtn.setIcon(backArrowIcon);
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
@@ -88,6 +89,7 @@ public class SchedulePage extends Page implements DocumentListener {
         add(scheduleTitle);
 
         JButton editTitleBtn = new JButton();
+        editTitleBtn.setBackground(Color.decode("#99002a"));
         editTitleBtn.setIcon(editIcon);
         editTitleBtn.setBounds(400, 0, 60, 35);
         add(editTitleBtn);
@@ -104,6 +106,8 @@ public class SchedulePage extends Page implements DocumentListener {
         });
 
         JButton statusSheetBtn = new JButton("View Status Sheets");
+        statusSheetBtn.setBackground(Color.decode("#99002a"));
+        statusSheetBtn.setForeground(Color.white);
         statusSheetBtn.setBounds(500, 0, 150, 35);
         add(statusSheetBtn);
 
@@ -217,13 +221,14 @@ public class SchedulePage extends Page implements DocumentListener {
 
         JTextArea courseInfo = new JTextArea();
 
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 0, align right");
-
-        JButton plusBtn = new JButton();
-        plusBtn.setIcon(plusIcon);
-        add(plusBtn, "cell 4 0, align right, wrap");
+//        courseInfo.setEditable(false);
+//        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+//        add(courseInfo, "cell 4 0, align right");
+//
+//        JButton plusBtn = new JButton();
+//        plusBtn.setBackground(Color.decode("#99002a"));
+//        plusBtn.setIcon(plusIcon);
+//        add(plusBtn, "cell 4 0, align right, wrap");
 
 
         searchBar = new JTextArea();
@@ -240,6 +245,8 @@ public class SchedulePage extends Page implements DocumentListener {
         am.put(COMMIT_ACTION, new CommitAction());
 
         JButton searchBtn = new JButton("SEARCH");
+        searchBtn.setBackground(Color.decode("#99002a"));
+        searchBtn.setForeground(Color.white);
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
             String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
@@ -284,23 +291,27 @@ public class SchedulePage extends Page implements DocumentListener {
         add(calendar);
 
         JLabel currentCoursesLabel = new JLabel("Current Courses");
-        currentCoursesLabel.setBounds(500, 75, 100, 25);
-        add(currentCoursesLabel);
+        currentCoursesLabel.setBounds(500, 60, 100, 25);
         add(currentCoursesLabel);
 
-        list.addListSelectionListener(new ListSelectionListener() {
+        JLabel currentCoursesLabel2 = new JLabel("(select to delete)");
+        currentCoursesLabel2.setBounds(500, 75, 100, 25);
+        add(currentCoursesLabel2);
+
+
+        list.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String toDisplay = "";
-                if (e.getValueIsAdjusting()) {
-                    String title = list.getSelectedValue().getName();
-                    String profFN = list.getSelectedValue().getProfessor().getFirstName();
-                    String profLN = list.getSelectedValue().getProfessor().getLastName();
-                    String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
-                            .map(map-> map.getKey()+": "+map.getValue())
-                            .collect(Collectors.joining(", "));
-                    toDisplay = ("Add Course? \n" + title + ": " + profFN + " " + profLN + "\n" + times);
-                }
+            public void mouseClicked(MouseEvent e) {
+                Course course = list.getSelectedValue();
+
+                String title = course.getName();
+                String profFN = course.getProfessor().getFirstName();
+                String profLN = course.getProfessor().getLastName();
+                String code = course.getCode();
+                String times = course.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                String toDisplay = ("Add Course? \n" + title + ": " + code + " " + profFN + " " + profLN + "\n" + times);
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
                 // when the plus button is pressed, add the course currently selected in the search results
@@ -335,7 +346,6 @@ public class SchedulePage extends Page implements DocumentListener {
                 }
             }
         });
-
 
         searchBar.addKeyListener(new KeyListener() {
 
@@ -382,6 +392,34 @@ public class SchedulePage extends Page implements DocumentListener {
 
 
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
+        curScheduleList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String toDisplay = "";
+                Course selected = curScheduleList.getSelectedValue();
+                String title = selected.getName();
+                String code = selected.getCode();
+                String times = selected.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                toDisplay = ("Delete Course? \n" + title + ": " + code + "\n" + times);
+
+
+                int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+                // when the plus button is pressed, add the course currently selected in the search results
+                if(popupChoice == JOptionPane.YES_OPTION) {
+                    if (curScheduleList.getSelectedIndex() != -1) {
+                        schedule.deleteCourse(selected);
+                        calendar.removeAll();
+                        calendar.add(new CalendarComponent());
+                        calendar.repaint();
+                        calendar.revalidate();
+                        app.getLoggedInStudent().save();
+                        redraw();
+                    }
+                }
+            }
+        });
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scheduleListPane.setBounds(475, 100, 175, 500);

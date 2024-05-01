@@ -159,6 +159,15 @@ public class Schedule {
     }
 
     /**
+     * FOR UNIT TESTING ONLY
+     * Adds a course without checking for time conflict and without logging it
+     * @param courseToAdd the course to add to the schedule
+     */
+    public void addCourseWithoutCheckingOrLogging(Course courseToAdd) {
+        courses.add(courseToAdd);
+    }
+
+    /**
      * Adds the most recently deleted class or deletes the most recently added class
      * NOTE: Does NOT put this change onto the changeStack
      * @return true if the undo is successful, false if it fails
