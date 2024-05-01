@@ -33,14 +33,6 @@ public class SchedulePage extends Page {
 
     DefaultListModel<Course> searchResults;
 
-    boolean viewStatusSheets = false;
-    JFormattedTextField startTimeField;
-    MaskFormatter startTimeMask;
-
-    JFormattedTextField endTimeField;
-    MaskFormatter endTimeMask;
-
-
     public void draw(){
         App app = App.getInstance();
         searchResults = new DefaultListModel<>();
@@ -60,13 +52,17 @@ public class SchedulePage extends Page {
         Image newimg = backArrow.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         backArrowIcon = new ImageIcon(newimg);
 
-        Image plus = plusIcon.getImage();
-        Image newimg4 = plus.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        plusIcon = new ImageIcon(newimg4);
-
         Image edit = editIcon.getImage();
-        Image newimg6 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        editIcon = new ImageIcon(newimg6);
+        Image newimg2 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        editIcon = new ImageIcon(newimg2);
+
+        Image pdf = pdfIcon.getImage();
+        Image newimg3 = pdf.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        pdfIcon = new ImageIcon(newimg3);
+
+        Image undo = undoIcon.getImage();
+        Image newimg4 = undo.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        undoIcon = new ImageIcon(newimg4);
 
 
         JButton backBtn = new JButton();
@@ -213,18 +209,6 @@ public class SchedulePage extends Page {
         endTimeAmPm.setBounds(650, 650, 100, 25);
         add(endTimeAmPm);
 
-        JTextArea courseInfo = new JTextArea();
-
-//        courseInfo.setEditable(false);
-//        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-//        add(courseInfo, "cell 4 0, align right");
-//
-//        JButton plusBtn = new JButton();
-//        plusBtn.setBackground(Color.decode("#99002a"));
-//        plusBtn.setIcon(plusIcon);
-//        add(plusBtn, "cell 4 0, align right, wrap");
-
-
 
         JTextField searchBar = new JTextField();
         searchBar.setBounds(25, 100, 150, 25);
@@ -268,6 +252,23 @@ public class SchedulePage extends Page {
         searchBtn.setBounds(175, 100, 100, 30);
         add(searchBtn);
 
+        JButton pdfBtn = new JButton();
+        pdfBtn.setBackground(Color.decode("#99002a"));
+        pdfBtn.setIcon(pdfIcon);
+        pdfBtn.addActionListener((event) -> {
+            int popupChoice = JOptionPane.showConfirmDialog(null, "Save to PDF?");
+            if(popupChoice == JOptionPane.YES_OPTION) {
+                try {
+                    PDF.create(app.getCurrSchedule(), app.getLoggedInStudent());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        pdfBtn.setBounds(925, 650, 60, 35);
+        add(pdfBtn);
+
+
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
 
@@ -275,6 +276,24 @@ public class SchedulePage extends Page {
         calendar.draw();
         calendar.setBounds(700, 0, 550, 600);
         add(calendar);
+
+        JButton undoBtn = new JButton();
+        undoBtn.setBackground(Color.decode("#99002a"));
+        undoBtn.setIcon(undoIcon);
+        undoBtn.addActionListener((event) -> {
+            int popupChoice = JOptionPane.showConfirmDialog(null, "Undo last action?");
+            if(popupChoice == JOptionPane.YES_OPTION) {
+                app.getCurrSchedule().undo();
+                calendar.removeAll();
+                calendar.add(new CalendarComponent());
+                calendar.repaint();
+                calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
+            }
+        });
+        undoBtn.setBounds(1025, 650, 60, 35);
+        add(undoBtn);
 
         JLabel currentCoursesLabel = new JLabel("Current Courses");
         currentCoursesLabel.setBounds(500, 60, 100, 25);

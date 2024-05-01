@@ -60,7 +60,7 @@ public class PDF  {
 
         doc.save(new File("src\\main\\PDFs\\"
                 + student.getInformation().getLastName() +
-                "_schedule_ " + schedule.getTerm() + ".pdf"));
+                "_schedule_" + schedule.getTerm() + ".pdf"));
         doc.close();
     }
 }
