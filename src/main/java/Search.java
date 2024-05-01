@@ -146,23 +146,26 @@ public class Search {
             double score = 0.0;
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
-            String[] spellChecked = new String[q.length()]; // get a spellchecked version of each word
+            String[] spellCheckedArr = new String[q.length()]; // get a spellchecked version of each word
             for(int i = 0; i < queryWords.length; i++){
-                spellChecked[i] = getBestMatch(queryWords[i]);
+                spellCheckedArr[i] = getBestMatch(queryWords[i]);
             }
 
             for(int i = 0; i < queryWords.length; i++){
                 String queryWord = queryWords[i];
                 double addToScore = 0.0;
+                boolean spellChecked = false;
+
                 for(int j = 0; j < nameWords.length; j++){
                     String nameWord = nameWords[j];
                     int idx = nameWord.indexOf(queryWord);
 
                     if(idx == -1){
-                        System.out.println("spell checked " + queryWord + " is " + spellChecked[i]);
-                        if(spellChecked[i] != null){
-                            idx = nameWord.indexOf(spellChecked[i]);
-                            System.out.println("    Use it!");
+//                        System.out.println("spell checked " + queryWord + " is " + spellCheckedArr[i]);
+                        if(spellCheckedArr[i] != null){
+                            idx = nameWord.indexOf(spellCheckedArr[i]);
+//                            System.out.println("    Use it!");
+                            spellChecked = true;
                         }
                     }
 
@@ -187,7 +190,10 @@ public class Search {
                         }
                     }
                 }
-                if(addToScore == 0.0){
+                if(spellChecked){ // give slightly less favor to courses found when using spell check
+                    addToScore -= .05;
+                }
+                if(addToScore <= 0.0){
                     score -= 0.4;
                 } else{
                     score += addToScore;
@@ -214,11 +220,13 @@ public class Search {
 
     public String getBestMatch(String word){
         char[] wordArr = word.toLowerCase().toCharArray();
-        for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
-            String next = it.next().toLowerCase();
-            if(Math.abs(word.length() - next.length()) <= 2){
-                if(diffAlgorithm(wordArr, next.toCharArray()) <= 3){
-                    return next;
+        if(word.length() > 3) { // only spell check words length 4 or longer
+            for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
+                String next = it.next().toLowerCase();
+                if (Math.abs(word.length() - next.length()) <= 2) {
+                    if (diffAlgorithm(wordArr, next.toCharArray()) <= 3) {
+                        return next;
+                    }
                 }
             }
         }
