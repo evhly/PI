@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -72,7 +73,8 @@ public class Console {
         System.out.println("Welcome to console debugger :D");
         System.out.println("Chose an option: \nEnter 1 for search\nEnter 2 for view schedule" +
                 "\nEnter 3 for load schedule\nEnter 4 for save schedule\nEnter 5 for new empty schedule" +
-                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to redo\nEnter 9 to quit");
+                "\nEnter 6 to recover schedule from logs\nEnter 7 to undo\nEnter 8 to redo\n" +
+                "Enter 9 to export a PDF of the current schedule\nEnter 10 to quit");
         //TODO: enter loadSchedule and saveSchedule options
         //restore schedule from file option using logs
         //ask for course name
@@ -81,7 +83,7 @@ public class Console {
         //send that + name to restore the schedule
         //test by going to view schedule
 
-        int choice = getInt(9); //scn.nextInt();
+        int choice = getInt(10); //scn.nextInt();
         // moving to search screen
         if (choice == 1) {
             searchScreen();
@@ -146,8 +148,18 @@ public class Console {
             }
         }
 
-        //exiting program
         else if (choice == 9) {
+            try {
+                PDF.create(sch, new Student(new Credentials("Jon", "Do",
+                        1001, "Underwater Basket Weaving",
+                        "be5tPa55w0rd3v3r", "e@e.com", false)));
+            } catch (IOException e) {
+                System.err.println("Issue with PDF exporting");;
+            }
+        }
+
+        //exiting program
+        else if (choice == 10) {
             System.out.println("quitting ...");
             System.out.println("   3.141592\n" +
                     "  653589793\n" +
