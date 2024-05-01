@@ -1,9 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Search {
 
@@ -96,36 +94,10 @@ public class Search {
                 }
             }
             if (!filterMismatch) { // if the filters match, continue to check
-                String[] queryList = query.split(" "); // list of each individual word in the query
-                boolean match = true; // keeps track of whether a query matches the current Course
-                ArrayList<String> arr = new ArrayList<>(); // contains each aspect of the Course that the query is checked against
-                arr.add(course.getName().toLowerCase());
-                arr.add(course.getCode().toLowerCase());
-                // add days and start times for each course meeting to arr
-                for(Map.Entry<DayOfWeek, ArrayList<LocalTime>> c : course.getMeetingTimes().entrySet()){
-                    arr.add(c.getValue().get(0).toString());
-                    arr.add(c.getKey().toString().toLowerCase());
-                }
-                int i = 0;
-                while(i < queryList.length && match) { // check each word in the query, and stop if a word in any query is not found in any aspect of the Course
-                    match = false;
-                    for (int j = 0; j < arr.size(); j++) {
-                        String fieldToCheck = arr.get(j);
-                        int index = fieldToCheck.indexOf(queryList[i]);
-                        if (index != -1) { // index would be -1 if query is not in fieldToCheck
-                            if (index == 0 || fieldToCheck.charAt(index - 1) == ' ') { // the beginning of the name, code, or a meeting descriptor matches the current query word
-                                j = arr.size();
-                                match = true;
-                            }
-                        }
-                    }
-                    i++;
-                }
-                if(match){
-                    results.add(course); // if each query word is found in an aspect of course, add course to search results
-                }
+                results.add(course);
             }
         }
+        results = orderedResultsFromQuery(query, results);
         return results;
     }
 
@@ -157,5 +129,69 @@ public class Search {
         }
         searchResults.addAll(search());
         return searchResults;
+    }
+
+    /**
+     *
+     * @param q query to search with
+     * @param courses courses to check against query
+     * @return ArrayList of courses matching the query, ordered from most to least relevant to the query
+     */
+    private ArrayList<Course> orderedResultsFromQuery(String q, ArrayList<Course> courses){
+        TreeMap<Double, ArrayList<Course>> resultsMap = new TreeMap<>(Collections.reverseOrder());
+
+        for(Course course : courses){
+            double score = 0.0;
+            String[] nameWords = course.getName().toLowerCase().split(" ");
+            String[] queryWords = query.split(" ");
+            for(int i = 0; i < queryWords.length; i++){
+                String queryWord = queryWords[i];
+                double addToScore = 0.0;
+                for(int j = 0; j < nameWords.length; j++){
+                    String nameWord = nameWords[j];
+                    int idx = nameWord.indexOf(queryWord);
+                    if(queryWord.equals(nameWord)){ // query matches current word from course name
+                        if(j == 0){ // matches first word in course name
+                            addToScore = 1;
+                        } else {
+                            addToScore = 0.9;
+                        }
+                        j = nameWords.length; // stop checking words from course name
+                    }
+                    else if (idx != -1) { // if query appears in current course name word
+                        if (idx == 0) { // if it appears at the beginning of course name word
+                            if (j == 0) { // if it appears in the first word of the course name
+                                addToScore = 0.8;
+                            } else if(addToScore < 0.7){ // if it appears in a word of the course name other than the first
+                                addToScore = 0.7;
+                            }
+                        } else if (queryWord.length() > 1 && addToScore < 0.4) { // query is inside of a word
+                            addToScore = 0.4;
+                        }
+                    }
+                }
+                if(addToScore == 0.0){
+                    score -= 0.4;
+                } else{
+                    score += addToScore;
+                }
+            }
+            score = score / queryWords.length;
+            if(score > 0) {
+                if (resultsMap.containsKey(score)) {
+                    resultsMap.get(score).add(course);
+                } else {
+                    ArrayList<Course> toAdd = new ArrayList<>();
+                    toAdd.add(course);
+                    resultsMap.put(score, toAdd);
+                }
+            }
+        }
+
+        ArrayList<Course> orderedResults = new ArrayList<>();
+        for(ArrayList<Course> cArr : resultsMap.values()){
+            orderedResults.addAll(cArr);
+        }
+        return orderedResults;
     }
 }
