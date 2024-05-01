@@ -167,37 +167,51 @@ public class Search {
     }
 
     private ArrayList<Course> searchWithQuery(String q, ArrayList<Course> courses){
-        ArrayList<Course> orderedResults = new ArrayList<>();
-        ArrayList<Course> t0 = new ArrayList<>();
-        ArrayList<Course> t1 = new ArrayList<>();
-        ArrayList<Course> t2 = new ArrayList<>();
-        // tier 0: contained in beginning of first word
-        // tier 1: beginning of other word
-        // tier 2: contained in a word
+        ArrayList<Course> t0 = new ArrayList<>(); // word of query is in any word
+        ArrayList<Course> t1 = new ArrayList<>(); // word of query is contained in beginning of any word but the first
+        ArrayList<Course> t2 = new ArrayList<>(); // word of query is contained in the beginning of the first word
         for(Course course : courses){
+            int tier = -1;
+            boolean match = false;
             String[] nameWords = course.getName().toLowerCase().split(" ");
-
-            boolean t2bool = false;
-            for(int i = 0; i < nameWords.length; i++){
-                int idx = nameWords[i].indexOf(q);
-                if(idx == 0) {
-                    if(i == 0){
-                        t0.add(course);
-                    } else {
-                        t1.add(course);
+            String[] queryWords = query.split(" ");
+            for(int i = 0; i < queryWords.length; i++){
+                for(int j = 0; j < nameWords.length; j++){
+                    int idx = nameWords[j].indexOf(queryWords[i]);
+                    if (idx != -1) {
+                        match = true;
+                        if (idx == 0) {
+                            if (j == 0) {
+                                tier = 2;
+                            } else if (tier < 1) {
+                                tier = 1;
+                            }
+                            j = nameWords.length;
+                        } else if (tier < 0) {
+                            tier = 0;
+                        }
                     }
-                    i = nameWords.length;
-                } else if(idx != -1){
-                    t2bool = true;
+                }
+                if(!match){
+                    tier = -1;
+                    i = queryWords.length;
                 }
             }
-            if(t2bool){
-                t2.add(course);
+            switch(tier){
+                case 0:
+                    t0.add(course);
+                    break;
+                case 1:
+                    t1.add(course);
+                    break;
+                case 2:
+                    t2.add(course);
+                    break;
             }
         }
 
-        t0.addAll(t1);
-        t0.addAll(t2);
-        return t0;
+        t2.addAll(t1);
+        t2.addAll(t0);
+        return t2;
     }
 }
