@@ -159,19 +159,19 @@ public class Search {
      * @param query word to suggest a completed word for
      * @return a suggested word if one is found, else null
      */
-    public String suggestWord(String query){
+    public String suggestWord(String query) {
         ArrayList<String> matches = new ArrayList<>();
-        for(String s : wordFreqMap.keySet()){
-            if(s.indexOf(query) == 0){
+        for (String s : wordFreqMap.keySet()) {
+            if (s.indexOf(query) == 0) {
                 matches.add(s);
             }
         }
 //        System.out.println(matches.size());
-        if(!matches.isEmpty() && matches.size() < 10){ // TODO: fine tune this threshold
+        if (!matches.isEmpty() && matches.size() < 10) { // TODO: fine tune this threshold
             String match = matches.get(0);
             int count = wordFreqMap.get(match);
-            for(int i = 1; i < matches.size(); i++){
-                if(wordFreqMap.get(matches.get(i)) > count){
+            for (int i = 1; i < matches.size(); i++) {
+                if (wordFreqMap.get(matches.get(i)) > count) {
                     match = matches.get(i);
                     count = wordFreqMap.get(match);
                 }
@@ -179,8 +179,9 @@ public class Search {
             return match;
         }
         return null;
+    }
 
-    /*
+    /**
      *
      * @param q query to search with
      * @param courses courses to check against query
