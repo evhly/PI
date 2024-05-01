@@ -230,7 +230,7 @@ public class SchedulePage extends Page implements DocumentListener {
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         searchBar.setBorder(BorderFactory.createCompoundBorder(border,
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-        searchBar.setBounds(25, 100, 140, 25);
+        searchBar.setBounds(25, 100, 140, 35);
         add(searchBar);
 
         searchBar.getDocument().addDocumentListener(this);
@@ -272,7 +272,7 @@ public class SchedulePage extends Page implements DocumentListener {
                 searchResults.addElement(c);
             }
         });
-        searchBtn.setBounds(175, 100, 100, 30);
+        searchBtn.setBounds(175, 103, 100, 30);
         add(searchBtn);
 
         // when search button is pressed, display all the search results for the current search query
