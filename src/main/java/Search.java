@@ -97,7 +97,7 @@ public class Search {
                 results.add(course);
             }
         }
-        results = searchWithQuery(query, results);
+        results = orderedResultsFromQuery(query, results);
         return results;
     }
 
@@ -131,7 +131,13 @@ public class Search {
         return searchResults;
     }
 
-    private ArrayList<Course> searchWithQuery(String q, ArrayList<Course> courses){
+    /**
+     *
+     * @param q query to search with
+     * @param courses courses to check against query
+     * @return ArrayList of courses matching the query, ordered from most to least relevant to the query
+     */
+    private ArrayList<Course> orderedResultsFromQuery(String q, ArrayList<Course> courses){
         TreeMap<Double, ArrayList<Course>> resultsMap = new TreeMap<>(Collections.reverseOrder());
 
         for(Course course : courses){
