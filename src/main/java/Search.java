@@ -9,6 +9,7 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+    private HashSet<String> wordSet;
     private HashMap<String, Integer> wordFreqMap;
 
     App app = App.getInstance();
@@ -17,6 +18,7 @@ public class Search {
         this.DB = DB;
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
+        wordSet = getSetOfWords();
         wordFreqMap = getWordFreqMap();
     }
 
@@ -194,33 +196,54 @@ public class Search {
             double score = 0.0;
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
+            String[] spellCheckedArr = new String[q.length()]; // get a spellchecked version of each word
+            for(int i = 0; i < queryWords.length; i++){
+                spellCheckedArr[i] = getBestMatch(queryWords[i]);
+            }
+
             for(int i = 0; i < queryWords.length; i++){
                 String queryWord = queryWords[i];
                 double addToScore = 0.0;
+                boolean spellChecked = false;
+
                 for(int j = 0; j < nameWords.length; j++){
                     String nameWord = nameWords[j];
                     int idx = nameWord.indexOf(queryWord);
-                    if(queryWord.equals(nameWord)){ // query matches current word from course name
-                        if(j == 0){ // matches first word in course name
-                            addToScore = 1;
-                        } else {
-                            addToScore = 0.9;
+
+                    if(idx == -1){
+//                        System.out.println("spell checked " + queryWord + " is " + spellCheckedArr[i]);
+                        if(spellCheckedArr[i] != null){
+                            idx = nameWord.indexOf(spellCheckedArr[i]);
+//                            System.out.println("    Use it!");
+                            spellChecked = true;
                         }
-                        j = nameWords.length; // stop checking words from course name
                     }
-                    else if (idx != -1) { // if query appears in current course name word
-                        if (idx == 0) { // if it appears at the beginning of course name word
-                            if (j == 0) { // if it appears in the first word of the course name
-                                addToScore = 0.8;
-                            } else if(addToScore < 0.7){ // if it appears in a word of the course name other than the first
-                                addToScore = 0.7;
+
+                    if(idx != -1) {
+                        if (queryWord.equals(nameWord)) { // query matches current word from course name
+                            if (j == 0) { // matches first word in course name
+                                addToScore = 1;
+                            } else {
+                                addToScore = 0.9;
                             }
-                        } else if (queryWord.length() > 1 && addToScore < 0.4) { // query is inside of a word
-                            addToScore = 0.4;
+                            j = nameWords.length; // stop checking words from course name
+                        } else { // if query appears in current course name word
+                            if (idx == 0) { // if it appears at the beginning of course name word
+                                if (j == 0) { // if it appears in the first word of the course name
+                                    addToScore = 0.8;
+                                } else if (addToScore < 0.7) { // if it appears in a word of the course name other than the first
+                                    addToScore = 0.7;
+                                }
+                            } else if (queryWord.length() > 1 && addToScore < 0.4) { // query is inside of a word
+                                addToScore = 0.4;
+                            }
                         }
                     }
                 }
-                if(addToScore == 0.0){
+                if(spellChecked){ // give slightly less favor to courses found when using spell check
+                    addToScore -= .05;
+                }
+                if(addToScore <= 0.0){
                     score -= 0.4;
                 } else{
                     score += addToScore;
@@ -243,5 +266,88 @@ public class Search {
             orderedResults.addAll(cArr);
         }
         return orderedResults;
+    }
+
+    public String getBestMatch(String word){
+        char[] wordArr = word.toLowerCase().toCharArray();
+        if(word.length() > 3) { // only spell check words length 4 or longer
+            for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
+                String next = it.next().toLowerCase();
+                if (Math.abs(word.length() - next.length()) <= 2) {
+                    if (diffAlgorithm(wordArr, next.toCharArray()) <= 3) {
+                        return next;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public HashSet<String> getSetOfWords(){
+        HashSet<String> wordSet = new HashSet<>();
+        for(Course course : DB.getCourses()){
+            String[] words = course.getName().split(" ");
+            for(String word : words){
+                word = word.toLowerCase();
+                wordSet.add(word);
+            }
+        }
+        return wordSet;
+    }
+
+    /**
+     * Java implementation of the Myers Diff algorithm, done by Allison Harnly in COMP422 Fall 2023
+     *
+     * @param A one of two sequences to find the edit difference between
+     * @param B one of two sequences to find the edit difference between
+     * @return the minimum number of edits needed to transform A into B
+     * A single edit is either one deletion or one insertion of a character in a sequence
+     */
+    public int diffAlgorithm(char[] A, char[] B){
+        int N = A.length;
+        int M = B.length;
+        int DMax = M + N;
+        int[][] VArr = new int[DMax + 1][];
+        int shiftV = DMax;
+
+        int[] V = new int[2 * DMax + 1]; // At the end of the line 44 loop, V[i] always holds the furthest reaching D-path on diagonal i-VShift, if such a path exists
+        V[shiftV + 1] = 0;
+
+        int x = 0; // x value of the furthest point on the path currently being traced
+        int y = 0; // y value of the furthest point on the path currently being traced
+
+        // calculate the furthest reaching D-path for each possible diagonal and store these values in VArr[D]
+        for (int D = 0; D <= DMax; D++) {
+
+            // for each k, find the furthest reaching D-path on diagonal k
+            for (int k = -D; k <= D; k += 2) {
+                // determine if the furthest D-path on diagonal k will be an extension of the furthest (D-1)-path on diagonal k+1 or diagonal k-1
+                if (k == -D || (k != D && V[shiftV + k - 1] < V[shiftV + k + 1])) {
+                    x = V[shiftV + k + 1]; // if diagonal k+1, the current path extends one unit vertically downward from V[shiftV + k + 1]
+                } else {
+                    x = V[shiftV + k - 1] + 1; // if diagonal k-1, the current path extends one unit horizontally rightward from V[shiftV + k - 1]
+                }
+
+                y = x - k; // calculate the value of y at the point at the end of the current path
+
+                // take the longest snake extending from (x,y)
+                while (x < N && y < M && A[x] == B[y]) {
+                    x++;
+                    y++;
+                }
+
+                // add x coordinate to V array to keep record of the furthest reaching D-path on diagonal k
+                V[shiftV + k] = x;
+
+                // return the edit distance if the point (N,M) has been reached, as at this point the path corresponding to the LCS has been fully traced
+                if (x >= N && y >= M) {
+                    return D;
+                }
+            }
+            // Add the V array for value D to VArr
+            VArr[D] = V.clone();
+        }
+        // this next line should never run
+        return -1;
     }
 }
