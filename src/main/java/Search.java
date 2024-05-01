@@ -9,6 +9,7 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+    private HashSet<String> wordSet;
 
     App app = App.getInstance();
 
@@ -16,6 +17,7 @@ public class Search {
         this.DB = DB;
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
+        wordSet = getSetOfWords();
     }
 
     /**
@@ -212,7 +214,6 @@ public class Search {
 
     public String getBestMatch(String word){
         char[] wordArr = word.toLowerCase().toCharArray();
-        HashSet<String> wordSet = setOfWords();
         for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
             String next = it.next().toLowerCase();
             if(Math.abs(word.length() - next.length()) <= 2){
@@ -224,7 +225,7 @@ public class Search {
         return null;
     }
 
-    public HashSet<String> setOfWords(){
+    public HashSet<String> getSetOfWords(){
         HashSet<String> wordSet = new HashSet<>();
         for(Course course : DB.getCourses()){
             String[] words = course.getName().split(" ");
