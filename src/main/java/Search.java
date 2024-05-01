@@ -1,10 +1,7 @@
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Search {
 
@@ -12,6 +9,7 @@ public class Search {
     private String query;
     private CourseDatabase DB;
     private ArrayList<Filter> filters;
+    private HashMap<String, Integer> wordFreqMap;
 
     App app = App.getInstance();
 
@@ -19,6 +17,7 @@ public class Search {
         this.DB = DB;
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
+        wordFreqMap = getWordFreqMap();
     }
 
     /**
@@ -169,16 +168,16 @@ public class Search {
     public HashMap<String, Integer> getWordFreqMap(){
         // key: word
         // value: how many times it appears in course names
-        HashMap<String, Integer> wordFreq = new HashMap<String, Integer>();
+        HashMap<String, Integer> wordFreqs = new HashMap<>();
 
         for(Course course : DB.getCourses()){
             String[] words = course.getName().split(" ");
             for(String word : words){
                 word = word.toLowerCase();
-                wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+                wordFreqs.put(word, wordFreqs.getOrDefault(word, 0) + 1);
             }
         }
-        return wordFreq;
+        return wordFreqs;
     }
 
     /**
@@ -187,22 +186,20 @@ public class Search {
      * @return a suggested word if one is found, else null
      */
     public String suggestWord(String query){
-        HashMap<String, Integer> map = getWordFreqMap();
         ArrayList<String> matches = new ArrayList<>();
-        for(String s : map.keySet()){
+        for(String s : wordFreqMap.keySet()){
             if(s.indexOf(query) == 0){
                 matches.add(s);
-//                System.out.println("match: " + s);
             }
         }
-        System.out.println(matches.size());
+//        System.out.println(matches.size());
         if(!matches.isEmpty() && matches.size() < 10){ // TODO: fine tune this threshold
             String match = matches.get(0);
-            int count = map.get(match);
+            int count = wordFreqMap.get(match);
             for(int i = 1; i < matches.size(); i++){
-                if(map.get(matches.get(i)) > count){
+                if(wordFreqMap.get(matches.get(i)) > count){
                     match = matches.get(i);
-                    count = map.get(match);
+                    count = wordFreqMap.get(match);
                 }
             }
             return match;

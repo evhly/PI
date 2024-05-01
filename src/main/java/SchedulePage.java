@@ -440,15 +440,10 @@ public class SchedulePage extends Page implements DocumentListener {
         Search search = new Search(App.getInstance().getCourseDatabase());
         String suggest = search.suggestWord(prefix);
         if(suggest != null){
-            // A completion is found
             String completion = suggest.substring(pos - w);
-            // We cannot modify Document from within notification,
-            // so we submit a task that does the change later
             SwingUtilities.invokeLater(
                     new CompletionTask(completion, pos + 1));
-//            System.out.println("completion: " + completion);
         } else {
-            // Nothing found
             mode = Mode.INSERT;
         }
     }
