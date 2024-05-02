@@ -196,7 +196,7 @@ public class Search {
             double score = 0.0;
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
-            String[] spellCheckedArr = new String[q.length()]; // get a spellchecked version of each word
+            String[] spellCheckedArr = new String[queryWords.length]; // get a spellchecked version of each word
             for(int i = 0; i < queryWords.length; i++){
                 spellCheckedArr[i] = getBestMatch(queryWords[i]);
             }
