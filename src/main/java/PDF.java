@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class PDF  {
 
-    public static void create (Schedule schedule, Student student) throws IOException {
+    public static void create (Schedule schedule, Student student, File file) throws IOException {
         PDDocument doc = new PDDocument();
         PDPage page = new PDPage();
         doc.addPage(page);
@@ -58,9 +58,7 @@ public class PDF  {
         contentStream.endText();
         contentStream.close();
 
-        doc.save(new File("src\\main\\PDFs\\"
-                + student.getInformation().getLastName() +
-                "_schedule_ " + schedule.getTerm() + ".pdf"));
+        doc.save(file);
         doc.close();
     }
 }
