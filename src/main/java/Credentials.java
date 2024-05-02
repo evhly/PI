@@ -199,8 +199,6 @@ public class Credentials {
             md.update(rawPassword.getBytes(StandardCharsets.UTF_8));
             byte[] rawHash = md.digest();
             String hash = byteArrToHex(rawHash);
-            System.out.println("Hashing: ");
-            System.out.println(hash);
             return hash;
         }catch(Exception e){
             System.out.println("hashRawPassword exception: " + e);
