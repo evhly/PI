@@ -1,5 +1,8 @@
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -9,6 +12,7 @@ public class Console {
     //current schedule
     static Schedule sch;
     static CourseReader cr;
+    static JsonCourseReader jcr;
     static Scanner scn;
     static Student st;
     static CourseDatabase cdb;
@@ -19,7 +23,7 @@ public class Console {
      * @param args
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException, JSONException {
 //        // read in all files in csv directory
 //        CourseReader CR = new CourseReader();
 //        String path = "src/main/csvs";
@@ -35,15 +39,24 @@ public class Console {
         //TODO: if student has schedules, set the first one to the initial sch
         sch = new Schedule("F20");
         // just read in test2.csv
-        cr = new CourseReader();
-        //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-        cr.parseCsv("src//main//csvs//2020-2021.csv");
-        //  System.out.println("Done");
+        boolean useCurrentData = true;
+        if(useCurrentData) {
+            jcr = new JsonCourseReader();
+            jcr.parseJson();
+            cdb = jcr.getCourseDatabase("F24");
+        }
+        else {
+            cr = new CourseReader();
+            //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+            cr.parseCsv("src//main//csvs//2020-2021.csv");
+            cdb = cr.getCourseDatabase("F20");
+            //  System.out.println("Done");
+        }
 
         scn = new Scanner(System.in);
 
         //CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
-        cdb = cr.getCourseDatabase("F20");
+
         search = new Search(cdb);
 
         Credentials cr = getCreds();
