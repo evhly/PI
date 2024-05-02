@@ -51,6 +51,7 @@ public class Console {
             cr.parseCsv("src//main//csvs//2020-2021.csv");
             cdb = cr.getCourseDatabase("F20");
             //  System.out.println("Done");
+            //hi
         }
 
         scn = new Scanner(System.in);
