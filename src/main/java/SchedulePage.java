@@ -3,17 +3,20 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
+import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
-import javax.swing.text.html.CSS;
 
 class MenuItemListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
@@ -29,9 +32,10 @@ class MenuItemListener implements ActionListener {
     }
 }
 
-public class SchedulePage extends Page {
+public class SchedulePage extends Page implements DocumentListener {
 
     DefaultListModel<Course> searchResults;
+
 
     boolean viewStatusSheets = false;
     JFormattedTextField startTimeField;
@@ -39,6 +43,12 @@ public class SchedulePage extends Page {
 
     JFormattedTextField endTimeField;
     MaskFormatter endTimeMask;
+
+    JTextArea searchBar;
+
+    private static final String COMMIT_ACTION = "commit";
+    private static enum Mode { INSERT, COMPLETION };
+    private Mode mode = Mode.INSERT;
 
 
     public void draw(){
@@ -51,8 +61,7 @@ public class SchedulePage extends Page {
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
         ImageIcon undoIcon = new ImageIcon("resources/reply-arrow-icon.png");
         ImageIcon pdfIcon = new ImageIcon("resources/pdf-files-icon.png");
-        ImageIcon plusIcon = new ImageIcon("resources/plus-line-icon.png");
-        ImageIcon deleteIcon = new ImageIcon("resources/minus-round-line-icon.png");
+        ImageIcon redoIcon = new ImageIcon("resources/redo-arrow-icon-1.png");
         ImageIcon editIcon = new ImageIcon("resources/pencil-icon.png");
 
 
@@ -60,16 +69,25 @@ public class SchedulePage extends Page {
         Image newimg = backArrow.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
         backArrowIcon = new ImageIcon(newimg);
 
-        Image plus = plusIcon.getImage();
-        Image newimg4 = plus.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        plusIcon = new ImageIcon(newimg4);
-
         Image edit = editIcon.getImage();
-        Image newimg6 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
-        editIcon = new ImageIcon(newimg6);
+        Image newimg2 = edit.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        editIcon = new ImageIcon(newimg2);
+
+        Image pdf = pdfIcon.getImage();
+        Image newimg3 = pdf.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        pdfIcon = new ImageIcon(newimg3);
+
+        Image undo = undoIcon.getImage();
+        Image newimg4 = undo.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        undoIcon = new ImageIcon(newimg4);
+
+        Image redo = redoIcon.getImage();
+        Image newimg5 = redo.getScaledInstance(25, 25,  java.awt.Image.SCALE_SMOOTH);
+        redoIcon = new ImageIcon(newimg5);
 
 
         JButton backBtn = new JButton();
+        backBtn.setBackground(Color.decode("#99002a"));
         backBtn.setIcon(backArrowIcon);
         backBtn.addActionListener((event) -> {
             app.switchPages("choose-schedule-page");
@@ -82,6 +100,7 @@ public class SchedulePage extends Page {
         add(scheduleTitle);
 
         JButton editTitleBtn = new JButton();
+        editTitleBtn.setBackground(Color.decode("#99002a"));
         editTitleBtn.setIcon(editIcon);
         editTitleBtn.setBounds(400, 0, 60, 35);
         add(editTitleBtn);
@@ -98,6 +117,8 @@ public class SchedulePage extends Page {
         });
 
         JButton statusSheetBtn = new JButton("View Status Sheets");
+        statusSheetBtn.setBackground(Color.decode("#99002a"));
+        statusSheetBtn.setForeground(Color.white);
         statusSheetBtn.setBounds(500, 0, 150, 35);
         add(statusSheetBtn);
 
@@ -209,26 +230,38 @@ public class SchedulePage extends Page {
         endTimeAmPm.setBounds(650, 650, 100, 25);
         add(endTimeAmPm);
 
+
         JTextArea courseInfo = new JTextArea();
 
-        courseInfo.setEditable(false);
-        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-        add(courseInfo, "cell 4 0, align right");
+//        courseInfo.setEditable(false);
+//        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
+//        add(courseInfo, "cell 4 0, align right");
+//
+//        JButton plusBtn = new JButton();
+//        plusBtn.setBackground(Color.decode("#99002a"));
+//        plusBtn.setIcon(plusIcon);
+//        add(plusBtn, "cell 4 0, align right, wrap");
 
-        JButton plusBtn = new JButton();
-        plusBtn.setIcon(plusIcon);
-        add(plusBtn, "cell 4 0, align right, wrap");
 
-
-
-        JTextField searchBar = new JTextField();
-        searchBar.setBounds(25, 100, 150, 25);
+        searchBar = new JTextArea();
+        Border border = BorderFactory.createLineBorder(Color.BLACK);
+        searchBar.setBorder(BorderFactory.createCompoundBorder(border,
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        searchBar.setBounds(25, 100, 140, 35);
         add(searchBar);
 
+        searchBar.getDocument().addDocumentListener(this);
+        InputMap im = searchBar.getInputMap();
+        ActionMap am = searchBar.getActionMap();
+        im.put(KeyStroke.getKeyStroke("ENTER"), COMMIT_ACTION);
+        am.put(COMMIT_ACTION, new CommitAction());
+
         JButton searchBtn = new JButton("SEARCH");
+        searchBtn.setBackground(Color.decode("#99002a"));
+        searchBtn.setForeground(Color.white);
         searchBtn.addActionListener((event) -> {
             Search search = new Search(app.getCourseDatabase());
-            String query = searchBar.getText();
+            String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
             search.modifyQuery(query);
             searchResults.clear();
             String department = (String) departmentComboBox.getSelectedItem();
@@ -258,8 +291,35 @@ public class SchedulePage extends Page {
                 searchResults.addElement(c);
             }
         });
-        searchBtn.setBounds(175, 100, 100, 30);
+        searchBtn.setBounds(175, 103, 100, 30);
         add(searchBtn);
+
+        JButton pdfBtn = new JButton();
+        pdfBtn.setBackground(Color.decode("#99002a"));
+        pdfBtn.setIcon(pdfIcon);
+        pdfBtn.addActionListener((event) -> {
+            int popupChoice = JOptionPane.showConfirmDialog(null, "Save to PDF?");
+            if(popupChoice == JOptionPane.YES_OPTION) {
+                try {
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF", "pdf");
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setFileFilter(filter);
+                    int choice = fileChooser.showSaveDialog(this);
+                    if(choice == JFileChooser.APPROVE_OPTION) {
+                        File file = fileChooser.getSelectedFile();
+                        if (!file.getAbsolutePath().toLowerCase().endsWith(".pdf")) {
+                            file = new File(file.getAbsolutePath() + ".pdf");
+                        }
+                        PDF.create(app.getCurrSchedule(), app.getLoggedInStudent(), file);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        pdfBtn.setBounds(925, 650, 60, 35);
+        add(pdfBtn);
+
 
         // when search button is pressed, display all the search results for the current search query
         JList<Course> list = new JList<>(searchResults);
@@ -269,24 +329,64 @@ public class SchedulePage extends Page {
         calendar.setBounds(700, 0, 550, 600);
         add(calendar);
 
+        JButton undoBtn = new JButton();
+        undoBtn.setBackground(Color.decode("#99002a"));
+        undoBtn.setIcon(undoIcon);
+        undoBtn.addActionListener((event) -> {
+            int popupChoice = JOptionPane.showConfirmDialog(null, "Undo last action?");
+            if(popupChoice == JOptionPane.YES_OPTION) {
+                app.getCurrSchedule().undo();
+                calendar.removeAll();
+                calendar.add(new CalendarComponent());
+                calendar.repaint();
+                calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
+            }
+        });
+        undoBtn.setBounds(1000, 650, 60, 35);
+        add(undoBtn);
+
+        JButton redoBtn = new JButton();
+        redoBtn.setBackground(Color.decode("#99002a"));
+        redoBtn.setIcon(redoIcon);
+        redoBtn.addActionListener((event) -> {
+            int popupChoice = JOptionPane.showConfirmDialog(null, "Redo last action?");
+            if(popupChoice == JOptionPane.YES_OPTION) {
+                app.getCurrSchedule().redo();
+                calendar.removeAll();
+                calendar.add(new CalendarComponent());
+                calendar.repaint();
+                calendar.revalidate();
+                app.getLoggedInStudent().save();
+                redraw();
+            }
+        });
+        redoBtn.setBounds(1075, 650, 60, 35);
+        add(redoBtn);
+
         JLabel currentCoursesLabel = new JLabel("Current Courses");
-        currentCoursesLabel.setBounds(500, 75, 100, 25);
-        add(currentCoursesLabel);
+        currentCoursesLabel.setBounds(500, 60, 100, 25);
         add(currentCoursesLabel);
 
-        list.addListSelectionListener(new ListSelectionListener() {
+        JLabel currentCoursesLabel2 = new JLabel("(select to delete)");
+        currentCoursesLabel2.setBounds(500, 75, 100, 25);
+        add(currentCoursesLabel2);
+
+
+        list.addMouseListener(new MouseAdapter() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String toDisplay = "";
-                if (e.getValueIsAdjusting()) {
-                    String title = list.getSelectedValue().getName();
-                    String profFN = list.getSelectedValue().getProfessor().getFirstName();
-                    String profLN = list.getSelectedValue().getProfessor().getLastName();
-                    String times = list.getSelectedValue().getMeetingTimes().entrySet().stream()
-                            .map(map-> map.getKey()+": "+map.getValue())
-                            .collect(Collectors.joining(", "));
-                    toDisplay = ("Add Course? \n" + title + ": " + profFN + " " + profLN + "\n" + times);
-                }
+            public void mouseClicked(MouseEvent e) {
+                Course course = list.getSelectedValue();
+
+                String title = course.getName();
+                String profFN = course.getProfessor().getFirstName();
+                String profLN = course.getProfessor().getLastName();
+                String code = course.getCode();
+                String times = course.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                String toDisplay = ("Add Course? \n" + title + ": " + code + " " + profFN + " " + profLN + "\n" + times);
 
                 int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
                 // when the plus button is pressed, add the course currently selected in the search results
@@ -322,7 +422,6 @@ public class SchedulePage extends Page {
             }
         });
 
-
         searchBar.addKeyListener(new KeyListener() {
 
             @Override
@@ -338,7 +437,7 @@ public class SchedulePage extends Page {
             @Override
             public void keyReleased(KeyEvent e) {
                 Search search = new Search(app.getCourseDatabase());
-                String query = searchBar.getText();
+                String query = searchBar.getText().substring(0, searchBar.getCaretPosition());
                 String department = (String) departmentComboBox.getSelectedItem();
                 Professor professor = (Professor) facultyComboBox.getSelectedItem();
 
@@ -368,6 +467,34 @@ public class SchedulePage extends Page {
 
 
         JList<Course> curScheduleList = new JList<>(schedule.getCourses().toArray(new Course[0]));
+        curScheduleList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String toDisplay = "";
+                Course selected = curScheduleList.getSelectedValue();
+                String title = selected.getName();
+                String code = selected.getCode();
+                String times = selected.getMeetingTimes().entrySet().stream()
+                        .map(map-> map.getKey()+": "+map.getValue())
+                        .collect(Collectors.joining(", "));
+                toDisplay = ("Delete Course? \n" + title + ": " + code + "\n" + times);
+
+
+                int popupChoice = JOptionPane.showConfirmDialog(null, toDisplay);
+                // when the plus button is pressed, add the course currently selected in the search results
+                if(popupChoice == JOptionPane.YES_OPTION) {
+                    if (curScheduleList.getSelectedIndex() != -1) {
+                        schedule.deleteCourse(selected);
+                        calendar.removeAll();
+                        calendar.add(new CalendarComponent());
+                        calendar.repaint();
+                        calendar.revalidate();
+                        app.getLoggedInStudent().save();
+                        redraw();
+                    }
+                }
+            }
+        });
         JScrollPane scheduleListPane = new JScrollPane(curScheduleList);
         scheduleListPane.setBorder(BorderFactory.createLineBorder(Color.black));
         scheduleListPane.setBounds(475, 100, 175, 500);
@@ -392,5 +519,83 @@ public class SchedulePage extends Page {
                 "delete");
         scheduleListPane.getActionMap().put("delete",
                 deleteCourse);
+    }
+
+    @Override
+    public void insertUpdate(DocumentEvent ev){
+        if (ev.getLength() != 1) {
+            return;
+        }
+
+        int pos = ev.getOffset();
+        String content = null;
+        try {
+            content = searchBar.getText(0, pos + 1);
+//            System.out.println("searchbar: " + content);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+
+        // Find where the word starts
+        int w;
+        for (w = pos; w >= 0; w--) {
+            if (!Character.isLetter(content.charAt(w))) {
+                break;
+            }
+        }
+        if (pos - w < 1) {
+            // Too few chars
+            return;
+        }
+
+        String prefix = content.substring(w + 1).toLowerCase();
+//        System.out.println("prefix: " + prefix);
+        Search search = new Search(App.getInstance().getCourseDatabase());
+        String suggest = search.suggestWord(prefix);
+        if(suggest != null){
+            String completion = suggest.substring(pos - w);
+            SwingUtilities.invokeLater(
+                    new CompletionTask(completion, pos + 1));
+        } else {
+            mode = Mode.INSERT;
+        }
+    }
+
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+
+    }
+
+    private class CompletionTask implements Runnable {
+        String completion;
+        int position;
+
+        CompletionTask(String completion, int position) {
+            this.completion = completion;
+            this.position = position;
+        }
+
+        public void run() {
+            searchBar.insert(completion, position);
+            searchBar.setCaretPosition(position + completion.length());
+            searchBar.moveCaretPosition(position);
+            mode = Mode.COMPLETION;
+        }
+    }
+
+    private class CommitAction extends AbstractAction {
+        public void actionPerformed(ActionEvent ev) {
+            if (mode == Mode.COMPLETION) {
+                int pos = searchBar.getSelectionEnd();
+                searchBar.insert(" ", pos);
+                searchBar.setCaretPosition(pos + 1);
+                mode = Mode.INSERT;
+            }
+        }
     }
 }

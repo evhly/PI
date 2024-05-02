@@ -128,6 +128,18 @@ public class Course {
     }
 
     /**
+     * Yet another basic constructor for testing purposes.
+     * @param code Take a guess
+     * @param name Hmm... wonder what this one is
+     * @param meetingTimes This one looks complicated
+     */
+    public Course(String code, String name, HashMap<DayOfWeek,ArrayList<LocalTime>> meetingTimes) {
+        this.code = code;
+        this.name = name;
+        this.meetingTimes = meetingTimes;
+    }
+
+    /**
      * Another toString()
      * @return coures code and class name
      */
