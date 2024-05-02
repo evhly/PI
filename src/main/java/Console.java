@@ -152,7 +152,7 @@ public class Console {
             try {
                 PDF.create(sch, new Student(new Credentials("Jon", "Do",
                         1001, "Underwater Basket Weaving",
-                        "be5tPa55w0rd3v3r", "e@e.com", false)));
+                        "be5tPa55w0rd3v3r", "e@e.com", false)), new File("./test.pdf"));
             } catch (IOException e) {
                 System.err.println("Issue with PDF exporting");;
             }
