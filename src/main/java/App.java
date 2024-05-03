@@ -16,7 +16,7 @@ public class App extends JFrame {
 
 
     /**
-     * If you want to run it with the original data, set useJson to false
+     * If you want to run it with the original data, set useJson to false.
      */
     private App(){
         pages.put("login-page", new LoginPage());
