@@ -163,14 +163,14 @@ public class Search {
      */
     public String suggestWord(String query) {
         ArrayList<String> matches = new ArrayList<>();
+        // get all words in wordFreqMap that begin with query
         for (String s : wordFreqMap.keySet()) {
             if (s.indexOf(query) == 0) {
                 matches.add(s);
             }
         }
-//        System.out.println(matches.size());
-        if (!matches.isEmpty() && matches.size() < 10) { // TODO: fine tune this threshold
-            String match = matches.get(0);
+        if (!matches.isEmpty() && matches.size() < 10) { // if a match exists and there are less than ten of them, return the match with the highest frequency
+            String match = matches.getFirst();
             int count = wordFreqMap.get(match);
             for (int i = 1; i < matches.size(); i++) {
                 if (wordFreqMap.get(matches.get(i)) > count) {
@@ -188,6 +188,8 @@ public class Search {
      * @return ArrayList of courses matching the query, ordered from most to least relevant to the query
      */
     private ArrayList<Course> orderedResultsFromQuery(){
+        // key: relevance score
+        // value: ArrayList of courses with that score
         TreeMap<Double, ArrayList<Course>> resultsMap = new TreeMap<>(Collections.reverseOrder());
 
         for(Course course : results){ // check each course in results to see if it matches the query
@@ -217,21 +219,21 @@ public class Search {
                     }
 
                     if(idx != -1) {
-                        if (queryWord.equals(nameWord)) { // query matches current word from course name
-                            if (j == 0) { // matches first word in course name
+                        if (queryWord.equals(nameWord)) {
+                            if (j == 0) { // if queryWord equals first word in the course name
                                 addToScore = 1;
                             } else {
-                                addToScore = 0.9;
+                                addToScore = 0.9; // if queryWord equals a word other than the first in the course name
                             }
-                            j = nameWords.length; // stop checking words from course name
-                        } else { // if query appears in current course name word
-                            if (idx == 0) { // if it appears at the beginning of course name word
-                                if (j == 0) { // if it appears in the first word of the course name
+                            j = nameWords.length; // exit loop
+                        } else { // if query is contained in nameWord, but not equal to
+                            if (idx == 0) { // if it appears at the beginning of nameWord
+                                if (j == 0) { // if it appears in the first word of the nameWord
                                     addToScore = 0.8;
-                                } else if (addToScore < 0.7) { // if it appears in a word of the course name other than the first
+                                } else if (addToScore < 0.7) { // if it appears in a nameWord other than the first
                                     addToScore = 0.7;
                                 }
-                            } else if (queryWord.length() > 1 && addToScore < 0.4) { // query is inside of a word
+                            } else if (queryWord.length() > 1 && addToScore < 0.4) { // if query is inside of a word
                                 addToScore = 0.4;
                             }
                         }
@@ -240,14 +242,14 @@ public class Search {
                 if(spellChecked){ // give slightly less favor to courses found when using spell check
                     addToScore -= .05;
                 }
-                if(addToScore <= 0.0){
+                if(addToScore <= 0.0){ // if queryWord is in no words of the course name, give a negative score
                     score -= 0.4;
                 } else{
                     score += addToScore;
                 }
             }
-            score = score / queryWords.length;
-            if(score > 0) {
+            score = score / queryWords.length; // normalize score according to length
+            if(score > 0) { // only return results with a positive score
                 if (resultsMap.containsKey(score)) {
                     resultsMap.get(score).add(course);
                 } else {
