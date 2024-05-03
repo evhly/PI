@@ -11,6 +11,7 @@ public class Search {
     private ArrayList<Filter> filters;
     private HashSet<String> wordSet;
     private HashMap<String, Integer> wordFreqMap;
+    private HashMap<String, String> spellCheckedWords;
 
     App app = App.getInstance();
 
@@ -20,6 +21,7 @@ public class Search {
         results = new ArrayList<>();
         wordSet = getSetOfWords();
         wordFreqMap = getWordFreqMap();
+        spellCheckedWords = new HashMap<>();
     }
 
     /**
@@ -196,9 +198,11 @@ public class Search {
             double score = 0.0;
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
-            String[] spellCheckedArr = new String[queryWords.length]; // get a spellchecked version of each word
-            for(int i = 0; i < queryWords.length; i++){
-                spellCheckedArr[i] = getBestMatch(queryWords[i]);
+            for (String queryWord : queryWords) {
+                if (!spellCheckedWords.containsKey(queryWord)) {
+                    String match = getBestMatch(queryWord);
+                    spellCheckedWords.put(queryWord, match);
+                }
             }
 
             for(int i = 0; i < queryWords.length; i++){
@@ -211,10 +215,9 @@ public class Search {
                     int idx = nameWord.indexOf(queryWord);
 
                     if(idx == -1){
-//                        System.out.println("spell checked " + queryWord + " is " + spellCheckedArr[i]);
-                        if(spellCheckedArr[i] != null){
-                            idx = nameWord.indexOf(spellCheckedArr[i]);
-//                            System.out.println("    Use it!");
+                        String match = spellCheckedWords.get(queryWord);
+                        if(match != null){
+                            idx = nameWord.indexOf(match);
                             spellChecked = true;
                         }
                     }
@@ -285,6 +288,8 @@ public class Search {
 
     public HashSet<String> getSetOfWords(){
         HashSet<String> wordSet = new HashSet<>();
+//        wordSet.add("programming");
+//        wordSet.add("calculus");
         for(Course course : DB.getCourses()){
             String[] words = course.getName().split(" ");
             for(String word : words){
