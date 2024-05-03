@@ -101,7 +101,7 @@ public class Search {
                 results.add(course);
             }
         }
-        results = orderedResultsFromQuery(query, results);
+        results = orderedResultsFromQuery();
         return results;
     }
 
@@ -185,15 +185,13 @@ public class Search {
 
     /**
      *
-     * @param q query to search with
-     * @param courses courses to check against query
      * @return ArrayList of courses matching the query, ordered from most to least relevant to the query
      */
-    private ArrayList<Course> orderedResultsFromQuery(String q, ArrayList<Course> courses){
+    private ArrayList<Course> orderedResultsFromQuery(){
         TreeMap<Double, ArrayList<Course>> resultsMap = new TreeMap<>(Collections.reverseOrder());
 
-        for(Course course : courses){
-            double score = 0.0;
+        for(Course course : results){ // check each course in results to see if it matches the query
+            double score = 0.0; // use to keep track of how well the query matches course
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
             String[] spellCheckedArr = new String[queryWords.length]; // get a spellchecked version of each word
@@ -204,17 +202,16 @@ public class Search {
             for(int i = 0; i < queryWords.length; i++){
                 String queryWord = queryWords[i];
                 double addToScore = 0.0;
-                boolean spellChecked = false;
+                boolean spellChecked = false; // whether the original word from the user or its spell checked version is being used
 
                 for(int j = 0; j < nameWords.length; j++){
                     String nameWord = nameWords[j];
                     int idx = nameWord.indexOf(queryWord);
 
+                    // if queryWord is not contained in nameWord, try again using the spell checked version of queryWord
                     if(idx == -1){
-//                        System.out.println("spell checked " + queryWord + " is " + spellCheckedArr[i]);
                         if(spellCheckedArr[i] != null){
                             idx = nameWord.indexOf(spellCheckedArr[i]);
-//                            System.out.println("    Use it!");
                             spellChecked = true;
                         }
                     }
@@ -268,13 +265,18 @@ public class Search {
         return orderedResults;
     }
 
-    public String getBestMatch(String word){
-        char[] wordArr = word.toLowerCase().toCharArray();
-        if(word.length() > 3) { // only spell check words length 4 or longer
-            for (Iterator<String> it = wordSet.iterator(); it.hasNext(); ) {
-                String next = it.next().toLowerCase();
-                if (Math.abs(word.length() - next.length()) <= 2) {
-                    if (diffAlgorithm(wordArr, next.toCharArray()) <= 3) {
+    /**
+     * Used for spell checking search querys
+     * @param queryWord word to spell check, i.e. check if there is a close match for it among the words in wordSet
+     * @return a sufficiently close match for queryWord from wordSet, or null if no such match exists
+     */
+    public String getBestMatch(String queryWord){
+        char[] wordArr = queryWord.toLowerCase().toCharArray();
+        if(queryWord.length() > 3) { // only spell check words length 4 or longer
+            for (String s : wordSet) {
+                String next = s.toLowerCase();
+                if (Math.abs(queryWord.length() - next.length()) <= 2) { // the match cannot be more than 2 characters longer or shorter than queryWord
+                    if (diffAlgorithm(wordArr, next.toCharArray()) <= 3) { // the match must be no more than 3 edits away from queryWord (see diffAlgorithm for explanation of edits)
                         return next;
                     }
                 }
@@ -283,6 +285,10 @@ public class Search {
         return null;
     }
 
+    /**
+     *
+     * @return set of all words found in the names of the course in DB
+     */
     public HashSet<String> getSetOfWords(){
         HashSet<String> wordSet = new HashSet<>();
         for(Course course : DB.getCourses()){
