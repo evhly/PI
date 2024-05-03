@@ -11,6 +11,8 @@ public class Search {
     private ArrayList<Filter> filters;
     private HashSet<String> wordSet;
     private HashMap<String, Integer> wordFreqMap;
+    private HashMap<String, String> spellCheckedWords;
+    private boolean suggestWordsFlag = false;
 
     App app = App.getInstance();
 
@@ -19,7 +21,14 @@ public class Search {
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
         wordSet = getSetOfWords();
-        wordFreqMap = getWordFreqMap();
+        if(suggestWordsFlag) {
+            wordFreqMap = getWordFreqMap();
+        }
+        spellCheckedWords = new HashMap<>();
+    }
+
+    public boolean isSuggestWordsFlag(){
+        return suggestWordsFlag;
     }
 
     /**
@@ -196,9 +205,11 @@ public class Search {
             double score = 0.0; // use to keep track of how well the query matches course
             String[] nameWords = course.getName().toLowerCase().split(" ");
             String[] queryWords = query.split(" ");
-            String[] spellCheckedArr = new String[queryWords.length]; // get a spellchecked version of each word
-            for(int i = 0; i < queryWords.length; i++){
-                spellCheckedArr[i] = getBestMatch(queryWords[i]);
+            for (String queryWord : queryWords) {
+                if (!spellCheckedWords.containsKey(queryWord)) {
+                    String match = getBestMatch(queryWord);
+                    spellCheckedWords.put(queryWord, match);
+                }
             }
 
             for(int i = 0; i < queryWords.length; i++){
@@ -212,8 +223,9 @@ public class Search {
 
                     // if queryWord is not contained in nameWord, try again using the spell checked version of queryWord
                     if(idx == -1){
-                        if(spellCheckedArr[i] != null){
-                            idx = nameWord.indexOf(spellCheckedArr[i]);
+                        String match = spellCheckedWords.get(queryWord);
+                        if(match != null){
+                            idx = nameWord.indexOf(match);
                             spellChecked = true;
                         }
                     }

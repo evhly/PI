@@ -49,6 +49,7 @@ public class SchedulePage extends Page implements DocumentListener {
     private static final String COMMIT_ACTION = "commit";
     private static enum Mode { INSERT, COMPLETION };
     private Mode mode = Mode.INSERT;
+    private Boolean suggestWordsFlag;
 
 
     public void draw(){
@@ -56,6 +57,7 @@ public class SchedulePage extends Page implements DocumentListener {
         searchResults = new DefaultListModel<>();
         Schedule schedule = app.getCurrSchedule();
         app.setCourseDatabase(app.getCourseReader().getCourseDatabase(schedule.getTerm()));
+        suggestWordsFlag = new Search(app.getCourseDatabase()).isSuggestWordsFlag();
 
         setLayout(null);
         ImageIcon backArrowIcon = new ImageIcon("resources/arrow-left-icon.png");
@@ -523,41 +525,43 @@ public class SchedulePage extends Page implements DocumentListener {
 
     @Override
     public void insertUpdate(DocumentEvent ev){
-        if (ev.getLength() != 1) {
-            return;
-        }
-
-        int pos = ev.getOffset();
-        String content = null;
-        try {
-            content = searchBar.getText(0, pos + 1);
-//            System.out.println("searchbar: " + content);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-
-        // Find where the word starts
-        int w;
-        for (w = pos; w >= 0; w--) {
-            if (!Character.isLetter(content.charAt(w))) {
-                break;
+        if(suggestWordsFlag) {
+            if (ev.getLength() != 1) {
+                return;
             }
-        }
-        if (pos - w < 1) {
-            // Too few chars
-            return;
-        }
 
-        String prefix = content.substring(w + 1).toLowerCase();
+            int pos = ev.getOffset();
+            String content = null;
+            try {
+                content = searchBar.getText(0, pos + 1);
+//            System.out.println("searchbar: " + content);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+
+            // Find where the word starts
+            int w;
+            for (w = pos; w >= 0; w--) {
+                if (!Character.isLetter(content.charAt(w))) {
+                    break;
+                }
+            }
+            if (pos - w < 1) {
+                // Too few chars
+                return;
+            }
+
+            String prefix = content.substring(w + 1).toLowerCase();
 //        System.out.println("prefix: " + prefix);
-        Search search = new Search(App.getInstance().getCourseDatabase());
-        String suggest = search.suggestWord(prefix);
-        if(suggest != null){
-            String completion = suggest.substring(pos - w);
-            SwingUtilities.invokeLater(
-                    new CompletionTask(completion, pos + 1));
-        } else {
-            mode = Mode.INSERT;
+            Search search = new Search(App.getInstance().getCourseDatabase());
+            String suggest = search.suggestWord(prefix);
+            if (suggest != null) {
+                String completion = suggest.substring(pos - w);
+                SwingUtilities.invokeLater(
+                        new CompletionTask(completion, pos + 1));
+            } else {
+                mode = Mode.INSERT;
+            }
         }
     }
 
