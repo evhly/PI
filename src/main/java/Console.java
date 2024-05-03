@@ -121,6 +121,8 @@ public class Console {
         // save schedule
         else if (choice == 4) {
             st.save();
+            System.out.println("Saved!\n");
+            homeScreen();
         }
         // overwriting and creating new schedule
         else if (choice == 5) {
