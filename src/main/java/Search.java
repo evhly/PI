@@ -12,6 +12,7 @@ public class Search {
     private HashSet<String> wordSet;
     private HashMap<String, Integer> wordFreqMap;
     private HashMap<String, String> spellCheckedWords;
+    private boolean suggestWordsFlag = false;
 
     App app = App.getInstance();
 
@@ -20,8 +21,14 @@ public class Search {
         this.filters = new ArrayList<>();
         results = new ArrayList<>();
         wordSet = getSetOfWords();
-        wordFreqMap = getWordFreqMap();
+        if(suggestWordsFlag) {
+            wordFreqMap = getWordFreqMap();
+        }
         spellCheckedWords = new HashMap<>();
+    }
+
+    public boolean isSuggestWordsFlag(){
+        return suggestWordsFlag;
     }
 
     /**
