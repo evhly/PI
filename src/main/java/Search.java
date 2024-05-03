@@ -288,8 +288,6 @@ public class Search {
 
     public HashSet<String> getSetOfWords(){
         HashSet<String> wordSet = new HashSet<>();
-//        wordSet.add("programming");
-//        wordSet.add("calculus");
         for(Course course : DB.getCourses()){
             String[] words = course.getName().split(" ");
             for(String word : words){
