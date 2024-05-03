@@ -1,5 +1,8 @@
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -170,4 +173,13 @@ public class CourseReader {
         return CR;
     }
 
+    public static CourseReader getJSONCourseDatabases()  {
+        JsonCourseReader CR = new JsonCourseReader();
+        try {
+            CR.parseJson();
+        } catch (Exception e) {
+            System.out.println("Error reading JSON");
+        }
+        return CR;
+    }
 }
