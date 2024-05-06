@@ -15,6 +15,7 @@ dependencies {
     implementation 'com.miglayout:miglayout-swing:5.0'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation "org.apache.pdfbox:pdfbox:2.0.3"
+    implementation 'org.json:json:20090211'
 }
 
 test {

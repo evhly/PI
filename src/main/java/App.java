@@ -15,12 +15,20 @@ public class App extends JFrame {
     private CourseReader courseReader;
 
 
+    /**
+     * If you want to run it with the original data, set useJson to false.
+     */
     private App(){
         pages.put("login-page", new LoginPage());
         pages.put("new-account-page", new NewAccountPage());
         pages.put("choose-schedule-page", new ChooseSchedulePage());
         pages.put("schedule-page", new SchedulePage());
-        courseReader = CourseReader.getAllCourseDatabases();
+        boolean useJson = true;
+        if (useJson){
+            courseReader = CourseReader.getJSONCourseDatabases();
+        }else {
+            courseReader = CourseReader.getAllCourseDatabases();
+        }
         setCourseDatabase(courseReader.getCourseDatabase("F20"));
     }
 

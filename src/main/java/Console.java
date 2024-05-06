@@ -1,3 +1,5 @@
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +12,7 @@ public class Console {
     //current schedule
     static Schedule sch;
     static CourseReader cr;
+    static JsonCourseReader jcr;
     static Scanner scn;
     static Student st;
     static CourseDatabase cdb;
@@ -20,7 +23,7 @@ public class Console {
      * @param args
      * @throws FileNotFoundException
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException, JSONException {
 //        // read in all files in csv directory
 //        CourseReader CR = new CourseReader();
 //        String path = "src/main/csvs";
@@ -36,15 +39,24 @@ public class Console {
         //TODO: if student has schedules, set the first one to the initial sch
         sch = new Schedule("F20");
         // just read in test2.csv
-        cr = new CourseReader();
-        //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
-        cr.parseCsv("src//main//csvs//2020-2021.csv");
-        //  System.out.println("Done");
+        boolean useCurrentData = true;
+        if(useCurrentData) {
+            jcr = new JsonCourseReader();
+            jcr.parseJson();
+            cdb = jcr.getCourseDatabase("F24");
+        }
+        else {
+            cr = new CourseReader();
+            //   cr.parseCsv("src/main/csvs/extraCsvs/test2.csv");
+            cr.parseCsv("src//main//csvs//2020-2021.csv");
+            cdb = cr.getCourseDatabase("F20");
+            //  System.out.println("Done");
+        }
 
         scn = new Scanner(System.in);
 
         //CourseDatabase DB = new CourseDatabase("src/main/csvs/extraCsvs");
-        cdb = cr.getCourseDatabase("F20");
+
         search = new Search(cdb);
 
         Credentials cr = getCreds();
@@ -65,7 +77,8 @@ public class Console {
     }
 
     private static Credentials getCreds() {
-        return new Credentials("a","b", 7,"m","22","s@s.s", false);
+        return new Credentials("a","b", 7,"m","22",
+                "s@s.s", false);
         //TODO: make interactive
     }
 
@@ -108,6 +121,8 @@ public class Console {
         // save schedule
         else if (choice == 4) {
             st.save();
+            System.out.println("Saved!\n");
+            homeScreen();
         }
         // overwriting and creating new schedule
         else if (choice == 5) {
@@ -121,7 +136,7 @@ public class Console {
             System.out.println("Enter schedule name:");
             String schName = scn.next();
             File schFile = new File(schName+"Log.txt");//accessing log file for that schedule
-            sch = new Schedule(schFile,schName+"1",cdb);//////////////////////////////////////
+            sch = new Schedule(schFile,schName+"1",cdb);
             System.out.println("Schedule restored!\nReturning home ... \n\n");
             homeScreen();
         }
