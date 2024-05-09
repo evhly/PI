@@ -24,7 +24,7 @@ public class App extends JFrame {
         pages.put("choose-schedule-page", new ChooseSchedulePage());
         pages.put("schedule-page", new SchedulePage());
         boolean useJson = true;
-        if (useJson){
+        if (false){
             courseReader = CourseReader.getJSONCourseDatabases();
         }else {
             courseReader = CourseReader.getAllCourseDatabases();

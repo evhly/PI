@@ -293,10 +293,10 @@ public class Schedule {
     /**
      * Loads a specific student schedule
      * @param scheduleString Line of student's schedule csv, containing title and courses
-     * @param db Course Database to read course data
+     * @param cr Course Reader to read course data
      * @return Specific schedule of a student
      */
-    public static Schedule loadSchedule(String scheduleString, CourseDatabase db) {
+    public static Schedule loadSchedule(String scheduleString, CourseReader cr) {
         String[] parts = scheduleString.split(",");
         String title = parts[0].trim();
         String term = parts[1].trim();
@@ -304,7 +304,7 @@ public class Schedule {
 
         //Adds a course to the schedule for every course in the schedule.csv
         for(int i=2; i<parts.length; i++) {
-            schedule.addCourse(db.getCourseData(parts[i]));
+            schedule.addCourse(cr.getCourseDatabase(term).getCourseData(parts[i]));
         }
 
         return schedule;
@@ -313,17 +313,17 @@ public class Schedule {
     /**
      * Loads schedules from a file
      * @param file The file to load the list of schedules from
-     * @param db The CourseDatabase to draw course data from, since we only have the course code
+     * @param cr The CourseReader to draw course data from, since we only have the course code
      * @throws IOException If a save data file does not exist
      */
-    public static ArrayList<Schedule> loadSchedules(File file, CourseDatabase db) {
+    public static ArrayList<Schedule> loadSchedules(File file, CourseReader cr) {
         ArrayList<Schedule> schedules = new ArrayList<>();
 
         try {
             Scanner fileScanner = new Scanner(file);
             fileScanner.useDelimiter("\n");
             while (fileScanner.hasNext()) {
-                schedules.add(Schedule.loadSchedule(fileScanner.next(), db));
+                schedules.add(Schedule.loadSchedule(fileScanner.next(), cr));
             }
             fileScanner.close();
         } catch (FileNotFoundException e) {
