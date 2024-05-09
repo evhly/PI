@@ -61,7 +61,6 @@ public class Search {
     public ArrayList<Course> search(){
         results = new ArrayList<>();
 
-        //System.out.println(filters.size());
         for(Course course : DB.getCourses()){ // checks every Course in the DB
             boolean filterMismatch = false; // this variable holds whether the filters rule a Course out
             for (Filter filter : filters) { // checks every filter

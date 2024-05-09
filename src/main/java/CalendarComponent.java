@@ -45,7 +45,6 @@ public class CalendarComponent extends DynamicComponent {
                     int day = entry.getKey().getValue() % 7;
                     // determine how many cells (each corresponding to 15 minutes) the course corresponds to
                     int time = (int)(ChronoUnit.MINUTES.between(LocalTime.parse("08:00:00"), entry.getValue().get(0)) / 15);
-//                    System.out.println("time: " + time);
                     data[time][day] = c.getCode(); // add course code to the first cell corresponding to the course
 
                     int length = (int)(ChronoUnit.MINUTES.between(entry.getValue().get(0), entry.getValue().get(1)) / 15);
