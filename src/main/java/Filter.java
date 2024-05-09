@@ -54,8 +54,6 @@ public class Filter {
         this.filterType = filterType;
         this.startTime = startTime;
         this.endTime = endTime;
-//        this.startAmPm = startAmPm;
-//        this.endAmPm = endAmPm;
     }
 
     public type getType() {

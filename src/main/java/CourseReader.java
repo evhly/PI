@@ -73,8 +73,6 @@ public class CourseReader {
         String crs_capacity	= s.next();
         String crs_enrollment = s.next();
         // TODO: add room and bldg code columns
-//        String bldg_cde	= s.next();
-//        String room_cde	= s.next();
         String[] days = new String[5];
         for(int i = 0; i < 5; i++){
             days[i] = s.next();

@@ -36,14 +36,6 @@ public class SchedulePage extends Page implements DocumentListener {
 
     DefaultListModel<Course> searchResults;
 
-
-    boolean viewStatusSheets = false;
-    JFormattedTextField startTimeField;
-    MaskFormatter startTimeMask;
-
-    JFormattedTextField endTimeField;
-    MaskFormatter endTimeMask;
-
     JTextArea searchBar;
 
     private static final String COMMIT_ACTION = "commit";
@@ -231,18 +223,6 @@ public class SchedulePage extends Page implements DocumentListener {
         add(endTimeFilterCB);
         endTimeAmPm.setBounds(650, 650, 100, 25);
         add(endTimeAmPm);
-
-
-        JTextArea courseInfo = new JTextArea();
-
-//        courseInfo.setEditable(false);
-//        courseInfo.setBorder(BorderFactory.createLineBorder(Color.black));
-//        add(courseInfo, "cell 4 0, align right");
-//
-//        JButton plusBtn = new JButton();
-//        plusBtn.setBackground(Color.decode("#99002a"));
-//        plusBtn.setIcon(plusIcon);
-//        add(plusBtn, "cell 4 0, align right, wrap");
 
 
         searchBar = new JTextArea();
