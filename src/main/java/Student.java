@@ -17,11 +17,10 @@ public class Student {
      */
     public Student(Credentials creds) {
         information = creds;
-
         if (getSaveFile().exists()) {
             schedules = Schedule.loadSchedules(
                 getSaveFile(),
-                App.getInstance().getCourseDatabase()
+                App.getInstance().getCourseReader()
             );
         } else {
             schedules = new ArrayList<>();
@@ -37,7 +36,7 @@ public class Student {
         information = creds;
 
         if (getSaveFile().exists()) {
-            schedules = Schedule.loadSchedules(getSaveFile(),db);
+            schedules = Schedule.loadSchedules(getSaveFile(),App.getInstance().getCourseReader());
         } else {
             schedules = new ArrayList<>();
         }
